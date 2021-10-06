@@ -1,21 +1,12 @@
-type RoomProps = {
-    type: string;
-    name: string;
-    price: number;
-    id: number;
-    isFavorite: boolean;
-};
+import type {RoomProps} from '../app/app';
 
 function Room(props: RoomProps): JSX.Element {
   return (
     <article className={props.isFavorite ? 'favorites__card place-card' : 'cities__place-card place-card'}>
-      {props.isFavorite ?
+      {props.isPremium ?
         <div className='place-card__mark'>
           <span>Premium</span>
         </div> : ''}
-      <div className='place-card__mark'>
-        <span>Premium</span>
-      </div>
       <div className={props.isFavorite ? 'favorites__image-wrapper place-card__image-wrapper' : 'cities__image-wrapper place-card__image-wrapper'}>
         <a href='#'>
           <img className='place-card__image' src='img/apartment-01.jpg' width='260' height='200' alt='Place image' />

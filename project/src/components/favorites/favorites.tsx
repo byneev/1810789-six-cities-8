@@ -1,4 +1,7 @@
-function Favorites(props: FavoritesProps): JSX.Element {
+import Room from '../room/room';
+import type { AppProps } from '../app/app';
+
+function Favorites(props: AppProps): JSX.Element {
   return (
     <div className="page">
       <header className="header">
@@ -42,7 +45,7 @@ function Favorites(props: FavoritesProps): JSX.Element {
                   </div>
                 </div>
                 <div className="favorites__places">
-                  // 2 articles
+                  {props.rooms.slice(5, 7).map((room) => <Room key={room.id} {...room}/>)}
                 </div>
               </li>
 
@@ -55,7 +58,7 @@ function Favorites(props: FavoritesProps): JSX.Element {
                   </div>
                 </div>
                 <div className="favorites__places">
-                  //1 article
+                  <Room key={props.rooms[5].id} {...props.rooms[5]} />
                 </div>
               </li>
             </ul>

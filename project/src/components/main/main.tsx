@@ -1,18 +1,7 @@
-import React from 'react';
 import Room from '../room/room';
+import type { AppProps } from '../app/app';
 
-type MainProps = {
-    rooms: {
-      type: string;
-      name: string;
-      price: number;
-      id: number;
-      isFavorite: boolean;
-    }[],
-    count: number;
-};
-
-function Main(props: MainProps): JSX.Element {
+function Main(props: AppProps): JSX.Element {
   return (
     <div className='page page--gray page--main'>
       <header className='header'>
@@ -109,11 +98,9 @@ function Main(props: MainProps): JSX.Element {
                 </ul>
               </form>
               <div className='cities__places-list places__list tabs__content'>
-                (
-                {props.rooms.map((room) => (
+                {props.rooms.slice(0, 5).map((room) => (
                   <Room key={room.id} {...room} />
                 ))}
-                )
               </div>
             </section>
             <div className='cities__right-section'>
