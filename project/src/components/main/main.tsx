@@ -1,7 +1,7 @@
 import Room from '../room/room';
 import type { AppProps } from '../app/app';
 
-function Main(props: AppProps): JSX.Element {
+function Main(room: AppProps): JSX.Element {
   return (
     <div className='page page--gray page--main'>
       <header className='header'>
