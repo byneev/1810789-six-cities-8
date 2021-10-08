@@ -1,21 +1,34 @@
-import type {RoomProps} from '../app/app';
+/* eslint-disable no-console */
+import { mockRooms } from '../../mock/data';
 
-function Room(props: RoomProps): JSX.Element {
+type RoomAllProps = {match?: {
+  params: {
+      id: string
+    }
+  }
+} & {
+  id: string;
+};
+
+function Room(props: RoomAllProps): JSX.Element {
+  console.log(props);
+  const id : string | undefined = (props.match  === undefined || !props.match.params.id) ? props.id : props.match.params.id;
+  const room = mockRooms[+id];
   return (
-    <article className={props.isFavorite ? 'favorites__card place-card' : 'cities__place-card place-card'}>
-      {props.isPremium ?
+    <article className={room.isFavorite ? 'favorites__card place-card' : 'cities__place-card place-card'}>
+      {room.isPremium ?
         <div className='place-card__mark'>
           <span>Premium</span>
         </div> : ''}
-      <div className={props.isFavorite ? 'favorites__image-wrapper place-card__image-wrapper' : 'cities__image-wrapper place-card__image-wrapper'}>
-        <a href='#'>
-          <img className='place-card__image' src='img/apartment-01.jpg' width='260' height='200' alt='Place image' />
+      <div className={room.isFavorite ? 'favorites__image-wrapper place-card__image-wrapper' : 'cities__image-wrapper place-card__image-wrapper'}>
+        <a href='/'>
+          <img className='place-card__image' src='img/apartment-01.jpg' width='260' height='200' alt='Place ' />
         </a>
       </div>
-      <div className={ props.isFavorite ? 'favorites__card place-card__info' : 'place-card__info'} >
+      <div className={ room.isFavorite ? 'favorites__card place-card__info' : 'place-card__info'} >
         <div className='place-card__price-wrapper'>
           <div className='place-card__price'>
-            <b className='place-card__price-value'>&euro;{props.price}</b>
+            <b className='place-card__price-value'>&euro;{room.price}</b>
             <span className='place-card__price-text'>&#47;&nbsp;night</span>
           </div>
           <button className='place-card__bookmark-button button' type='button'>
@@ -32,9 +45,9 @@ function Room(props: RoomProps): JSX.Element {
           </div>
         </div>
         <h2 className='place-card__name'>
-          <a href='#'>{props.name}</a>
+          <a href='/'>{room.name}</a>
         </h2>
-        <p className='place-card__type'>{props.type}</p>
+        <p className='place-card__type'>{room.type}</p>
       </div>
     </article>
   );
