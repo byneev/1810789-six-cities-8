@@ -1,7 +1,12 @@
-import type { AppProps } from '../components/app/app';
+import type { AppProps, RoomProps } from '../components/app/app';
 
 export const mockData: AppProps = {
-  rooms: [
+  count: 7,
+  location: 'Amsterdam',
+};
+
+export const mockRooms: RoomProps =
+  [
     {
       type: 'Bungalo',
       name: 'Great place nearby river',
@@ -58,7 +63,5 @@ export const mockData: AppProps = {
       isFavorite: true,
       isPremium: false,
     },
-  ],
-  count: 7,
-  location: 'Amsterdam',
-};
+  ];
+

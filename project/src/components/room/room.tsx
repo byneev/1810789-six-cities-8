@@ -1,12 +1,19 @@
-import type {AppProps, RoomProps} from '../app/app';
+/* eslint-disable no-console */
+import { mockRooms } from '../../mock/data';
 
-type RouteRoomProps = AppProps & {
-  id: string,
-}
+type RoomAllProps = {match?: {
+  params: {
+      id: string
+    }
+  }
+} & {
+  id: string;
+};
 
-function Room(props: RouteRoomProps): JSX.Element {
-  // TODO откуда приходит id?
-  const room:RoomProps = props.rooms[+props.id];
+function Room(props: RoomAllProps): JSX.Element {
+  console.log(props);
+  const id : string | undefined = (props.match  === undefined || !props.match.params.id) ? props.id : props.match.params.id;
+  const room = mockRooms[+id];
   return (
     <article className={room.isFavorite ? 'favorites__card place-card' : 'cities__place-card place-card'}>
       {room.isPremium ?
@@ -14,8 +21,8 @@ function Room(props: RouteRoomProps): JSX.Element {
           <span>Premium</span>
         </div> : ''}
       <div className={room.isFavorite ? 'favorites__image-wrapper place-card__image-wrapper' : 'cities__image-wrapper place-card__image-wrapper'}>
-        <a href='#'>
-          <img className='place-card__image' src='img/apartment-01.jpg' width='260' height='200' alt='Place image' />
+        <a href='/'>
+          <img className='place-card__image' src='img/apartment-01.jpg' width='260' height='200' alt='Place ' />
         </a>
       </div>
       <div className={ room.isFavorite ? 'favorites__card place-card__info' : 'place-card__info'} >
@@ -38,7 +45,7 @@ function Room(props: RouteRoomProps): JSX.Element {
           </div>
         </div>
         <h2 className='place-card__name'>
-          <a href='#'>{room.name}</a>
+          <a href='/'>{room.name}</a>
         </h2>
         <p className='place-card__type'>{room.type}</p>
       </div>

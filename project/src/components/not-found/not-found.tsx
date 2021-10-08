@@ -6,7 +6,7 @@ function NotFound():JSX.Element {
     <>
       <p>Error 404</p>
       <p>Page not found</p>
-      <Link to={AppRoute.MAIN} />
+      <Link to={AppRoute.MAIN}>Вернуться на главную</Link>
     </>
   );
 }
