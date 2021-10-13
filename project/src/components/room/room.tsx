@@ -1,31 +1,26 @@
 /* eslint-disable no-console */
-import { mockRooms } from '../../mock/data';
+import { OfferProp } from '../../mock/offer';
+import { Container } from '../../utils/constants';
 
-type RoomAllProps = {match?: {
-  params: {
-      id: string
-    }
-  }
-} & {
-  id: string;
-};
+export type RoomProp =  {
+  room: OfferProp;
+  container: string;
+}
 
-function Room(props: RoomAllProps): JSX.Element {
-  console.log(props);
-  const id : string | undefined = (props.match  === undefined || !props.match.params.id) ? props.id : props.match.params.id;
-  const room = mockRooms[+id];
+function Room(prop: RoomProp): JSX.Element {
+  const {container, room} = prop;
   return (
-    <article className={room.isFavorite ? 'favorites__card place-card' : 'cities__place-card place-card'}>
+    <article className={container === Container.FAVORITES ? 'favorites__card place-card' : 'cities__place-card place-card'}>
       {room.isPremium ?
         <div className='place-card__mark'>
           <span>Premium</span>
         </div> : ''}
-      <div className={room.isFavorite ? 'favorites__image-wrapper place-card__image-wrapper' : 'cities__image-wrapper place-card__image-wrapper'}>
+      <div className={container === Container.FAVORITES ? 'favorites__image-wrapper place-card__image-wrapper' : 'cities__image-wrapper place-card__image-wrapper'}>
         <a href='/'>
-          <img className='place-card__image' src='img/apartment-01.jpg' width='260' height='200' alt='Place ' />
+          <img className='place-card__image' src={room.previewImage} width='260' height='200' alt={room.title} />
         </a>
       </div>
-      <div className={ room.isFavorite ? 'favorites__card place-card__info' : 'place-card__info'} >
+      <div className={ container === Container.FAVORITES ? 'favorites__card place-card__info' : 'place-card__info'} >
         <div className='place-card__price-wrapper'>
           <div className='place-card__price'>
             <b className='place-card__price-value'>&euro;{room.price}</b>
@@ -41,11 +36,11 @@ function Room(props: RoomAllProps): JSX.Element {
         <div className='place-card__rating rating'>
           <div className='place-card__stars rating__stars'>
             <span style={{ width: '80%' }}></span>
-            <span className='visually-hidden'>Rating</span>
+            <span className='visually-hidden'>{room.rating}</span>
           </div>
         </div>
         <h2 className='place-card__name'>
-          <a href='/'>{room.name}</a>
+          <a href='/'>{room.title}</a>
         </h2>
         <p className='place-card__type'>{room.type}</p>
       </div>

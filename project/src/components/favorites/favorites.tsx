@@ -1,16 +1,21 @@
-import Room from '../room/room';
+/* eslint-disable no-console */
+import { Link } from 'react-router-dom';
+import { AppRoute, Container } from '../../utils/constants';
 import type { AppProps } from '../app/app';
-
+import OffersList from '../offersList/offers-list';
+//TODO: li.favorites__locations-items отдельный компонент, создается мапом по массиву cities
 function Favorites(props: AppProps): JSX.Element {
+  const favoriteOffers = props.offers.filter((item) => item.isFavorite);
+  console.log(favoriteOffers);
   return (
     <div className="page">
       <header className="header">
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
-              <a className="header__logo-link" href="main.html">
+              <Link className="header__logo-link" to={AppRoute.MAIN}>
                 <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
-              </a>
+              </Link>
             </div>
             <nav className="header__nav">
               <ul className="header__nav-list">
@@ -40,12 +45,12 @@ function Favorites(props: AppProps): JSX.Element {
                 <div className="favorites__locations locations locations--current">
                   <div className="locations__item">
                     <a className="locations__item-link" href="/">
-                      <span>Amsterdam</span>
+                      <span>{props.cities[2]}</span>
                     </a>
                   </div>
                 </div>
                 <div className="favorites__places">
-                  {['5', '6'].map((id) => <Room key={id} id={id} />)}
+                  <OffersList container={Container.FAVORITES} offers={favoriteOffers.filter((item) => item.city.name === props.cities[2])} />
                 </div>
               </li>
 
@@ -53,12 +58,12 @@ function Favorites(props: AppProps): JSX.Element {
                 <div className="favorites__locations locations locations--current">
                   <div className="locations__item">
                     <a className="locations__item-link" href="/">
-                      <span>Cologne</span>
+                      <span>{props.cities[3]}</span>
                     </a>
                   </div>
                 </div>
                 <div className="favorites__places">
-                  <Room id='5'/>
+                  <OffersList container={Container.FAVORITES} offers={favoriteOffers.filter((item) => item.city.name === props.cities[3])} />
                 </div>
               </li>
             </ul>
