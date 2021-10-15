@@ -1,14 +1,16 @@
 /* eslint-disable no-console */
+import { Link } from 'react-router-dom';
 import { OfferProp } from '../../mock/offer';
-import { Container } from '../../utils/constants';
+import { AppRoute, Container } from '../../utils/constants';
 
 export type RoomProp =  {
-  room: OfferProp;
   container: string;
+  room: OfferProp;
 }
 
 function Room(prop: RoomProp): JSX.Element {
   const {container, room} = prop;
+
   return (
     <article className={container === Container.FAVORITES ? 'favorites__card place-card' : 'cities__place-card place-card'}>
       {room.isPremium ?
@@ -16,9 +18,9 @@ function Room(prop: RoomProp): JSX.Element {
           <span>Premium</span>
         </div> : ''}
       <div className={container === Container.FAVORITES ? 'favorites__image-wrapper place-card__image-wrapper' : 'cities__image-wrapper place-card__image-wrapper'}>
-        <a href='/'>
+        <Link to={`${AppRoute.ROOM}${room.id}`}>
           <img className='place-card__image' src={room.previewImage} width='260' height='200' alt={room.title} />
-        </a>
+        </Link>
       </div>
       <div className={ container === Container.FAVORITES ? 'favorites__card place-card__info' : 'place-card__info'} >
         <div className='place-card__price-wrapper'>

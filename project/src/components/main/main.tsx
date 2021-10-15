@@ -2,7 +2,6 @@
 import { Link } from 'react-router-dom';
 import { AppRoute, City, Container } from '../../utils/constants';
 import { AppProps } from '../app/app';
-import Login from '../login/login';
 import OffersList from '../offersList/offers-list';
 
 function Main(props: AppProps): JSX.Element {
@@ -20,15 +19,15 @@ function Main(props: AppProps): JSX.Element {
             <nav className='header__nav'>
               <ul className='header__nav-list'>
                 <li className='header__nav-item user'>
-                  <Link className='header__nav-link header__nav-link--profile' to={AppRoute.LOGIN}>
+                  <Link className='header__nav-link header__nav-link--profile' to={AppRoute.MAIN}>
                     <div className='header__avatar-wrapper user__avatar-wrapper'></div>
                     <span className='header__user-name user__name'>Oliver.conner@gmail.com</span>
                   </Link>
                 </li>
                 <li className='header__nav-item'>
-                  <a className='header__nav-link' href='/'>
+                  <Link className='header__nav-link' to={AppRoute.LOGIN}>
                     <span className='header__signout'>Sign out</span>
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </nav>
@@ -112,8 +111,7 @@ function Main(props: AppProps): JSX.Element {
           </div>
         </div>
       </main>
-    </div>
-  );
+    </div>);
 }
 
 export default Main;

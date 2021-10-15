@@ -11,12 +11,12 @@ export type OffersListProps = OfferProps & {
 
 function OffersList(props: OffersListProps): JSX.Element {
   const {container, offers} = props;
-  console.log(container);
+
   const [activeId, setActiveId] = useState();
   return(
     <React.Fragment>
       {offers.map((offer) =>
-        <Room key={`${offer.id}-${offer.city.name}`} container={container} room={offer}/>)}
+        <Room key={`${offer.id}-${offer.city.name}`} container={container} room={offer} />)}
     </React.Fragment>
   );
 }

@@ -2,7 +2,7 @@ export const AppRoute = {
   MAIN: '/',
   LOGIN: '/login',
   FAVORITES: '/favorites',
-  ROOM: '/offer/:id',
+  ROOM: '/offer/:',
 };
 
 export const AuthorizationStatus = {
@@ -22,5 +22,6 @@ export const City = {
 export const Container = {
   FAVORITES: 'Favorites',
   MAIN: 'Main',
+  ROOM: 'Room',
 };
 

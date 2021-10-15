@@ -1,12 +1,13 @@
 /* eslint-disable no-console */
 import { Link } from 'react-router-dom';
-import { AppRoute, Container } from '../../utils/constants';
+import { AppRoute } from '../../utils/constants';
 import type { AppProps } from '../app/app';
-import OffersList from '../offersList/offers-list';
+import LocationItem from '../location-item/location-item';
 //TODO: li.favorites__locations-items отдельный компонент, создается мапом по массиву cities
 function Favorites(props: AppProps): JSX.Element {
   const favoriteOffers = props.offers.filter((item) => item.isFavorite);
-  console.log(favoriteOffers);
+
+  const actualCities:string[] = props.cities.filter((city) => favoriteOffers.filter((item) => item.city.name === city).length !== 0);
   return (
     <div className="page">
       <header className="header">
@@ -20,15 +21,15 @@ function Favorites(props: AppProps): JSX.Element {
             <nav className="header__nav">
               <ul className="header__nav-list">
                 <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile" href="/">
+                  <Link className="header__nav-link header__nav-link--profile" to={AppRoute.MAIN}>
                     <div className="header__avatar-wrapper user__avatar-wrapper"></div>
                     <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                  </a>
+                  </Link>
                 </li>
                 <li className="header__nav-item">
-                  <a className="header__nav-link" href="/">
+                  <Link className="header__nav-link" to={AppRoute.LOGIN}>
                     <span className="header__signout">Sign out</span>
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </nav>
@@ -41,42 +42,17 @@ function Favorites(props: AppProps): JSX.Element {
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
             <ul className="favorites__list">
-              <li className="favorites__locations-items">
-                <div className="favorites__locations locations locations--current">
-                  <div className="locations__item">
-                    <a className="locations__item-link" href="/">
-                      <span>{props.cities[2]}</span>
-                    </a>
-                  </div>
-                </div>
-                <div className="favorites__places">
-                  <OffersList container={Container.FAVORITES} offers={favoriteOffers.filter((item) => item.city.name === props.cities[2])} />
-                </div>
-              </li>
-
-              <li className="favorites__locations-items">
-                <div className="favorites__locations locations locations--current">
-                  <div className="locations__item">
-                    <a className="locations__item-link" href="/">
-                      <span>{props.cities[3]}</span>
-                    </a>
-                  </div>
-                </div>
-                <div className="favorites__places">
-                  <OffersList container={Container.FAVORITES} offers={favoriteOffers.filter((item) => item.city.name === props.cities[3])} />
-                </div>
-              </li>
+              {actualCities.map((city) => <LocationItem key={city} city={city} offers={favoriteOffers.filter((item) => item.city.name === city)} />)}
             </ul>
           </section>
         </div>
       </main>
       <footer className="footer container">
-        <a className="footer__logo-link" href="main.html">
+        <Link className="footer__logo-link" to={AppRoute.MAIN}>
           <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33" />
-        </a>
+        </Link>
       </footer>
-    </div>
-  );
+    </div>);
 }
 
 export default Favorites;
