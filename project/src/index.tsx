@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/app/app';
-import { mockData } from './mock/data';
+import { cities, offers } from './mock/offer';
+import { reviews } from './mock/review';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App {...mockData} />
+    <App offers={offers} reviews={reviews} cities={cities} />
   </React.StrictMode>,
   document.getElementById('root'),
 );
