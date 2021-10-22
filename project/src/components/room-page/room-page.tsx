@@ -154,7 +154,12 @@ function RoomPage(props: RoomPageProps):JSX.Element {
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              <OffersList container={Container.ROOM} offers={offers.filter((item) => item.city.name === offer.city.name).slice(0, 6)} />
+              <OffersList container={Container.ROOM} offers={offers.filter((item) => item.city.name === offer.city.name).slice(0, 6)} mouseEnterHandler={function (offerId: number): void {
+                throw new Error('Function not implemented.');
+              } } removeActiveStates={function (): void {
+                throw new Error('Function not implemented.');
+              } }
+              />
             </div>
           </section>
         </div>

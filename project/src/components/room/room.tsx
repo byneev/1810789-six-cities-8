@@ -6,10 +6,12 @@ import { AppRoute, Container } from '../../utils/constants';
 export type RoomProp =  {
   container: string;
   room: OfferProp;
+  mouseEnterHandler: (offerId: number) => void;
+  removeActiveStates: () => void;
 }
 
 function Room(prop: RoomProp): JSX.Element {
-  const {container, room} = prop;
+  const {container, room, mouseEnterHandler, removeActiveStates} = prop;
 
   return (
     <article className={container === Container.FAVORITES ? 'favorites__card place-card' : 'cities__place-card place-card'}>
@@ -19,7 +21,7 @@ function Room(prop: RoomProp): JSX.Element {
         </div> : ''}
       <div className={container === Container.FAVORITES ? 'favorites__image-wrapper place-card__image-wrapper' : 'cities__image-wrapper place-card__image-wrapper'}>
         <Link to={`${AppRoute.ROOM}${room.id}`}>
-          <img className='place-card__image' src={room.previewImage} width='260' height='200' alt={room.title} />
+          <img onMouseEnter={() => mouseEnterHandler(room.id)} onMouseOut={() => removeActiveStates()} className='place-card__image' src={room.previewImage} width='260' height='200' alt={room.title} />
         </Link>
       </div>
       <div className={ container === Container.FAVORITES ? 'favorites__card place-card__info' : 'place-card__info'} >

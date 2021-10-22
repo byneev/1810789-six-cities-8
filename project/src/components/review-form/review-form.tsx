@@ -50,31 +50,31 @@ function ReviewForm(props: ReviewProps):JSX.Element {
           </svg>
         </label>
 
-        <input onChange={(evt: ChangeEvent<HTMLInputElement>) => {
+        <input onChange={(evt:ChangeEvent<HTMLInputElement>) => {
           setRating(+evt.target.value);
         }} className="form__rating-input visually-hidden" name="rating" value="3" id="3-stars" type="radio" checked={rating === 3}
         />
-        <label htmlFor="3-stars" className="reviews__rating-label form__rating-label" title="not bad">
+        <label htmlFor="3-stars" className="reviews__rating-label form__rating-label" title="good">
           <svg className="form__star-image" width="37" height="33">
             <use xlinkHref="#icon-star"></use>
           </svg>
         </label>
 
-        <input onChange={(evt: ChangeEvent<HTMLInputElement>) => {
+        <input onChange={(evt:ChangeEvent<HTMLInputElement>) => {
           setRating(+evt.target.value);
         }} className="form__rating-input visually-hidden" name="rating" value="2" id="2-stars" type="radio" checked={rating === 2}
         />
-        <label htmlFor="2-stars" className="reviews__rating-label form__rating-label" title="badly">
+        <label htmlFor="2-stars" className="reviews__rating-label form__rating-label" title="good">
           <svg className="form__star-image" width="37" height="33">
             <use xlinkHref="#icon-star"></use>
           </svg>
         </label>
 
-        <input onChange={(evt: ChangeEvent<HTMLInputElement>) => {
+        <input onChange={(evt:ChangeEvent<HTMLInputElement>) => {
           setRating(+evt.target.value);
-        }} className="form__rating-input visually-hidden" name="rating" value="1" id="1-star" type="radio" checked={rating === 1}
+        }} className="form__rating-input visually-hidden" name="rating" value="1" id="1-stars" type="radio" checked={rating === 1}
         />
-        <label htmlFor="1-star" className="reviews__rating-label form__rating-label" title="terribly">
+        <label htmlFor="1-stars" className="reviews__rating-label form__rating-label" title="good">
           <svg className="form__star-image" width="37" height="33">
             <use xlinkHref="#icon-star"></use>
           </svg>

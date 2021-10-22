@@ -8,7 +8,7 @@ export type LocationItemProps = {
 }
 
 function LocationItem(props:LocationItemProps):JSX.Element {
-  const {offers, city} = props;
+  const { offers, city } = props;
   return (
     <li className="favorites__locations-items">
       <div className="favorites__locations locations locations--current">
@@ -19,7 +19,12 @@ function LocationItem(props:LocationItemProps):JSX.Element {
         </div>
       </div>
       <div className="favorites__places">
-        <OffersList container={Container.FAVORITES} offers={offers} />
+        <OffersList container={Container.FAVORITES} offers={offers} mouseEnterHandler={function (offerId: number): void {
+          throw new Error('Function not implemented.');
+        } } removeActiveStates={function (): void {
+          throw new Error('Function not implemented.');
+        } }
+        />
       </div>
     </li>
   );
