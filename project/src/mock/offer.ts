@@ -43,8 +43,8 @@ export const offers: OfferProp[] =
       'bedrooms': 3,
       'city': {
         'location': {
-          'latitude': 52.370216,
-          'longitude': 4.895168,
+          'latitude': 52.379189,
+          'longitude': 4.899431,
           'zoom': 10,
         },
         'name': 'Amsterdam',
@@ -62,8 +62,8 @@ export const offers: OfferProp[] =
       'isFavorite': false,
       'isPremium': false,
       'location': {
-        'latitude': 52.35514938496378,
-        'longitude': 4.673877537499948,
+        'latitude': 52.3909553943508,
+        'longitude': 4.85309666406198,
         'zoom': 8,
       },
       'maxAdults': 4,
@@ -77,11 +77,11 @@ export const offers: OfferProp[] =
       'bedrooms': 2,
       'city': {
         'location': {
-          'latitude': 51.370216,
-          'longitude': 3.895168,
+          'latitude': 52.379189,
+          'longitude': 4.899431,
           'zoom': 10,
         },
-        'name': 'Brussels',
+        'name': 'Amsterdam',
       },
       'description': 'Sicturesque that hides behind a a river by the unique lightness of Amsterdam.',
       'goods': ['Heating', 'Cable TV', 'Coffee machine', 'Dishwasher'],
@@ -96,8 +96,8 @@ export const offers: OfferProp[] =
       'isFavorite': true,
       'isPremium': false,
       'location': {
-        'latitude': 51.35514938496378,
-        'longitude': 3.673877537499948,
+        'latitude': 52.369553943508,
+        'longitude': 4.85309666406198,
         'zoom': 8,
       },
       'maxAdults': 4,
@@ -111,8 +111,8 @@ export const offers: OfferProp[] =
       'bedrooms': 1,
       'city': {
         'location': {
-          'latitude': 52.370216,
-          'longitude': 3.895168,
+          'latitude': 52.379189,
+          'longitude': 4.899431,
           'zoom': 10,
         },
         'name': 'Amsterdam',
@@ -130,8 +130,8 @@ export const offers: OfferProp[] =
       'isFavorite': true,
       'isPremium': true,
       'location': {
-        'latitude': 52.35514938496378,
-        'longitude': 3.673877537499948,
+        'latitude': 52.3909553943508,
+        'longitude': 4.929309666406198,
         'zoom': 8,
       },
       'maxAdults': 4,
@@ -145,11 +145,11 @@ export const offers: OfferProp[] =
       'bedrooms': 5,
       'city': {
         'location': {
-          'latitude': 51.370216,
-          'longitude': 4.895168,
+          'latitude': 52.379189,
+          'longitude': 4.899431,
           'zoom': 10,
         },
-        'name': 'Brussels',
+        'name': 'Amsterdam',
       },
       'description': 'Amazing simple dimple house with unstoppable environments.',
       'goods': ['Heating', 'Cable TV', 'Coffee machine', 'Dishwasher'],
@@ -164,8 +164,8 @@ export const offers: OfferProp[] =
       'isFavorite': false,
       'isPremium': false,
       'location': {
-        'latitude': 51.35514938496378,
-        'longitude': 4.673877537499948,
+        'latitude': 52.3809553943508,
+        'longitude': 4.939309666406198,
         'zoom': 8,
       },
       'maxAdults': 4,
