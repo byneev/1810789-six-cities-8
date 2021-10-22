@@ -7,6 +7,7 @@ import 'leaflet/dist/leaflet.css';
 export type MapProps = {
   offers: OfferProp[];
   currentOffer: number | undefined;
+  className: string;
 }
 
 const inactiveMarker = new Icon({
@@ -22,7 +23,7 @@ const activeMarker = new Icon({
 });
 
 function Map(props: MapProps) : JSX.Element {
-  const {offers, currentOffer} = props;
+  const {offers, currentOffer, className} = props;
   const mapRef = useRef(null);
   const city = offers[0].city;
   const map = useMap(mapRef, city);
@@ -39,7 +40,7 @@ function Map(props: MapProps) : JSX.Element {
   }, [map, offers, currentOffer]);
 
   return (
-    <section ref={mapRef} className='cities__map map'></section>
+    <section ref={mapRef} className={`${className}__map map`}></section>
   );
 }
 

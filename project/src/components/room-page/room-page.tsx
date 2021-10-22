@@ -5,10 +5,11 @@ import { OfferProp} from '../../mock/offer';
 import { ReviewProp} from '../../mock/review';
 import { reviews } from '../../mock/review';
 import { AppRoute, Container } from '../../utils/constants';
-import dayjs from 'dayjs';
 import OffersList from '../offersList/offers-list';
 import { useState } from 'react';
 import ReviewForm from '../review-form/review-form';
+import ReviewsList from '../reviews-list/reviews-list';
+import Map from '../map/map';
 
 export type IdProps = {
   id: string
@@ -120,46 +121,20 @@ function RoomPage(props: RoomPageProps):JSX.Element {
               </div>
               <section className="property__reviews reviews">
                 <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviewsList.length}</span></h2>
-                <ul className="reviews__list">
-                  {reviewsList.map((item) => (
-                    <li key={item.id} className="reviews__item">
-                      <div className="reviews__user user">
-                        <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                          <img className="reviews__avatar user__avatar" src={item.user.avatarUrl} width="54" height="54" alt="Reviews avatar" />
-                        </div>
-                        <span className="reviews__user-name"> {item.user.name} </span>
-                      </div>
-                      <div className="reviews__info">
-                        <div className="reviews__rating rating">
-                          <div className="reviews__stars rating__stars">
-                            <span style={{width: '80%'}}></span>
-                            <span className="visually-hidden">{item.rating}</span>
-                          </div>
-                        </div>
-                        <p className="reviews__text">{item.comment}</p>
-                        <time className="reviews__time" dateTime={dayjs(item.date).format('YYYY-MM-DD')}>{dayjs(item.date).format('MMMM YYYY')}</time>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+                <ReviewsList reviews={reviewsList} />
                 <ReviewForm onSubmitCallback={(reviewData:ReviewProp) =>
                   setReviewsList([...reviewsList, reviewData])}
                 />
               </section>
             </div>
           </div>
-          <section className="property__map map"></section>
+          <Map offers={offers.slice(0, 3)} currentOffer={undefined} className={'property'} />
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              <OffersList container={Container.ROOM} offers={offers.filter((item) => item.city.name === offer.city.name).slice(0, 6)} mouseEnterHandler={function (offerId: number): void {
-                throw new Error('Function not implemented.');
-              } } removeActiveStates={function (): void {
-                throw new Error('Function not implemented.');
-              } }
-              />
+              <OffersList container={Container.ROOM} offers={offers.filter((item) => item.city.name === offer.city.name).slice(0, 3)} mouseEnterHandler={(item) => null} removeActiveStates={() => null}/>
             </div>
           </section>
         </div>
