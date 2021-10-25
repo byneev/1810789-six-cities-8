@@ -128,7 +128,7 @@ function RoomPage(props: RoomPageProps):JSX.Element {
               </section>
             </div>
           </div>
-          <Map offers={offers.slice(0, 3)} currentOffer={undefined} className={'property'} />
+          <Map offers={offers.slice(0, 3)} currentOffer={undefined} styleClassName={'property'} />
         </section>
         <div className="container">
           <section className="near-places places">
