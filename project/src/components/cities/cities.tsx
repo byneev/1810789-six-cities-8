@@ -51,7 +51,7 @@ function Cities(props: AppProps):JSX.Element {
           </div>
         </section>
         <div className='cities__right-section'>
-          <Map offers={[...offers].filter((item) => item.city.name === City.AMSTERDAM)} currentOffer={currentOffer} />
+          <Map offers={[...offers].filter((item) => item.city.name === City.AMSTERDAM)} currentOffer={currentOffer} styleClassName={'cities'}  />
         </div>
       </div>
     </div>
