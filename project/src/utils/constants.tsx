@@ -1,3 +1,14 @@
+import { CitiesProps } from '../mock/offer';
+
+export type CityProp = {
+  AMSTERDAM: CitiesProps,
+  DUSSELDORF: CitiesProps,
+  HAMBURG: CitiesProps,
+  BRUSSELS: CitiesProps,
+  COLOGNE: CitiesProps,
+  PARIS: CitiesProps,
+};
+
 export const AppRoute = {
   MAIN: '/',
   LOGIN: '/login',
@@ -10,7 +21,7 @@ export const AuthorizationStatus = {
   IS_NOT_OK: 'authorization is not ok',
 };
 
-export const City = {
+export const City:CityProp = {
   AMSTERDAM: 'Amsterdam',
   DUSSELDORF: 'Dusseldorf',
   HAMBURG: 'Hamburg',

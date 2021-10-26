@@ -1,11 +1,17 @@
+import { connect, ConnectedProps } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { StateProps } from '../../store/reducer';
 import { AppRoute } from '../../utils/constants';
 
-type LoginProps = {
-  location: string
-}
+const mapStateToProps = ({currentCity}:StateProps) => ({
+  currentCity,
+});
 
-function Login(props: LoginProps):JSX.Element {
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+function Login(props: PropsFromRedux):JSX.Element {
+  const {currentCity} = props;
   return (
     <div className="page page--gray page--login">
       <header className="header">
@@ -39,7 +45,7 @@ function Login(props: LoginProps):JSX.Element {
           <section className="locations locations--login locations--current">
             <div className="locations__item">
               <a className="locations__item-link" href="/">
-                <span>{props.location}</span>
+                <span>{currentCity}</span>
               </a>
             </div>
           </section>
@@ -49,5 +55,7 @@ function Login(props: LoginProps):JSX.Element {
   );
 }
 
-export default Login;
+export {Login};
+export default connector(Login);
+
 

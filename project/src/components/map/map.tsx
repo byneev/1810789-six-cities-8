@@ -29,7 +29,7 @@ function Map(props: MapProps) : JSX.Element {
   const map = useMap(mapRef, city);
 
   useEffect(() => {
-    if (map) {
+    if (map && offers) {
       offers.forEach((offer) => {
         const marker = new Marker([offer.location.latitude, offer.location.longitude]);
         marker.setIcon(currentOffer !== undefined && offer.id === currentOffer ?

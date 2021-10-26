@@ -5,7 +5,7 @@ import { AppRoute, AuthorizationStatus } from '../../utils/constants';
 import NotFound from '../not-found/not-found';
 import PrivateRoute from '../private-route/private-route';
 import Favorites from '../favorites/favorites';
-import {  OfferProp } from '../../mock/offer';
+import { OfferProp } from '../../mock/offer';
 import { ReviewProp } from '../../mock/review';
 import RoomPage from '../room-page/room-page';
 
@@ -28,10 +28,10 @@ function App(props: AppProps): JSX.Element {
     <BrowserRouter>
       <Switch>
         <Route path={AppRoute.MAIN} exact>
-          <Main {...props} />
+          <Main />
         </Route>
         <Route path={AppRoute.LOGIN} exact>
-          <Login location={props.cities[0]} />
+          <Login />
         </Route>
         <PrivateRoute path={AppRoute.FAVORITES} authorizationStatus={authorizationStatus} render={() => <Favorites {...props} />} />
         <Route path='/offer/:id' exact render={
