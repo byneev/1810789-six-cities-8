@@ -37,6 +37,8 @@ export type OfferProp = {
   type: string,
 }
 
+export type CitiesProps = |'Amsterdam' |'Dusseldorf' |'Hamburg' |'Brussels' |'Cologne' | 'Paris';
+
 export const offers: OfferProp[] =
   [
     {
@@ -173,6 +175,40 @@ export const offers: OfferProp[] =
       'price': 137,
       'rating': 4.5,
       'title': 'What a great location. Look at this',
+      'type': 'apartment',
+    },
+    {
+      'bedrooms': 3,
+      'city': {
+        'location': {
+          'latitude': 48.864716,
+          'longitude': 2.349014,
+          'zoom': 10,
+        },
+        'name': 'Paris',
+      },
+      'description': 'A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.',
+      'goods': ['Heating', 'Kitchen', 'Cable TV', 'Washing machine', 'Coffee machine', 'Dishwasher'],
+      'host': {
+        'avatarUrl': 'img/1.png',
+        'id': 3,
+        'isPro': true,
+        'name': 'Angelina',
+      },
+      'id': 1,
+      'images': ['img/1.png', 'img/2.png'],
+      'isFavorite': false,
+      'isPremium': false,
+      'location': {
+        'latitude': 48.858093,
+        'longitude': 2.294694,
+        'zoom': 8,
+      },
+      'maxAdults': 4,
+      'previewImage': 'https://via.placeholder.com/260x200',
+      'price': 120,
+      'rating': 4.8,
+      'title': 'Beautiful & luxurious studio at great location',
       'type': 'apartment',
     },
   ];

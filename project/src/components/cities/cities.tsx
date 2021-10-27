@@ -1,12 +1,22 @@
 import { useState } from 'react';
-import { City, Container } from '../../utils/constants';
-import { AppProps } from '../app/app';
+import { Container } from '../../utils/constants';
 import Map from '../map/map';
 import OffersList from '../offersList/offers-list';
+import { StateProps } from '../../store/reducer';
+import { connect, ConnectedProps } from 'react-redux';
+import { getOffersByCity } from '../../utils/functions';
 
+const mapStateToProps = ({currentCity, offers}:StateProps) => ({
+  currentCity,
+  offers,
+});
 
-function Cities(props: AppProps):JSX.Element {
-  const {offers} = props;
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+function Cities(props: PropsFromRedux):JSX.Element {
+  const {currentCity, offers} = props;
+  const currentOffers = getOffersByCity(offers, currentCity);
   const [currentOffer, setCurrentOffer] = useState<number | undefined>(undefined);
 
   const offerMouseEnterHandler = (offerFromListId:number):void => {
@@ -22,7 +32,7 @@ function Cities(props: AppProps):JSX.Element {
       <div className='cities__places-container container'>
         <section className='cities__places places'>
           <h2 className='visually-hidden'>Places</h2>
-          <b className='places__found'>{[...offers].filter((item) => item.city.name === City.AMSTERDAM).length} places to stay in Amsterdam</b>
+          <b className='places__found'>{`${currentOffers.length} places to stay in ${currentCity}`}</b>
           <form className='places__sorting' action='#' method='get'>
             <span className='places__sorting-caption'>Sort by</span>
             <span className='places__sorting-type' tabIndex={0}>
@@ -47,15 +57,18 @@ function Cities(props: AppProps):JSX.Element {
             </ul>
           </form>
           <div className='cities__places-list places__list tabs__content'>
-            <OffersList removeActiveStates={offerMouseOutHandler} container={Container.MAIN} offers={offers} mouseEnterHandler={offerMouseEnterHandler} />
+            <OffersList removeActiveStates={offerMouseOutHandler} container={Container.MAIN} offers={currentOffers} mouseEnterHandler={offerMouseEnterHandler} />
           </div>
         </section>
         <div className='cities__right-section'>
-          <Map offers={[...offers].filter((item) => item.city.name === City.AMSTERDAM)} currentOffer={currentOffer} styleClassName={'cities'}  />
+          {currentOffers.length !== 0
+            ? <Map offers={currentOffers} currentOffer={currentOffer} styleClassName={'cities'} />
+            : ''}
         </div>
       </div>
     </div>
   );
 }
 
-export default Cities;
+export default connector(Cities);
+export {Cities};

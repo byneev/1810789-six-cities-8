@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { Map, TileLayer } from 'leaflet';
 import { MutableRefObject, useEffect, useState } from 'react';
-import { CityProps } from '../../mock/offer';
+import {  CityProps } from '../../mock/offer';
 
 function useMap(mapRef: MutableRefObject<HTMLElement | null>, city: CityProps) : Map | null {
   const [map, setMap] = useState<Map | null>(null);
