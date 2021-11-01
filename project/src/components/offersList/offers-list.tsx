@@ -1,23 +1,46 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import { OfferProps } from '../app/app';
+import { connect, ConnectedProps } from 'react-redux';
+import { OfferProp } from '../../mock/offer';
+import { StateProps } from '../../store/reducer';
+import { sortBySortType } from '../../utils/functions';
 import Room from '../room/room';
 
-export type OffersListProps = OfferProps & {
+export type OffersListProps = {
+  offers: OfferProp[];
   container: string;
   mouseEnterHandler: (offerId: number) => void;
   removeActiveStates: () => void;
 }
 
-function OffersList(props: OffersListProps): JSX.Element {
-  const {container, offers, mouseEnterHandler, removeActiveStates} = props;
+export enum SortType {
+  HighFirst = 'Price: high to low',
+  LowFirst = 'Price: low to high',
+  RatedFirst = 'Top rated first',
+  Popular = 'Popular',
+}
+
+export type SortProps = | SortType.HighFirst | SortType.LowFirst | SortType.Popular | SortType.RatedFirst;
+
+const mapStateToProps = ({currentSort}:StateProps) => ({
+  currentSort,
+});
+
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedOffersListProps = PropsFromRedux & OffersListProps;
+
+function OffersList(props: ConnectedOffersListProps): JSX.Element {
+  const {container, offers, mouseEnterHandler, removeActiveStates, currentSort} = props;
+  const sortedOffers:OfferProp[] = sortBySortType(offers, currentSort);
   return(
     <React.Fragment>
-      {offers.map((offer) =>
+      {sortedOffers.map((offer) =>
         <Room key={`${offer.id}-${offer.city.name}`} container={container} room={offer} mouseEnterHandler={mouseEnterHandler} removeActiveStates={removeActiveStates} />)}
     </React.Fragment>
   );
 }
 
-export default OffersList;
+export {OffersList};
+export default connector(OffersList);

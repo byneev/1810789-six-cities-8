@@ -1,8 +1,10 @@
+import { SortProps } from '../components/offersList/offers-list';
 import { CitiesProps, OfferProp } from '../mock/offer';
 
 export enum ActionType {
   ChangeCity = 'app/changeCity',
   SetupOffers = 'app/setupOffers',
+  ChangeSort = 'app/changeSort',
 }
 
 export const getChangeCity = (city: CitiesProps) => ({
@@ -19,4 +21,11 @@ export const getSetupOffers = (offers: OfferProp[]) => ({
   },
 } as const);
 
-export type Actions = ReturnType<typeof getChangeCity> | ReturnType<typeof getSetupOffers>;
+export const getChangeSort = (sort: SortProps) => ({
+  type: ActionType.ChangeSort,
+  payload: {
+    sort,
+  },
+} as const);
+
+export type Actions = ReturnType<typeof getChangeSort> | ReturnType<typeof getChangeCity> | ReturnType<typeof getSetupOffers>;

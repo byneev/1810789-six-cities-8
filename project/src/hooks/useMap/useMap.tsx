@@ -1,17 +1,17 @@
 /* eslint-disable no-console */
 import { Map, TileLayer } from 'leaflet';
 import { MutableRefObject, useEffect, useState } from 'react';
-import {  CityProps } from '../../mock/offer';
+import { OfferProp } from '../../mock/offer';
 
-function useMap(mapRef: MutableRefObject<HTMLElement | null>, city: CityProps) : Map | null {
+function useMap(mapRef: MutableRefObject<HTMLElement | null>, offer: OfferProp) : Map | null {
   const [map, setMap] = useState<Map | null>(null);
 
   useEffect(() => {
     if (mapRef.current !== null && map === null) {
       const instance = new Map(mapRef.current,
         {
-          center: [city.location.latitude, city.location.longitude],
-          zoom: city.location.zoom,
+          center: [offer.location.latitude, offer.location.longitude],
+          zoom: offer.location.zoom,
         },
       );
       const layer = new TileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
@@ -22,7 +22,7 @@ function useMap(mapRef: MutableRefObject<HTMLElement | null>, city: CityProps) :
 
       instance.addLayer(layer);
       setMap(instance);
-    }}, [map, mapRef, city]);
+    }}, [map, mapRef, offer]);
 
   return map;
 }

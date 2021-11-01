@@ -8,7 +8,7 @@ export type LocationProps = {
 
 export type CityProps = {
   location: LocationProps,
-  name: string,
+  name: CitiesProps,
 }
 
 export type HostProps = {
