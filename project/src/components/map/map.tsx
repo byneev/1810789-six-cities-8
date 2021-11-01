@@ -1,13 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Icon, Marker} from 'leaflet';
 import { useEffect, useRef} from 'react';
 import useMap from '../../hooks/useMap/useMap';
-import type { OfferProp } from '../../mock/offer';
+import type { CitiesProps, OfferProp } from '../../mock/offer';
 import 'leaflet/dist/leaflet.css';
 
 export type MapProps = {
   offers: OfferProp[];
   currentOffer: number | undefined;
   styleClassName: string;
+  city: CitiesProps;
 }
 
 const inactiveMarker = new Icon({
@@ -23,10 +25,9 @@ const activeMarker = new Icon({
 });
 
 function Map(props: MapProps) : JSX.Element {
-  const {offers, currentOffer, styleClassName} = props;
+  const {offers, currentOffer, styleClassName, city} = props;
   const mapRef = useRef(null);
-  const city = offers[0].city;
-  const map = useMap(mapRef, city);
+  const map = useMap(mapRef, offers[0]);
 
   useEffect(() => {
     if (map && offers) {
@@ -38,6 +39,13 @@ function Map(props: MapProps) : JSX.Element {
       });
     }
   }, [map, offers, currentOffer]);
+
+  useEffect(() => {
+    if (map && offers) {
+      const defaultOffer = offers[0];
+      map.flyTo([defaultOffer.location.latitude, defaultOffer.location.longitude], defaultOffer.location.zoom);
+    }
+  }, [city]);
 
   return (
     <section ref={mapRef} className={`${styleClassName}__map map`}></section>
