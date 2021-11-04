@@ -1,4 +1,4 @@
-import { createStore } from '@reduxjs/toolkit';
+import { applyMiddleware, createStore } from '@reduxjs/toolkit';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -8,8 +8,13 @@ import { reviews } from './mock/review';
 import { reducer } from './store/reducer';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import { getSetupOffers } from './store/actions';
+import thunk from 'redux-thunk';
+import { createAPI } from './utils/api';
 
-const store = createStore(reducer, composeWithDevTools());
+const api = createAPI();
+const store = createStore(reducer, composeWithDevTools(
+  applyMiddleware(thunk.withExtraArgument(api)),
+));
 store.dispatch(getSetupOffers(offers));
 
 ReactDOM.render(
