@@ -42,6 +42,7 @@ function Map(props: MapProps) : JSX.Element {
 
   useEffect(() => {
     if (map && offers) {
+      // сделать zoom по городу, а не по оферу
       const defaultOffer = offers[0];
       map.flyTo([defaultOffer.location.latitude, defaultOffer.location.longitude], defaultOffer.location.zoom);
     }

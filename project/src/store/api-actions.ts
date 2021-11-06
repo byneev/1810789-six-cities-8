@@ -1,10 +1,14 @@
-import { APIRoute } from '../utils/constants';
-import { Actions, getSetupOffers } from './actions';
+/* eslint-disable no-console */
+import { APIRoute, AuthorizationStatus } from '../utils/constants';
+import { Actions, getChangeAuthorization, getSetupOffers, getSetUserData } from './actions';
 import { OfferProp } from '../mock/offer';
-import { convertOffersToClient, ServerOfferProp } from '../utils/adapter';
+import { convertOffersToClient, convertUserDataToClient, ServerOfferProp } from '../utils/adapter';
 import { ThunkAction, ThunkDispatch } from '@reduxjs/toolkit';
-import { StateProps } from './reducer';
+import { StateProps, UserDataProps } from './reducer';
 import { AxiosInstance } from 'axios';
+import { AuthData } from '../components/login/login';
+import { removeToken, setToken } from './token';
+import { toast } from 'react-toastify';
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, StateProps, AxiosInstance, Actions>;
 export type ThunkAppDispatch = ThunkDispatch<StateProps, AxiosInstance, Actions>;
@@ -16,3 +20,28 @@ export const loadOffersFromServer = ():ThunkActionResult =>
     dispatch(getSetupOffers(offersForClient));
   };
 
+export const checkAuthorizeStatus = ():ThunkActionResult =>
+  async (dispatch, _getState, api) => {
+    try {
+      await api.get(APIRoute.Login);
+      dispatch(getChangeAuthorization(AuthorizationStatus.Auth));
+
+    } catch (error) {
+      toast.warn('Failed authorize to Six cities');
+    }
+  };
+
+export const loginToCite = ({login: email, password}:AuthData):ThunkActionResult =>
+  async (dispatch, _getState, api) => {
+    const {data} = await api.post<UserDataProps>(APIRoute.Login, {email, password});
+    setToken(data.token);
+    dispatch(getChangeAuthorization(AuthorizationStatus.Auth));
+    dispatch(getSetUserData(convertUserDataToClient(data)));
+  };
+
+export const logoutFromCite = ():ThunkActionResult =>
+  async (dispatch, _getState, api) => {
+    await api.delete(APIRoute.Logout);
+    removeToken();
+    dispatch(getChangeAuthorization(AuthorizationStatus.NoAuth));
+  };

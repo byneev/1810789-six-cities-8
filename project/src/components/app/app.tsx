@@ -1,15 +1,17 @@
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Router as BrowserRouter, Route, Switch } from 'react-router-dom';
 import Login from '../login/login';
 import Main from '../main/main';
-import { AppRoute, AuthorizationStatus } from '../../utils/constants';
+import { AppRoute} from '../../utils/constants';
 import NotFound from '../not-found/not-found';
 import PrivateRoute from '../private-route/private-route';
 import Favorites from '../favorites/favorites';
 import { OfferProp } from '../../mock/offer';
 import { ReviewProp } from '../../mock/review';
 import RoomPage from '../room-page/room-page';
-
-const authorizationStatus: string = AuthorizationStatus.IS_OK;
+import { StateProps } from '../../store/reducer';
+import { connect, ConnectedProps } from 'react-redux';
+import Spinner from '../spinner/spinner';
+import browserHistory from '../../utils/history';
 
 export type OfferProps = {
   offers: OfferProp[];
@@ -23,17 +25,32 @@ export type AppProps = OfferProps & ReviewProps & {
   cities: string[];
 }
 
-function App(props: AppProps): JSX.Element {
+const mapStateToProps = ({isLoading}:StateProps) => ({
+  isLoading,
+});
+
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedAppProps = AppProps & PropsFromRedux;
+
+function App(props: ConnectedAppProps): JSX.Element {
+  const {isLoading} = props;
+  if (isLoading) {
+    return (
+      <Spinner />
+    );
+  }
   return (
-    <BrowserRouter>
+    <BrowserRouter history={browserHistory}>
       <Switch>
         <Route path={AppRoute.MAIN} exact>
           <Main />
         </Route>
-        <Route path={AppRoute.LOGIN} exact>
-          <Login />
-        </Route>
-        <PrivateRoute path={AppRoute.FAVORITES} authorizationStatus={authorizationStatus} render={() => <Favorites {...props} />} />
+        <Route path={AppRoute.LOGIN} render={({history}) => (
+          <Login onSubmitData={() => history.push(AppRoute.MAIN)} />
+        )} exact
+        />
+        <PrivateRoute path={AppRoute.FAVORITES} render={() => <Favorites {...props} />} />
         <Route path='/offer/:id' exact render={
           (routeProps) => <RoomPage offers={props.offers} {...routeProps} />
         }
@@ -45,4 +62,5 @@ function App(props: AppProps): JSX.Element {
     </BrowserRouter>);
 }
 
-export default App;
+export default connector(App);
+export {App};

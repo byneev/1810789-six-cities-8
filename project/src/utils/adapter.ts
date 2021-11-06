@@ -1,4 +1,6 @@
 import { CitiesProps, OfferProp } from '../mock/offer';
+import { UserDataProps } from '../store/reducer';
+import { Token } from '../store/token';
 
 export type ServerOfferProp = {
   'bedrooms': number,
@@ -35,6 +37,15 @@ export type ServerOfferProp = {
   'type': string
 }
 
+export type ServerUserDataProp = {
+  'avatar_url'?: string,
+  'email': string,
+  'id': number,
+  'is_pro'?: false,
+  'name': string,
+  'token': Token,
+}
+
 export const convertOffersToClient = (offer: ServerOfferProp) : OfferProp => {
   if (offer.is_favorite === undefined || offer.is_premium === undefined || offer.max_adults === undefined || offer.preview_image === undefined) {
     throw new Error('Data from server is incorrect');
@@ -62,3 +73,19 @@ export const convertOffersToClient = (offer: ServerOfferProp) : OfferProp => {
 };
 
 export const convertOffersToServer = (offers: OfferProp[]):OfferProp[] => offers;
+
+export const convertUserDataToClient = (userData: ServerUserDataProp):UserDataProps => {
+  if (userData.avatar_url === undefined|| userData.is_pro === undefined) {
+    throw new Error('User data from server is incorrect');
+  }
+  const clientUserData:UserDataProps & Pick<ServerUserDataProp, 'avatar_url' | 'is_pro'> =
+  {...userData,
+    avatarUrl: userData.avatar_url,
+    isPro: userData.is_pro,
+  };
+  delete clientUserData.avatar_url;
+  delete clientUserData.is_pro;
+
+  return clientUserData;
+};
+
