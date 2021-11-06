@@ -36,3 +36,9 @@ export const Container = {
   ROOM: 'Room',
 };
 
+export enum APIRoute {
+  Hotels = '/hotels',
+  Favorite = '/favorite',
+  Login = '/login',
+  Logout = '/logout',
+}

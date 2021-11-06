@@ -26,11 +26,11 @@ export type OfferProp = {
   host: HostProps,
   id: number,
   images: string[],
-  isFavorite: boolean,
-  isPremium: boolean,
+  isFavorite: boolean | undefined,
+  isPremium: boolean | undefined,
   location: LocationProps,
-  maxAdults: number
-  previewImage: string,
+  maxAdults: number | undefined
+  previewImage: string | undefined,
   price: number
   rating: number
   title: string,

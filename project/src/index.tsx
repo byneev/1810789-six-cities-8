@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { applyMiddleware, createStore } from '@reduxjs/toolkit';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -7,15 +8,15 @@ import { cities, offers } from './mock/offer';
 import { reviews } from './mock/review';
 import { reducer } from './store/reducer';
 import {composeWithDevTools} from 'redux-devtools-extension';
-import { getSetupOffers } from './store/actions';
 import thunk from 'redux-thunk';
 import { createAPI } from './utils/api';
+import { loadOffersFromServer } from './store/api-actions';
 
 const api = createAPI();
 const store = createStore(reducer, composeWithDevTools(
   applyMiddleware(thunk.withExtraArgument(api)),
 ));
-store.dispatch(getSetupOffers(offers));
+store.dispatch(loadOffersFromServer());
 
 ReactDOM.render(
   <React.StrictMode>
