@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { offers} from '../../mock/offer';
 import { ReviewProp} from '../../mock/review';
 import { reviews } from '../../mock/review';
 import { AppRoute, AuthorizationStatus, Container } from '../../utils/constants';
@@ -12,20 +11,26 @@ import Map from '../map/map';
 import { connect, ConnectedProps } from 'react-redux';
 import { ThunkAppDispatch, logoutFromCite } from '../../store/api-actions';
 import { StateProps } from '../../store/reducer';
+import { getRefreshMarkers } from '../../store/actions';
 
 export type IdProps = {
   id: string
 }
 
-const mapStateToProps = ({currentOffer, authorizationStatus, userData}:StateProps) => ({
+const mapStateToProps = ({currentCity, currentOffer, authorizationStatus, userData, nearbyOffers}:StateProps) => ({
+  currentCity,
   currentOffer,
   authorizationStatus,
   userData,
+  nearbyOffers,
 });
 
 const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({
   onLogout(){
     dispatch(logoutFromCite());
+  },
+  onLoad(){
+    dispatch(getRefreshMarkers(true));
   },
 });
 
@@ -34,8 +39,9 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedRoomPageProps = RouteComponentProps<IdProps> & PropsFromRedux;
 
 function RoomPage(props: ConnectedRoomPageProps):JSX.Element {
-  const {currentOffer, authorizationStatus, userData, onLogout} = props;
+  const {currentCity, currentOffer, authorizationStatus, userData, nearbyOffers, onLogout, onLoad} = props;
   const [reviewsList, setReviewsList] = useState(reviews);
+  onLoad();
   if (currentOffer === null) {
     return <div></div>;
   }
@@ -153,13 +159,13 @@ function RoomPage(props: ConnectedRoomPageProps):JSX.Element {
               </section>
             </div>
           </div>
-          <Map offers={offers.slice(0, 3)} currentOffer={undefined} styleClassName={'property'} city={currentOffer.city.name} />
+          <Map offers={nearbyOffers} currentOffer={currentOffer} styleClassName={'property'} city={currentCity} />
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              <OffersList container={Container.ROOM} offers={offers.filter((item) => item.city.name === currentOffer.city.name).slice(0, 3)} mouseEnterHandler={(item) => null} removeActiveStates={() => null}/>
+              <OffersList container={Container.ROOM} offers={nearbyOffers} mouseEnterHandler={(item) => null} removeActiveStates={() => null}/>
             </div>
           </section>
         </div>

@@ -22,6 +22,8 @@ export type StateProps = {
   authorizationStatus: AuthoriztionProps,
   userData:UserDataProps,
   currentOffer: OfferProp | null,
+  nearbyOffers: OfferProp[],
+  isNeedRefreshMarkers: boolean,
 };
 
 const initialState:StateProps = {
@@ -39,6 +41,8 @@ const initialState:StateProps = {
     avatarUrl:'',
   },
   currentOffer: null,
+  nearbyOffers: [],
+  isNeedRefreshMarkers: false,
 };
 
 export const reducer = (state:StateProps = initialState, action: Actions):StateProps => {
@@ -57,6 +61,10 @@ export const reducer = (state:StateProps = initialState, action: Actions):StateP
       return {...state, authorizationStatus: AuthorizationStatus.NoAuth};
     case ActionType.SetCurrentOffer:
       return {...state, currentOffer: action.payload.offer};
+    case ActionType.SetNearbyOffers:
+      return {...state, nearbyOffers: action.payload.offers};
+    case ActionType.RefreshMarkers:
+      return {...state, isNeedRefreshMarkers: action.payload.isNeedRefreshMarkers};
     default:
       return state;
   }

@@ -25,6 +25,7 @@ export const store = createStore(reducer, composeWithDevTools(
 ));
 store.dispatch(loadOffersFromServer());
 store.dispatch(checkAuthorizeStatus());
+console.log(store.getState());
 
 ReactDOM.render(
   <React.StrictMode>

@@ -11,6 +11,8 @@ export enum ActionType {
   SetUserData = 'user/setUserData',
   Logout = 'user/logout',
   SetCurrentOffer = 'app/setCurrentOffer',
+  SetNearbyOffers = 'app/setNearbyOffers',
+  RefreshMarkers = 'app/refreshMarkers'
 }
 
 export const getChangeCity = (city: CitiesProps) => ({
@@ -59,4 +61,18 @@ export const getSetCurrentOffer = (offer:OfferProp) => ({
   },
 } as const);
 
-export type Actions = ReturnType<typeof getChangeSort> | ReturnType<typeof getChangeCity> | ReturnType<typeof getSetupOffers> | ReturnType<typeof getChangeAuthorization> | ReturnType<typeof getSetUserData> | ReturnType<typeof getLogout> | ReturnType<typeof getSetCurrentOffer>;
+export const getSetNearbyOferrs = (offers:OfferProp[]) => ({
+  type: ActionType.SetNearbyOffers,
+  payload: {
+    offers,
+  },
+} as const);
+
+export const getRefreshMarkers = (isNeedRefreshMarkers: boolean) => ({
+  type: ActionType.RefreshMarkers,
+  payload: {
+    isNeedRefreshMarkers,
+  },
+} as const);
+
+export type Actions = ReturnType<typeof getChangeSort> | ReturnType<typeof getChangeCity> | ReturnType<typeof getSetupOffers> | ReturnType<typeof getChangeAuthorization> | ReturnType<typeof getSetUserData> | ReturnType<typeof getLogout> | ReturnType<typeof getSetCurrentOffer> | ReturnType<typeof getSetNearbyOferrs> | ReturnType<typeof getRefreshMarkers>;
