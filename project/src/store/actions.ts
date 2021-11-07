@@ -10,6 +10,7 @@ export enum ActionType {
   ChangeAuthorization = 'user/changeAuthoriztion',
   SetUserData = 'user/setUserData',
   Logout = 'user/logout',
+  SetCurrentOffer = 'app/setCurrentOffer',
 }
 
 export const getChangeCity = (city: CitiesProps) => ({
@@ -51,4 +52,11 @@ export const getLogout = () => ({
   type: ActionType.Logout,
 } as const);
 
-export type Actions = ReturnType<typeof getChangeSort> | ReturnType<typeof getChangeCity> | ReturnType<typeof getSetupOffers> | ReturnType<typeof getChangeAuthorization> | ReturnType<typeof getSetUserData> | ReturnType<typeof getLogout>;
+export const getSetCurrentOffer = (offer:OfferProp) => ({
+  type: ActionType.SetCurrentOffer,
+  payload: {
+    offer,
+  },
+} as const);
+
+export type Actions = ReturnType<typeof getChangeSort> | ReturnType<typeof getChangeCity> | ReturnType<typeof getSetupOffers> | ReturnType<typeof getChangeAuthorization> | ReturnType<typeof getSetUserData> | ReturnType<typeof getLogout> | ReturnType<typeof getSetCurrentOffer>;

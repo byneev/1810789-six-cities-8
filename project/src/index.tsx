@@ -12,10 +12,15 @@ import thunk from 'redux-thunk';
 import { createAPI } from './utils/api';
 import { checkAuthorizeStatus, loadOffersFromServer } from './store/api-actions';
 import { getChangeAuthorization } from './store/actions';
-import { AuthorizationStatus } from './utils/constants';
+import { AppRoute, AuthorizationStatus } from './utils/constants';
+import { Redirect } from 'react-router-dom';
 
-const api = createAPI(() => store.dispatch(getChangeAuthorization(AuthorizationStatus.NoAuth)));
-const store = createStore(reducer, composeWithDevTools(
+const api = createAPI(
+  () => store.dispatch(getChangeAuthorization(AuthorizationStatus.NoAuth)),
+  () => <Redirect to={AppRoute.NOTFOUND}/>,
+);
+
+export const store = createStore(reducer, composeWithDevTools(
   applyMiddleware(thunk.withExtraArgument(api)),
 ));
 store.dispatch(loadOffersFromServer());

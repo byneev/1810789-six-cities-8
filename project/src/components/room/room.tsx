@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
+import { connect, ConnectedProps } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { OfferProp } from '../../mock/offer';
+import { loadCurrentOffer, ThunkAppDispatch } from '../../store/api-actions';
 import { AppRoute, Container } from '../../utils/constants';
 
 export type RoomProp =  {
@@ -10,7 +12,16 @@ export type RoomProp =  {
   removeActiveStates: () => void;
 }
 
-function Room(prop: RoomProp): JSX.Element {
+const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
+  onRoomClick(id:number){
+    dispatch(loadCurrentOffer(id));
+  },
+});
+const connector = connect(null, mapDispatchToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedRoomProps = RoomProp & PropsFromRedux;
+
+function Room(prop: ConnectedRoomProps): JSX.Element {
   const {container, room, mouseEnterHandler, removeActiveStates} = prop;
 
   return (
@@ -52,4 +63,5 @@ function Room(prop: RoomProp): JSX.Element {
   );
 }
 
-export default Room;
+export {Room};
+export default connector(Room);

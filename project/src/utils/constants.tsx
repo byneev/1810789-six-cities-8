@@ -17,6 +17,7 @@ export const AppRoute = {
   LOGIN: '/login',
   FAVORITES: '/favorites',
   ROOM: '/offer/',
+  NOTFOUND: '/404',
 };
 
 export const City:CityProp = {
@@ -49,4 +50,5 @@ export enum AuthorizationStatus {
 
 export enum HTTPStatusCode {
   Unauthorized = 401,
+  NotFound = 404,
 }

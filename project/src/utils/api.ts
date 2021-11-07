@@ -1,8 +1,9 @@
+/* eslint-disable no-console */
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { getToken } from '../store/token';
 import { HTTPStatusCode } from './constants';
 
-export const createAPI = (onUnauthorize: () => void):AxiosInstance => {
+export const createAPI = (onUnauthorize: () => void, onNotFound: () => void):AxiosInstance => {
   const api = axios.create({
     baseURL: 'https://8.react.pages.academy/six-cities',
     timeout: 5000,
@@ -13,6 +14,10 @@ export const createAPI = (onUnauthorize: () => void):AxiosInstance => {
     (error: AxiosError) => {
       if (error.response?.status === HTTPStatusCode.Unauthorized) {
         onUnauthorize();
+      }
+      if (error.response?.status === HTTPStatusCode.NotFound) {
+        console.log('404');
+        onNotFound();
       }
       return Promise.reject(error);
     },

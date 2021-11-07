@@ -21,6 +21,7 @@ export type StateProps = {
   isLoading: boolean,
   authorizationStatus: AuthoriztionProps,
   userData:UserDataProps,
+  currentOffer: OfferProp | null,
 };
 
 const initialState:StateProps = {
@@ -37,6 +38,7 @@ const initialState:StateProps = {
     isPro:undefined,
     avatarUrl:'',
   },
+  currentOffer: null,
 };
 
 export const reducer = (state:StateProps = initialState, action: Actions):StateProps => {
@@ -53,6 +55,8 @@ export const reducer = (state:StateProps = initialState, action: Actions):StateP
       return {...state, userData: action.payload.data};
     case ActionType.Logout:
       return {...state, authorizationStatus: AuthorizationStatus.NoAuth};
+    case ActionType.SetCurrentOffer:
+      return {...state, currentOffer: action.payload.offer};
     default:
       return state;
   }

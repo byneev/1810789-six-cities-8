@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Router as BrowserRouter, Route, Switch } from 'react-router-dom';
 import Login from '../login/login';
 import Main from '../main/main';
@@ -12,6 +13,8 @@ import { StateProps } from '../../store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import Spinner from '../spinner/spinner';
 import browserHistory from '../../utils/history';
+import { store } from '../..';
+import { loadCurrentOffer } from '../../store/api-actions';
 
 export type OfferProps = {
   offers: OfferProp[];
@@ -52,7 +55,10 @@ function App(props: ConnectedAppProps): JSX.Element {
         />
         <PrivateRoute path={AppRoute.FAVORITES} render={() => <Favorites {...props} />} />
         <Route path='/offer/:id' exact render={
-          (routeProps) => <RoomPage offers={props.offers} {...routeProps} />
+          (routeProps) => {
+            store.dispatch(loadCurrentOffer(+routeProps.match.params.id));
+            return <RoomPage {...routeProps}/>;
+          }
         }
         />
         <Route >

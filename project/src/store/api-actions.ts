@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { APIRoute, AuthorizationStatus } from '../utils/constants';
-import { Actions, getChangeAuthorization, getSetupOffers, getSetUserData } from './actions';
+import { Actions, getChangeAuthorization, getSetCurrentOffer, getSetupOffers, getSetUserData } from './actions';
 import { OfferProp } from '../mock/offer';
 import { convertOffersToClient, convertUserDataToClient, ServerOfferProp } from '../utils/adapter';
 import { ThunkAction, ThunkDispatch } from '@reduxjs/toolkit';
@@ -44,4 +44,11 @@ export const logoutFromCite = ():ThunkActionResult =>
     await api.delete(APIRoute.Logout);
     removeToken();
     dispatch(getChangeAuthorization(AuthorizationStatus.NoAuth));
+  };
+
+export const loadCurrentOffer = (id:number):ThunkActionResult =>
+  async (dispatch, _getState, api) => {
+    console.log(`${APIRoute.Hotels}/:${id}`);
+    const offer = await api.get(`${APIRoute.Hotels}/${id}`);
+    dispatch(getSetCurrentOffer(convertOffersToClient(offer.data)));
   };
