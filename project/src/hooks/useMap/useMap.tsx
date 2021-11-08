@@ -1,17 +1,30 @@
 /* eslint-disable no-console */
-import { LayerGroup, Map, TileLayer } from 'leaflet';
+import { Map, TileLayer } from 'leaflet';
 import { MutableRefObject, useEffect, useState } from 'react';
 import { OfferProp } from '../../mock/offer';
 
-function useMap(mapRef: MutableRefObject<HTMLElement | null>, offer: OfferProp, isNeedRefreshMarkers: boolean ) : LayerGroup<any> | undefined {
-  const [map, setMap] = useState<Map | LayerGroup | null>(null);
+function useMap(mapRef: MutableRefObject<HTMLElement | null>, offer: OfferProp, currentOffer: OfferProp | null ) : Map | null {
+  const [map, setMap] = useState<Map | null>(null);
+
+  useEffect(() => {
+    if (map !== null) {
+      map.remove();
+      console.log(map);
+    }
+    setMap(null);
+  }, [currentOffer]);
 
   useEffect(() => {
     if (mapRef.current !== null && map === null) {
+      console.log('I am rdy to create map');
       const instance = new Map(mapRef.current,
         {
-          center: [offer.city.location.latitude, offer.city.location.longitude],
-          zoom: offer.city.location.zoom,
+          center: currentOffer === null ?
+            [offer.city.location.latitude, offer.city.location.longitude] :
+            [currentOffer.city.location.latitude, currentOffer.city.location.longitude],
+          zoom: currentOffer === null ?
+            offer.city.location.zoom :
+            currentOffer.city.location.zoom,
         },
       );
       const layer = new TileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
@@ -22,13 +35,9 @@ function useMap(mapRef: MutableRefObject<HTMLElement | null>, offer: OfferProp, 
 
       instance.addLayer(layer);
       setMap(instance);
-    }}, [mapRef, offer]);
-  let markersLayer;
-  if (map) {
-    markersLayer = new LayerGroup().addTo(map);
-  }
+    }}, [map, mapRef, offer]);
 
-  return markersLayer;
+  return map;
 }
 
 export default useMap;

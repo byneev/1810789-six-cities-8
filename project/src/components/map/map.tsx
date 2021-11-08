@@ -10,7 +10,7 @@ import { StateProps } from '../../store/reducer';
 
 export type MapProps = {
   offers: OfferProp[];
-  currentOffer: OfferProp | undefined;
+  activeOffer: OfferProp | undefined;
   styleClassName: string;
   city: CitiesProps;
 }
@@ -27,42 +27,38 @@ const activeMarker = new Icon({
   iconAnchor: [14, 39],
 });
 
-const mapStateToProps = ({isNeedRefreshMarkers}:StateProps) => ({
-  isNeedRefreshMarkers,
+const mapStateToProps = ({currentOffer}:StateProps) => ({
+  currentOffer,
 });
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedMapProps = PropsFromRedux & MapProps;
 
 function Map(props: ConnectedMapProps) : JSX.Element {
-  const {offers, currentOffer, styleClassName, isNeedRefreshMarkers} = props;
+  const {offers, activeOffer, currentOffer, styleClassName, city} = props;
   const mapRef = useRef(null);
-  const layer = useMap(mapRef, offers[0], isNeedRefreshMarkers);
-  console.log(isNeedRefreshMarkers);
-  if (isNeedRefreshMarkers) {
-    layer?.clearLayers();
-  }
+  const map = useMap(mapRef, offers[0], currentOffer);
 
   useEffect(() => {
-    if (layer && offers) {
+    if (map && offers) {
       offers.forEach((offer) => {
         const marker = new Marker([offer.location.latitude, offer.location.longitude]);
-        marker.setIcon(currentOffer !== undefined && offer.id === currentOffer.id ?
+        marker.setIcon(activeOffer !== undefined && offer.id === activeOffer.id ?
           activeMarker :
-          inactiveMarker).addTo(layer);
+          inactiveMarker).addTo(map);
       });
-      if (currentOffer !== undefined) {
-        new Marker([currentOffer.location.latitude, currentOffer.location.longitude]).setIcon(activeMarker).addTo(layer);
+      if (currentOffer !== null) {
+        new Marker([currentOffer.location.latitude, currentOffer.location.longitude]).setIcon(activeMarker).addTo(map);
       }
     }
-  }, [layer, currentOffer, offers]);
+  }, [map, activeOffer, offers]);
 
-  // useEffect(() => {
-  //   if (layer && offers) {
-  //     const defaultOffer = offers[0];
-  //     layer.flyTo([defaultOffer.city.location.latitude, defaultOffer.city.location.longitude], defaultOffer.city.location.zoom);
-  //   }
-  // }, [city]);
+  useEffect(() => {
+    if (map && offers) {
+      const defaultOffer = offers[0];
+      map.flyTo([defaultOffer.city.location.latitude, defaultOffer.city.location.longitude], defaultOffer.city.location.zoom);
+    }
+  }, [city]);
 
   return (
     <section ref={mapRef} className={`${styleClassName}__map map`}></section>

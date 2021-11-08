@@ -159,7 +159,7 @@ function RoomPage(props: ConnectedRoomPageProps):JSX.Element {
               </section>
             </div>
           </div>
-          <Map offers={nearbyOffers} currentOffer={currentOffer} styleClassName={'property'} city={currentCity} />
+          <Map offers={nearbyOffers} activeOffer={currentOffer} styleClassName={'property'} city={currentCity} />
         </section>
         <div className="container">
           <section className="near-places places">
