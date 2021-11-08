@@ -11,7 +11,6 @@ import Map from '../map/map';
 import { connect, ConnectedProps } from 'react-redux';
 import { ThunkAppDispatch, logoutFromCite } from '../../store/api-actions';
 import { StateProps } from '../../store/reducer';
-import { getRefreshMarkers } from '../../store/actions';
 
 export type IdProps = {
   id: string
@@ -29,9 +28,6 @@ const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({
   onLogout(){
     dispatch(logoutFromCite());
   },
-  onLoad(){
-    dispatch(getRefreshMarkers(true));
-  },
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -39,9 +35,9 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedRoomPageProps = RouteComponentProps<IdProps> & PropsFromRedux;
 
 function RoomPage(props: ConnectedRoomPageProps):JSX.Element {
-  const {currentCity, currentOffer, authorizationStatus, userData, nearbyOffers, onLogout, onLoad} = props;
+  const {currentCity, currentOffer, authorizationStatus, userData, nearbyOffers, onLogout} = props;
   const [reviewsList, setReviewsList] = useState(reviews);
-  onLoad();
+
   if (currentOffer === null) {
     return <div></div>;
   }

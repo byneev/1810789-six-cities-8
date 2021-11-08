@@ -7,6 +7,7 @@ import type { CitiesProps, OfferProp } from '../../mock/offer';
 import 'leaflet/dist/leaflet.css';
 import { connect, ConnectedProps } from 'react-redux';
 import { StateProps } from '../../store/reducer';
+import useLayer from '../../hooks/useLayer/useLayer';
 
 export type MapProps = {
   offers: OfferProp[];
@@ -38,20 +39,25 @@ function Map(props: ConnectedMapProps) : JSX.Element {
   const {offers, activeOffer, currentOffer, styleClassName, city} = props;
   const mapRef = useRef(null);
   const map = useMap(mapRef, offers[0], currentOffer);
+  const layer = useLayer(map);
+
 
   useEffect(() => {
-    if (map && offers) {
+    if (map && offers && layer) {
+      if (currentOffer) {
+        layer.clearLayers();
+      }
       offers.forEach((offer) => {
         const marker = new Marker([offer.location.latitude, offer.location.longitude]);
         marker.setIcon(activeOffer !== undefined && offer.id === activeOffer.id ?
           activeMarker :
-          inactiveMarker).addTo(map);
+          inactiveMarker).addTo(layer);
       });
       if (currentOffer !== null) {
-        new Marker([currentOffer.location.latitude, currentOffer.location.longitude]).setIcon(activeMarker).addTo(map);
+        new Marker([currentOffer.location.latitude, currentOffer.location.longitude]).setIcon(activeMarker).addTo(layer);
       }
     }
-  }, [map, activeOffer, offers]);
+  }, [layer, activeOffer, offers, currentOffer]);
 
   useEffect(() => {
     if (map && offers) {

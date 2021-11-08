@@ -4,19 +4,10 @@ import { MutableRefObject, useEffect, useState } from 'react';
 import { OfferProp } from '../../mock/offer';
 
 function useMap(mapRef: MutableRefObject<HTMLElement | null>, offer: OfferProp, currentOffer: OfferProp | null ) : Map | null {
-  const [map, setMap] = useState<Map | null>(null);
-
-  useEffect(() => {
-    if (map !== null) {
-      map.remove();
-      console.log(map);
-    }
-    setMap(null);
-  }, [currentOffer]);
+  const [map, setMap] = useState<Map | null >(null);
 
   useEffect(() => {
     if (mapRef.current !== null && map === null) {
-      console.log('I am rdy to create map');
       const instance = new Map(mapRef.current,
         {
           center: currentOffer === null ?
@@ -35,7 +26,7 @@ function useMap(mapRef: MutableRefObject<HTMLElement | null>, offer: OfferProp, 
 
       instance.addLayer(layer);
       setMap(instance);
-    }}, [map, mapRef, offer]);
+    }}, [map, mapRef, offer, currentOffer]);
 
   return map;
 }
