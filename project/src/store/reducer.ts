@@ -1,6 +1,7 @@
 /* eslint-disable no-case-declarations */
 import { SortProps, SortType } from '../components/offersList/offers-list';
 import { CitiesProps, OfferProp } from '../mock/offer';
+import { ReviewProp } from '../mock/review';
 import { AuthoriztionProps, AuthorizationStatus } from '../utils/constants';
 import { Actions, ActionType } from './actions';
 import { Token } from './token';
@@ -24,6 +25,7 @@ export type StateProps = {
   currentOffer: OfferProp | null,
   nearbyOffers: OfferProp[],
   isNeedRefreshMarkers: boolean,
+  currentComments: ReviewProp[],
 };
 
 const initialState:StateProps = {
@@ -43,6 +45,7 @@ const initialState:StateProps = {
   currentOffer: null,
   nearbyOffers: [],
   isNeedRefreshMarkers: false,
+  currentComments: [],
 };
 
 export const reducer = (state:StateProps = initialState, action: Actions):StateProps => {
@@ -65,6 +68,8 @@ export const reducer = (state:StateProps = initialState, action: Actions):StateP
       return {...state, nearbyOffers: action.payload.offers};
     case ActionType.RefreshMarkers:
       return {...state, isNeedRefreshMarkers: action.payload.isNeedRefreshMarkers};
+    case ActionType.SetCurrentComments:
+      return {...state, currentComments: action.payload.comments};
     default:
       return state;
   }

@@ -1,10 +1,8 @@
 /* eslint-disable no-console */
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { ReviewProp} from '../../mock/review';
-import { reviews } from '../../mock/review';
 import { AppRoute, AuthorizationStatus, Container } from '../../utils/constants';
 import OffersList from '../offersList/offers-list';
-import { useState } from 'react';
 import ReviewForm from '../review-form/review-form';
 import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
@@ -16,12 +14,13 @@ export type IdProps = {
   id: string
 }
 
-const mapStateToProps = ({currentCity, currentOffer, authorizationStatus, userData, nearbyOffers}:StateProps) => ({
+const mapStateToProps = ({currentCity, currentOffer, authorizationStatus, userData, nearbyOffers, currentComments}:StateProps) => ({
   currentCity,
   currentOffer,
   authorizationStatus,
   userData,
   nearbyOffers,
+  currentComments,
 });
 
 const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({
@@ -35,8 +34,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedRoomPageProps = RouteComponentProps<IdProps> & PropsFromRedux;
 
 function RoomPage(props: ConnectedRoomPageProps):JSX.Element {
-  const {currentCity, currentOffer, authorizationStatus, userData, nearbyOffers, onLogout} = props;
-  const [reviewsList, setReviewsList] = useState(reviews);
+  const {currentCity, currentOffer, authorizationStatus, userData, nearbyOffers, currentComments, onLogout} = props;
 
   if (currentOffer === null) {
     return <div></div>;
@@ -147,11 +145,11 @@ function RoomPage(props: ConnectedRoomPageProps):JSX.Element {
                 </div>
               </div>
               <section className="property__reviews reviews">
-                <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviewsList.length}</span></h2>
-                <ReviewsList reviews={reviewsList} />
-                <ReviewForm onSubmitCallback={(reviewData:ReviewProp) =>
-                  setReviewsList([...reviewsList, reviewData])}
-                />
+                <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{currentComments.length}</span></h2>
+                <ReviewsList />
+                {authorizationStatus === AuthorizationStatus.Auth ?
+                  <ReviewForm /> :
+                  ''}
               </section>
             </div>
           </div>

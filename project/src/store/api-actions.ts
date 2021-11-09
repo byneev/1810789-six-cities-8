@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { APIRoute, AuthorizationStatus } from '../utils/constants';
-import { Actions, getChangeAuthorization, getSetCurrentOffer, getSetNearbyOferrs, getSetupOffers, getSetUserData } from './actions';
+import { Actions, getChangeAuthorization, getSetCurrentComments, getSetCurrentOffer, getSetNearbyOferrs, getSetupOffers, getSetUserData } from './actions';
 import { OfferProp } from '../mock/offer';
 import { convertOffersToClient, convertUserDataToClient, ServerOfferProp } from '../utils/adapter';
 import { ThunkAction, ThunkDispatch } from '@reduxjs/toolkit';
@@ -56,4 +56,10 @@ export const loadNearbyOffers = (id:number):ThunkActionResult =>
   async (dispatch, _getState, api) => {
     const offers = await api.get(`${APIRoute.Hotels}/${id}/nearby`);
     dispatch(getSetNearbyOferrs(offers.data.map((offer:ServerOfferProp) => convertOffersToClient(offer))));
+  };
+
+export const loadCurrentComments = (id:number):ThunkActionResult =>
+  async (dispatch, _getState, api) => {
+    const comments = await api.get(`${APIRoute.Comments}/${id}`);
+    dispatch(getSetCurrentComments(comments.data));
   };

@@ -1,5 +1,6 @@
 import { SortProps } from '../components/offersList/offers-list';
 import { CitiesProps, OfferProp } from '../mock/offer';
+import { ReviewProp } from '../mock/review';
 import { AuthoriztionProps } from '../utils/constants';
 import { UserDataProps } from './reducer';
 
@@ -12,7 +13,8 @@ export enum ActionType {
   Logout = 'user/logout',
   SetCurrentOffer = 'app/setCurrentOffer',
   SetNearbyOffers = 'app/setNearbyOffers',
-  RefreshMarkers = 'app/refreshMarkers'
+  RefreshMarkers = 'app/refreshMarkers',
+  SetCurrentComments = 'app/setCurrentComments',
 }
 
 export const getChangeCity = (city: CitiesProps) => ({
@@ -75,4 +77,11 @@ export const getRefreshMarkers = (isNeedRefreshMarkers: boolean) => ({
   },
 } as const);
 
-export type Actions = ReturnType<typeof getChangeSort> | ReturnType<typeof getChangeCity> | ReturnType<typeof getSetupOffers> | ReturnType<typeof getChangeAuthorization> | ReturnType<typeof getSetUserData> | ReturnType<typeof getLogout> | ReturnType<typeof getSetCurrentOffer> | ReturnType<typeof getSetNearbyOferrs> | ReturnType<typeof getRefreshMarkers>;
+export const getSetCurrentComments = (comments: ReviewProp[]) => ({
+  type: ActionType.SetCurrentComments,
+  payload: {
+    comments,
+  },
+} as const);
+
+export type Actions = ReturnType<typeof getChangeSort> | ReturnType<typeof getChangeCity> | ReturnType<typeof getSetupOffers> | ReturnType<typeof getChangeAuthorization> | ReturnType<typeof getSetUserData> | ReturnType<typeof getLogout> | ReturnType<typeof getSetCurrentOffer> | ReturnType<typeof getSetNearbyOferrs> | ReturnType<typeof getRefreshMarkers> | ReturnType<typeof getSetCurrentComments>;

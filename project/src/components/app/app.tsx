@@ -14,7 +14,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import Spinner from '../spinner/spinner';
 import browserHistory from '../../utils/history';
 import { store } from '../..';
-import { loadCurrentOffer, loadNearbyOffers } from '../../store/api-actions';
+import { loadCurrentComments, loadCurrentOffer, loadNearbyOffers } from '../../store/api-actions';
 
 export type OfferProps = {
   offers: OfferProp[];
@@ -56,9 +56,11 @@ function App(props: ConnectedAppProps): JSX.Element {
         <PrivateRoute path={AppRoute.FAVORITES} render={() => <Favorites {...props} />} />
         <Route path='/offer/:id' exact render={
           (routeProps) => {
-            store.dispatch(loadCurrentOffer(+routeProps.match.params.id));
-            store.dispatch(loadNearbyOffers(+routeProps.match.params.id));
-            // store.dispatch(loadCommentsByOffer());
+            const id = +routeProps.match.params.id;
+            store.dispatch(loadCurrentOffer(id));
+            store.dispatch(loadNearbyOffers(id));
+            store.dispatch(loadCurrentComments(id));
+
             return <RoomPage {...routeProps}/>;
           }
         }
