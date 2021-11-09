@@ -28,7 +28,6 @@ const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
 const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedLoginProps = PropsFromRedux & LoginProps;
-//организовать отправку логина пароля на сервер с помощью api-action
 function Login(props: ConnectedLoginProps):JSX.Element {
   const {currentCity, onSubmit, onSubmitData } = props;
   const email = useRef<HTMLInputElement | null>(null);
@@ -57,7 +56,6 @@ function Login(props: ConnectedLoginProps):JSX.Element {
                   login: email.current.value,
                   password: password.current.value,
                 });
-                console.log('I pressed it');
                 onSubmitData();
               }
             }} className="login__form form" action="#" method="post"

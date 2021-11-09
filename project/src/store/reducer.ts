@@ -26,6 +26,7 @@ export type StateProps = {
   nearbyOffers: OfferProp[],
   isNeedRefreshMarkers: boolean,
   currentComments: ReviewProp[],
+  currentRating: number,
 };
 
 const initialState:StateProps = {
@@ -46,6 +47,7 @@ const initialState:StateProps = {
   nearbyOffers: [],
   isNeedRefreshMarkers: false,
   currentComments: [],
+  currentRating: 3,
 };
 
 export const reducer = (state:StateProps = initialState, action: Actions):StateProps => {
@@ -70,6 +72,8 @@ export const reducer = (state:StateProps = initialState, action: Actions):StateP
       return {...state, isNeedRefreshMarkers: action.payload.isNeedRefreshMarkers};
     case ActionType.SetCurrentComments:
       return {...state, currentComments: action.payload.comments};
+    case ActionType.ChangeRating:
+      return {...state, currentRating: action.payload.rating};
     default:
       return state;
   }

@@ -42,7 +42,7 @@ function Cities(props: PropsFromRedux):JSX.Element {
         </section>
         <div className='cities__right-section'>
           {currentOffers.length !== 0
-            ? <Map offers={currentOffers} activeOffer={currentOffer} styleClassName={'cities'} city={currentCity} />
+            ? <Map offers={currentOffers} activeOffer={currentOffer} styleClassName={'cities'}  />
             : ''}
         </div>
       </div>

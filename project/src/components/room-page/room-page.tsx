@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { ReviewProp} from '../../mock/review';
-import { AppRoute, AuthorizationStatus, Container } from '../../utils/constants';
+import { AppRoute, AuthorizationStatus, City, Container } from '../../utils/constants';
 import OffersList from '../offersList/offers-list';
 import ReviewForm from '../review-form/review-form';
 import ReviewsList from '../reviews-list/reviews-list';
@@ -9,6 +8,7 @@ import Map from '../map/map';
 import { connect, ConnectedProps } from 'react-redux';
 import { ThunkAppDispatch, logoutFromCite } from '../../store/api-actions';
 import { StateProps } from '../../store/reducer';
+import { getChangeCity, getSetCurrentOffer } from '../../store/actions';
 
 export type IdProps = {
   id: string
@@ -27,6 +27,10 @@ const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({
   onLogout(){
     dispatch(logoutFromCite());
   },
+  onClick(){
+    dispatch(getChangeCity(City.PARIS));
+    dispatch(getSetCurrentOffer(null));
+  },
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -34,7 +38,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedRoomPageProps = RouteComponentProps<IdProps> & PropsFromRedux;
 
 function RoomPage(props: ConnectedRoomPageProps):JSX.Element {
-  const {currentCity, currentOffer, authorizationStatus, userData, nearbyOffers, currentComments, onLogout} = props;
+  const {currentOffer, authorizationStatus, userData, nearbyOffers, currentComments, onLogout, onClick} = props;
 
   if (currentOffer === null) {
     return <div></div>;
@@ -45,7 +49,7 @@ function RoomPage(props: ConnectedRoomPageProps):JSX.Element {
         <div className="container">
           <div className='header__wrapper'>
             <div className='header__left'>
-              <Link className='header__logo-link header__logo-link--active' to={AppRoute.MAIN}>
+              <Link onClick={() => onClick()}  className='header__logo-link header__logo-link--active' to={AppRoute.MAIN}>
                 <img className='header__logo' src='img/logo.svg' alt='6 cities logo' width='81' height='41' />
               </Link>
             </div>
@@ -148,12 +152,12 @@ function RoomPage(props: ConnectedRoomPageProps):JSX.Element {
                 <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{currentComments.length}</span></h2>
                 <ReviewsList />
                 {authorizationStatus === AuthorizationStatus.Auth ?
-                  <ReviewForm /> :
+                  <ReviewForm id={currentOffer.id}/> :
                   ''}
               </section>
             </div>
           </div>
-          <Map offers={nearbyOffers} activeOffer={currentOffer} styleClassName={'property'} city={currentCity} />
+          <Map offers={nearbyOffers} activeOffer={currentOffer} styleClassName={'property'} />
         </section>
         <div className="container">
           <section className="near-places places">

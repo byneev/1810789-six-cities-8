@@ -11,7 +11,6 @@ export type CityProp = {
 
 export type AuthoriztionProps =  AuthorizationStatus.Auth | AuthorizationStatus.NoAuth | AuthorizationStatus.Unknown;
 
-
 export const AppRoute = {
   MAIN: '/',
   LOGIN: '/login',
@@ -40,7 +39,7 @@ export enum APIRoute {
   Favorite = '/favorite',
   Login = '/login',
   Logout = '/logout',
-  Comments = '/comments/',
+  Comments = '/comments',
 }
 
 export enum AuthorizationStatus {

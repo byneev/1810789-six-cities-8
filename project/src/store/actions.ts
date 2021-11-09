@@ -1,6 +1,6 @@
 import { SortProps } from '../components/offersList/offers-list';
 import { CitiesProps, OfferProp } from '../mock/offer';
-import { ReviewProp } from '../mock/review';
+import { convertCommentsToClient, ServerCommentProp } from '../utils/adapter';
 import { AuthoriztionProps } from '../utils/constants';
 import { UserDataProps } from './reducer';
 
@@ -14,7 +14,8 @@ export enum ActionType {
   SetCurrentOffer = 'app/setCurrentOffer',
   SetNearbyOffers = 'app/setNearbyOffers',
   RefreshMarkers = 'app/refreshMarkers',
-  SetCurrentComments = 'app/setCurrentComments',
+  SetCurrentComments = 'user/setCurrentComments',
+  ChangeRating = 'user/changeRating',
 }
 
 export const getChangeCity = (city: CitiesProps) => ({
@@ -56,7 +57,7 @@ export const getLogout = () => ({
   type: ActionType.Logout,
 } as const);
 
-export const getSetCurrentOffer = (offer:OfferProp) => ({
+export const getSetCurrentOffer = (offer:OfferProp | null) => ({
   type: ActionType.SetCurrentOffer,
   payload: {
     offer,
@@ -77,11 +78,18 @@ export const getRefreshMarkers = (isNeedRefreshMarkers: boolean) => ({
   },
 } as const);
 
-export const getSetCurrentComments = (comments: ReviewProp[]) => ({
+export const getSetCurrentComments = (comments: ServerCommentProp[]) => ({
   type: ActionType.SetCurrentComments,
   payload: {
-    comments,
+    comments: comments.map((comment) => convertCommentsToClient(comment)),
   },
 } as const);
 
-export type Actions = ReturnType<typeof getChangeSort> | ReturnType<typeof getChangeCity> | ReturnType<typeof getSetupOffers> | ReturnType<typeof getChangeAuthorization> | ReturnType<typeof getSetUserData> | ReturnType<typeof getLogout> | ReturnType<typeof getSetCurrentOffer> | ReturnType<typeof getSetNearbyOferrs> | ReturnType<typeof getRefreshMarkers> | ReturnType<typeof getSetCurrentComments>;
+export const getChangeRating = (rating: number) => ({
+  type: ActionType.ChangeRating,
+  payload: {
+    rating,
+  },
+} as const);
+
+export type Actions = ReturnType<typeof getChangeSort> | ReturnType<typeof getChangeCity> | ReturnType<typeof getSetupOffers> | ReturnType<typeof getChangeAuthorization> | ReturnType<typeof getSetUserData> | ReturnType<typeof getLogout> | ReturnType<typeof getSetCurrentOffer> | ReturnType<typeof getSetNearbyOferrs> | ReturnType<typeof getRefreshMarkers> | ReturnType<typeof getSetCurrentComments> | ReturnType<typeof getChangeRating>;

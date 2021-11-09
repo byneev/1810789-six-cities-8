@@ -1,4 +1,5 @@
 import { CitiesProps, OfferProp } from '../mock/offer';
+import { ReviewProp } from '../mock/review';
 import { UserDataProps } from '../store/reducer';
 import { Token } from '../store/token';
 
@@ -46,6 +47,19 @@ export type ServerUserDataProp = {
   'token': Token,
 }
 
+export type ServerCommentProp = {
+  'comment': string,
+  'date': string,
+  'id': number,
+  'rating': number,
+  'user': {
+    'avatar_url': string,
+    'id': number,
+    'is_pro': boolean,
+    'name': string,
+  }
+}
+
 export const convertOffersToClient = (offer: ServerOfferProp) : OfferProp => {
   if (offer.is_favorite === undefined || offer.is_premium === undefined || offer.max_adults === undefined || offer.preview_image === undefined) {
     throw new Error('Data from server is incorrect');
@@ -72,7 +86,18 @@ export const convertOffersToClient = (offer: ServerOfferProp) : OfferProp => {
   return clientOffer;
 };
 
-export const convertOffersToServer = (offers: OfferProp[]):OfferProp[] => offers;
+export const convertCommentsToClient = (comment: ServerCommentProp):ReviewProp => {
+  const clientComment:ReviewProp =
+  {...comment,
+    user: {
+      name: comment.user.name,
+      id: comment.user.id,
+      avatarUrl: comment.user.avatar_url,
+      isPro: comment.user.is_pro,
+    },
+  };
+  return clientComment;
+};
 
 export const convertUserDataToClient = (userData: ServerUserDataProp):UserDataProps => {
   if (userData.avatar_url === undefined|| userData.is_pro === undefined) {
