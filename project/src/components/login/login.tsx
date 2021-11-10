@@ -1,17 +1,37 @@
+/* eslint-disable no-console */
+import { FormEvent, useRef } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, RouteProps } from 'react-router-dom';
 import { StateProps } from '../../store/reducer';
 import { AppRoute } from '../../utils/constants';
+import { loginToCite, ThunkAppDispatch } from '../../store/api-actions';
+
+export type AuthData = {
+  login: string;
+  password: string;
+};
+
+export type LoginProps = RouteProps & {
+  onSubmitData: () => void;
+}
 
 const mapStateToProps = ({currentCity}:StateProps) => ({
   currentCity,
 });
 
-const connector = connect(mapStateToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
+const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
+  onSubmit(authData:AuthData) {
+    dispatch(loginToCite(authData));
+  },
+});
 
-function Login(props: PropsFromRedux):JSX.Element {
-  const {currentCity} = props;
+const connector = connect(mapStateToProps, mapDispatchToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedLoginProps = PropsFromRedux & LoginProps;
+function Login(props: ConnectedLoginProps):JSX.Element {
+  const {currentCity, onSubmit, onSubmitData } = props;
+  const email = useRef<HTMLInputElement | null>(null);
+  const password = useRef<HTMLInputElement | null>(null);
   return (
     <div className="page page--gray page--login">
       <header className="header">
@@ -25,19 +45,28 @@ function Login(props: PropsFromRedux):JSX.Element {
           </div>
         </div>
       </header>
-
       <main className="page__main page__main--login">
         <div className="page__login-container container">
           <section className="login">
             <h1 className="login__title">Sign in</h1>
-            <form className="login__form form" action="#" method="post">
+            <form onSubmit={(evt:FormEvent<HTMLFormElement>) => {
+              evt.preventDefault();
+              if (email.current !== null && password.current !== null) {
+                onSubmit({
+                  login: email.current.value,
+                  password: password.current.value,
+                });
+                onSubmitData();
+              }
+            }} className="login__form form" action="#" method="post"
+            >
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
-                <input className="login__input form__input" type="email" name="email" placeholder="Email" required />
+                <input ref={email} className="login__input form__input" type="email" name="email" placeholder="Email" required />
               </div>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">Password</label>
-                <input className="login__input form__input" type="password" name="password" placeholder="Password" required />
+                <input ref={password} className="login__input form__input" type="password" name="password" placeholder="Password" required />
               </div>
               <button className="login__submit form__submit button" type="submit">Sign in</button>
             </form>

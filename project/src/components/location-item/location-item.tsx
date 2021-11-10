@@ -19,7 +19,7 @@ function LocationItem(props:LocationItemProps):JSX.Element {
         </div>
       </div>
       <div className="favorites__places">
-        <OffersList container={Container.FAVORITES} offers={offers} mouseEnterHandler={function (offerId: number): void {
+        <OffersList container={Container.FAVORITES} offers={offers} mouseEnterHandler={function (offerId: OfferProp): void {
           throw new Error('Function not implemented.');
         } } removeActiveStates={function (): void {
           throw new Error('Function not implemented.');

@@ -9,16 +9,14 @@ export type CityProp = {
   PARIS: CitiesProps,
 };
 
+export type AuthoriztionProps =  AuthorizationStatus.Auth | AuthorizationStatus.NoAuth | AuthorizationStatus.Unknown;
+
 export const AppRoute = {
   MAIN: '/',
   LOGIN: '/login',
   FAVORITES: '/favorites',
   ROOM: '/offer/',
-};
-
-export const AuthorizationStatus = {
-  IS_OK: 'authorization is ok',
-  IS_NOT_OK: 'authorization is not ok',
+  NOTFOUND: '/404',
 };
 
 export const City:CityProp = {
@@ -36,3 +34,21 @@ export const Container = {
   ROOM: 'Room',
 };
 
+export enum APIRoute {
+  Hotels = '/hotels',
+  Favorite = '/favorite',
+  Login = '/login',
+  Logout = '/logout',
+  Comments = '/comments',
+}
+
+export enum AuthorizationStatus {
+  Auth = 'Auth',
+  NoAuth = 'NoAuth',
+  Unknown = 'Unknown',
+}
+
+export enum HTTPStatusCode {
+  Unauthorized = 401,
+  NotFound = 404,
+}

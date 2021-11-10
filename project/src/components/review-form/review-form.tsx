@@ -1,48 +1,71 @@
 /* eslint-disable no-console */
-import dayjs from 'dayjs';
-import { ChangeEvent, FormEvent, useState } from 'react';
-import { ReviewProp} from '../../mock/review';
+import { ChangeEvent, FormEvent, useRef } from 'react';
+import { connect, ConnectedProps } from 'react-redux';
+import { RouteProps } from 'react-router-dom';
+import { getChangeRating } from '../../store/actions';
+import { ThunkAppDispatch, sendComment } from '../../store/api-actions';
+import { StateProps } from '../../store/reducer';
 
-export type ReviewProps = {
-  onSubmitCallback: (review: ReviewProp) => void;
+export type CommentData = {
+  comment: string;
+  rating: number;
+};
+
+export type LoginProps = RouteProps & {
+  onSubmitData: () => void;
 }
 
-function ReviewForm(props: ReviewProps):JSX.Element {
-  const {onSubmitCallback} = props;
-  const [rating, setRating] = useState(1);
-  const [comment, setComment] = useState('');
+const mapStateToProps = ({currentRating}:StateProps) => ({
+  currentRating,
+});
+
+const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
+  onSubmit(id:number, commentData:CommentData) {
+    dispatch(sendComment(id, commentData));
+  },
+  onChange(rating:number){
+    dispatch(getChangeRating(rating));
+  },
+});
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedReviewFormProps = PropsFromRedux & {
+  id:number,
+}
+
+function ReviewForm(props: ConnectedReviewFormProps):JSX.Element {
+  const {id, currentRating, onSubmit, onChange} = props;
+  const textarea = useRef<HTMLTextAreaElement | null>(null);
 
   return (
-    <form className="reviews__form form" action="#" method="post" onSubmit={(evt:FormEvent<HTMLFormElement>) => {
+    <form className="reviews__form form" action="#" method="post" onSubmit={(evt: FormEvent<HTMLFormElement>) => {
       evt.preventDefault();
-      onSubmitCallback({
-        comment: comment,
-        date: dayjs().toISOString(),
-        id: 7,
-        rating: rating,
-        user: {
-          avatarUrl: 'img/9.png',
-          id: 15,
-          isPro: false,
-          name: 'Stanislav',
-        },
-      });
-      setComment('');
-      setRating(1);
-    }}
+      if (textarea.current !== null && textarea.current.value !== '') {
+        onSubmit(id, {
+          comment: textarea.current.value,
+          rating: currentRating,
+        });
+        textarea.current.value = '';
+      }
+    } }
     >
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
-        <input className="form__rating-input visually-hidden" name="rating" value="5" id="5-stars" type="radio" checked={rating === 5} />
-        <label htmlFor="5-stars" className="reviews__rating-label form__rating-label" title="perfect">
+
+        <input onChange={(evt: ChangeEvent<HTMLInputElement>) => {
+          onChange(+evt.target.value);
+        } } className="form__rating-input visually-hidden" name="rating" value="5" id="5-stars" type="radio" checked={currentRating === 5}
+        />
+        <label htmlFor="5-stars" className="reviews__rating-label form__rating-label" title="good">
           <svg className="form__star-image" width="37" height="33">
             <use xlinkHref="#icon-star"></use>
           </svg>
         </label>
 
-        <input onChange={(evt:ChangeEvent<HTMLInputElement>) => {
-          setRating(+evt.target.value);
-        }} className="form__rating-input visually-hidden" name="rating" value="4" id="4-stars" type="radio" checked={rating === 4}
+        <input onChange={(evt: ChangeEvent<HTMLInputElement>) => {
+          onChange(+evt.target.value);
+        } } className="form__rating-input visually-hidden" name="rating" value="4" id="4-stars" type="radio" checked={currentRating === 4}
         />
         <label htmlFor="4-stars" className="reviews__rating-label form__rating-label" title="good">
           <svg className="form__star-image" width="37" height="33">
@@ -50,9 +73,9 @@ function ReviewForm(props: ReviewProps):JSX.Element {
           </svg>
         </label>
 
-        <input onChange={(evt:ChangeEvent<HTMLInputElement>) => {
-          setRating(+evt.target.value);
-        }} className="form__rating-input visually-hidden" name="rating" value="3" id="3-stars" type="radio" checked={rating === 3}
+        <input onChange={(evt: ChangeEvent<HTMLInputElement>) => {
+          onChange(+evt.target.value);
+        } } className="form__rating-input visually-hidden" name="rating" value="3" id="3-stars" type="radio" defaultChecked={currentRating === 3}
         />
         <label htmlFor="3-stars" className="reviews__rating-label form__rating-label" title="good">
           <svg className="form__star-image" width="37" height="33">
@@ -60,9 +83,9 @@ function ReviewForm(props: ReviewProps):JSX.Element {
           </svg>
         </label>
 
-        <input onChange={(evt:ChangeEvent<HTMLInputElement>) => {
-          setRating(+evt.target.value);
-        }} className="form__rating-input visually-hidden" name="rating" value="2" id="2-stars" type="radio" checked={rating === 2}
+        <input onChange={(evt: ChangeEvent<HTMLInputElement>) => {
+          onChange(+evt.target.value);
+        } } className="form__rating-input visually-hidden" name="rating" value="2" id="2-stars" type="radio" checked={currentRating === 2}
         />
         <label htmlFor="2-stars" className="reviews__rating-label form__rating-label" title="good">
           <svg className="form__star-image" width="37" height="33">
@@ -70,21 +93,16 @@ function ReviewForm(props: ReviewProps):JSX.Element {
           </svg>
         </label>
 
-        <input onChange={(evt:ChangeEvent<HTMLInputElement>) => {
-          setRating(+evt.target.value);
-        }} className="form__rating-input visually-hidden" name="rating" value="1" id="1-stars" type="radio" checked={rating === 1}
+        <input onChange={(evt: ChangeEvent<HTMLInputElement>) => {
+          onChange(+evt.target.value);
+        } } className="form__rating-input visually-hidden" name="rating" value="1" id="1-stars" type="radio" checked={currentRating === 1}
         />
         <label htmlFor="1-stars" className="reviews__rating-label form__rating-label" title="good">
           <svg className="form__star-image" width="37" height="33">
             <use xlinkHref="#icon-star"></use>
           </svg>
         </label>
-      </div>
-      <textarea onChange={(evt: ChangeEvent<HTMLTextAreaElement>) => {
-        setComment(evt.target.value);
-      }} className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved" value={comment}
-      >
-      </textarea>
+      </div><textarea ref={textarea} className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved"></textarea>
       <div className="reviews__button-wrapper">
         <p className="reviews__help">To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.</p>
         <button className="reviews__submit form__submit button" type="submit" disabled={false}>Submit
@@ -94,4 +112,5 @@ function ReviewForm(props: ReviewProps):JSX.Element {
   );
 }
 
-export default ReviewForm;
+export {ReviewForm};
+export default connector(ReviewForm);

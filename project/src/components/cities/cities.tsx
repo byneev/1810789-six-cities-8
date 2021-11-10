@@ -6,6 +6,7 @@ import { StateProps } from '../../store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import { getOffersByCity } from '../../utils/functions';
 import Sort from '../sort/sort';
+import { OfferProp } from '../../mock/offer';
 
 const mapStateToProps = ({currentCity, offers}:StateProps) => ({
   currentCity,
@@ -18,10 +19,10 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 function Cities(props: PropsFromRedux):JSX.Element {
   const {currentCity, offers} = props;
   const currentOffers = getOffersByCity(offers, currentCity);
-  const [currentOffer, setCurrentOffer] = useState<number | undefined>(undefined);
+  const [currentOffer, setCurrentOffer] = useState<OfferProp | undefined>(undefined);
 
-  const offerMouseEnterHandler = (offerFromListId:number):void => {
-    setCurrentOffer(offerFromListId);
+  const offerMouseEnterHandler = (offerFromList:OfferProp):void => {
+    setCurrentOffer(offerFromList);
   };
 
   const offerMouseOutHandler = () => {
@@ -41,7 +42,7 @@ function Cities(props: PropsFromRedux):JSX.Element {
         </section>
         <div className='cities__right-section'>
           {currentOffers.length !== 0
-            ? <Map offers={currentOffers} currentOffer={currentOffer} styleClassName={'cities'} city={currentCity} />
+            ? <Map offers={currentOffers} activeOffer={currentOffer} styleClassName={'cities'}  />
             : ''}
         </div>
       </div>

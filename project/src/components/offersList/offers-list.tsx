@@ -10,7 +10,7 @@ import Room from '../room/room';
 export type OffersListProps = {
   offers: OfferProp[];
   container: string;
-  mouseEnterHandler: (offerId: number) => void;
+  mouseEnterHandler: (offerId: OfferProp) => void;
   removeActiveStates: () => void;
 }
 
