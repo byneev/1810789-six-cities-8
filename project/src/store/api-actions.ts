@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
 import { APIRoute, AuthorizationStatus } from '../utils/constants';
-import { Actions, getChangeAuthorization, getChangeRating, getSetCurrentComments, getSetCurrentOffer, getSetNearbyOferrs, getSetupOffers, getSetUserData } from './actions';
+import { Actions, getChangeAuthorization, getChangeRating, getSetCurrentComments, getSetCurrentOffer, getSetFavoritesOffers, getSetNearbyOferrs, getSetupOffers, getSetUserData } from './actions';
 import { OfferProp } from '../mock/offer';
 import { convertOffersToClient, convertUserDataToClient, ServerOfferProp } from '../utils/adapter';
 import { ThunkAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { StateProps, UserDataProps } from './reducer';
 import { AxiosInstance } from 'axios';
 import { AuthData } from '../components/login/login';
-import { removeToken, setToken } from './token';
+import { removeData, setData } from './token';
 import { toast } from 'react-toastify';
 import { CommentData } from '../components/review-form/review-form';
 
@@ -35,7 +35,7 @@ export const checkAuthorizeStatus = ():ThunkActionResult =>
 export const loginToCite = ({login: email, password}:AuthData):ThunkActionResult =>
   async (dispatch, _getState, api) => {
     const {data} = await api.post<UserDataProps>(APIRoute.Login, {email, password});
-    setToken(data.token);
+    setData(data.token, data);
     dispatch(getChangeAuthorization(AuthorizationStatus.Auth));
     dispatch(getSetUserData(convertUserDataToClient(data)));
   };
@@ -43,7 +43,7 @@ export const loginToCite = ({login: email, password}:AuthData):ThunkActionResult
 export const logoutFromCite = ():ThunkActionResult =>
   async (dispatch, _getState, api) => {
     await api.delete(APIRoute.Logout);
-    removeToken();
+    removeData();
     dispatch(getChangeAuthorization(AuthorizationStatus.NoAuth));
   };
 
@@ -70,4 +70,16 @@ export const sendComment = (id:number, {comment, rating}:CommentData):ThunkActio
     const comments = await api.post(`${APIRoute.Comments}/${id}`, {comment, rating});
     dispatch(getSetCurrentComments(comments.data));
     dispatch(getChangeRating(3));
+  };
+
+export const getFavoritesOffers = ():ThunkActionResult =>
+  async (dispatch, _getState, api) => {
+    const offers = await api.get(APIRoute.Favorite);
+    dispatch(getSetFavoritesOffers(offers.data.map((offer:ServerOfferProp) => convertOffersToClient(offer))));
+  };
+
+export const addToFavorites = (id: number, status: number):ThunkActionResult =>
+  async (dispatch, getState, api) => {
+    const changedOffer = await api.post(`${APIRoute.Favorite}/${id}/${status}`);
+    dispatch(getSetupOffers(getState().offers.map((offer) => changedOffer.data.id === offer.id ? changedOffer.data.id : offer.id)));
   };

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-case-declarations */
 import { SortProps, SortType } from '../components/offersList/offers-list';
 import { CitiesProps, OfferProp } from '../mock/offer';
@@ -27,6 +28,8 @@ export type StateProps = {
   isNeedRefreshMarkers: boolean,
   currentComments: ReviewProp[],
   currentRating: number,
+  favoriteOffers: OfferProp[],
+  isFavorite: boolean,
 };
 
 const initialState:StateProps = {
@@ -48,6 +51,8 @@ const initialState:StateProps = {
   isNeedRefreshMarkers: false,
   currentComments: [],
   currentRating: 3,
+  favoriteOffers: [],
+  isFavorite: false,
 };
 
 export const reducer = (state:StateProps = initialState, action: Actions):StateProps => {
@@ -63,7 +68,7 @@ export const reducer = (state:StateProps = initialState, action: Actions):StateP
     case ActionType.SetUserData:
       return {...state, userData: action.payload.data};
     case ActionType.Logout:
-      return {...state, authorizationStatus: AuthorizationStatus.NoAuth};
+      return {...state, authorizationStatus: AuthorizationStatus.NoAuth, userData: initialState.userData};
     case ActionType.SetCurrentOffer:
       return {...state, currentOffer: action.payload.offer};
     case ActionType.SetNearbyOffers:
@@ -74,6 +79,10 @@ export const reducer = (state:StateProps = initialState, action: Actions):StateP
       return {...state, currentComments: action.payload.comments};
     case ActionType.ChangeRating:
       return {...state, currentRating: action.payload.rating};
+    case ActionType.SetFavoritesOffers:
+      return {...state, favoriteOffers: action.payload.offers};
+    case ActionType.AddToFavorites: // скорее всего это действие не нужно
+      return {...state, isFavorite: true};
     default:
       return state;
   }

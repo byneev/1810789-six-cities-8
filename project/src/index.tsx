@@ -11,9 +11,10 @@ import {composeWithDevTools} from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { createAPI } from './utils/api';
 import { checkAuthorizeStatus, loadOffersFromServer } from './store/api-actions';
-import { getChangeAuthorization } from './store/actions';
+import { getChangeAuthorization, getSetUserData } from './store/actions';
 import { AppRoute, AuthorizationStatus } from './utils/constants';
 import { Redirect } from 'react-router-dom';
+import { getUser } from './store/token';
 
 const api = createAPI(
   () => store.dispatch(getChangeAuthorization(AuthorizationStatus.NoAuth)),
@@ -25,7 +26,10 @@ export const store = createStore(reducer, composeWithDevTools(
 ));
 store.dispatch(loadOffersFromServer());
 store.dispatch(checkAuthorizeStatus());
-console.log(store.getState());
+const userDataFromLocalStorage = getUser();
+if (userDataFromLocalStorage) {
+  store.dispatch(getSetUserData(userDataFromLocalStorage));
+}
 
 ReactDOM.render(
   <React.StrictMode>

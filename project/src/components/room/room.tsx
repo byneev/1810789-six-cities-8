@@ -1,10 +1,12 @@
 /* eslint-disable no-console */
+import { MouseEvent, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { OfferProp } from '../../mock/offer';
 import { getRefreshMarkers } from '../../store/actions';
-import {ThunkAppDispatch } from '../../store/api-actions';
-import { AppRoute, Container } from '../../utils/constants';
+import {addToFavorites, ThunkAppDispatch } from '../../store/api-actions';
+import { StateProps } from '../../store/reducer';
+import { AppRoute, AuthorizationStatus, Container } from '../../utils/constants';
 
 export type RoomProp =  {
   container: string;
@@ -13,17 +15,25 @@ export type RoomProp =  {
   removeActiveStates: () => void;
 }
 
+const mapStateToProps = ({authorizationStatus}:StateProps) => ({
+  authorizationStatus,
+});
+
 const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
   onRoomClick(){
     dispatch(getRefreshMarkers(true));
   },
+  onFavoriteClick(id:number, status:number){
+    dispatch(addToFavorites(id, status));
+  },
 });
-const connector = connect(null, mapDispatchToProps);
+const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedRoomProps = RoomProp & PropsFromRedux;
 
 function Room(prop: ConnectedRoomProps): JSX.Element {
-  const {container, room, mouseEnterHandler, removeActiveStates} = prop;
+  const {container, room, mouseEnterHandler, removeActiveStates, onFavoriteClick, authorizationStatus} = prop;
+  const [currentStatus, setCurrentStatus] = useState(Number(room.isFavorite));
 
   return (
     <article className={container === Container.FAVORITES ? 'favorites__card place-card' : 'cities__place-card place-card'}>
@@ -42,12 +52,19 @@ function Room(prop: ConnectedRoomProps): JSX.Element {
             <b className='place-card__price-value'>&euro;{room.price}</b>
             <span className='place-card__price-text'>&#47;&nbsp;night</span>
           </div>
-          <button className='place-card__bookmark-button button' type='button'>
-            <svg className='place-card__bookmark-icon' width='18' height='19'>
-              <use xlinkHref='#icon-bookmark'></use>
-            </svg>
-            <span className='visually-hidden'>To bookmarks</span>
-          </button>
+          {authorizationStatus === AuthorizationStatus.Auth ?
+            <button onClick={(evt:MouseEvent<HTMLButtonElement>) => {
+              evt.preventDefault();
+              onFavoriteClick(room.id, Number(!room.isFavorite));
+              setCurrentStatus(Number(!room.isFavorite));
+            }} className='place-card__bookmark-button button' type='button'
+            >
+              <svg className={currentStatus ===0 ? 'place-card__bookmark-icon' : 'place-card__bookmark-icon place-card__bookmark-icon--active'} width='18' height='19'>
+                <use xlinkHref='#icon-bookmark'></use>
+              </svg>
+              <span className='visually-hidden'>To bookmarks</span>
+            </button> :
+            ''  }
         </div>
         <div className='place-card__rating rating'>
           <div className='place-card__stars rating__stars'>

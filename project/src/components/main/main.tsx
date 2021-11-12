@@ -23,7 +23,6 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 function Main(props:PropsFromRedux): JSX.Element {
   const {authorizationStatus, userData, onLogout} = props;
-  console.log(authorizationStatus);
   return (
     <div className='page page--gray page--main'>
       <header className='header'>
@@ -39,7 +38,7 @@ function Main(props:PropsFromRedux): JSX.Element {
                 {authorizationStatus === AuthorizationStatus.Auth ?
                   <>
                     <li className='header__nav-item user'>
-                      <Link className='header__nav-link header__nav-link--profile' to={AppRoute.MAIN}>
+                      <Link className='header__nav-link header__nav-link--profile' to={AppRoute.FAVORITES}>
                         <div className='header__avatar-wrapper user__avatar-wrapper'></div>
                         <span className='header__user-name user__name'>{userData.email}</span>
                       </Link>

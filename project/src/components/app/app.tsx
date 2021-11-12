@@ -53,7 +53,7 @@ function App(props: ConnectedAppProps): JSX.Element {
           <Login onSubmitData={() => history.push(AppRoute.MAIN)} />
         )} exact
         />
-        <PrivateRoute path={AppRoute.FAVORITES} render={() => <Favorites {...props} />} />
+        <PrivateRoute path={AppRoute.FAVORITES} render={() => <Favorites />} />
         <Route path='/offer/:id' exact render={
           (routeProps) => {
             const id = +routeProps.match.params.id;
