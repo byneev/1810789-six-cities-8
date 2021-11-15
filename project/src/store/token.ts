@@ -3,7 +3,7 @@ import { UserDataProps } from './reducer';
 
 export type Token = string;
 const TOKEN_KEY = 'six-cities-token';
-const USER_KEY = 'six-cities-token';
+const USER_KEY = 'six-cities-user';
 
 export const setData = (token: Token, user: UserDataProps):void => {
   localStorage.setItem(TOKEN_KEY, token);

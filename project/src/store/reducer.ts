@@ -30,6 +30,7 @@ export type StateProps = {
   currentRating: number,
   favoriteOffers: OfferProp[],
   isFavorite: boolean,
+  currentOffers: OfferProp[],
 };
 
 const initialState:StateProps = {
@@ -53,6 +54,7 @@ const initialState:StateProps = {
   currentRating: 3,
   favoriteOffers: [],
   isFavorite: false,
+  currentOffers: [],
 };
 
 export const reducer = (state:StateProps = initialState, action: Actions):StateProps => {
@@ -64,7 +66,7 @@ export const reducer = (state:StateProps = initialState, action: Actions):StateP
     case ActionType.ChangeSort:
       return {...state, currentSort: action.payload.sort};
     case ActionType.ChangeAuthorization:
-      return {...state, authorizationStatus: action.payload.status};
+      return {...state, authorizationStatus: action.payload.authorizationStatus};
     case ActionType.SetUserData:
       return {...state, userData: action.payload.data};
     case ActionType.Logout:
@@ -83,6 +85,8 @@ export const reducer = (state:StateProps = initialState, action: Actions):StateP
       return {...state, favoriteOffers: action.payload.offers};
     case ActionType.AddToFavorites: // скорее всего это действие не нужно
       return {...state, isFavorite: true};
+    case ActionType.SetCurrentOffers:
+      return {...state, currentOffers: action.payload.currentOffers};
     default:
       return state;
   }

@@ -1,26 +1,25 @@
+/* eslint-disable no-console */
 import { useState } from 'react';
 import { Container } from '../../utils/constants';
 import Map from '../map/map';
 import OffersList from '../offersList/offers-list';
 import { StateProps } from '../../store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
-import { getOffersByCity } from '../../utils/functions';
 import Sort from '../sort/sort';
 import { OfferProp } from '../../mock/offer';
 
-const mapStateToProps = ({currentCity, offers}:StateProps) => ({
+const mapStateToProps = ({currentCity, currentOffers}:StateProps) => ({
   currentCity,
-  offers,
+  currentOffers,
 });
 
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 function Cities(props: PropsFromRedux):JSX.Element {
-  const {currentCity, offers} = props;
-  const currentOffers = getOffersByCity(offers, currentCity);
+  const {currentCity, currentOffers} = props;
+  console.log('Redraw');
   const [currentOffer, setCurrentOffer] = useState<OfferProp | undefined>(undefined);
-
   const offerMouseEnterHandler = (offerFromList:OfferProp):void => {
     setCurrentOffer(offerFromList);
   };

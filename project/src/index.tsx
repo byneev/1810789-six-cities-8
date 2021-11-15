@@ -11,8 +11,8 @@ import {composeWithDevTools} from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { createAPI } from './utils/api';
 import { checkAuthorizeStatus, loadOffersFromServer } from './store/api-actions';
-import { getChangeAuthorization, getSetUserData } from './store/actions';
-import { AppRoute, AuthorizationStatus } from './utils/constants';
+import { getChangeAuthorization,  getSetUserData } from './store/actions';
+import { AppRoute, AuthorizationStatus} from './utils/constants';
 import { Redirect } from 'react-router-dom';
 import { getUser } from './store/token';
 

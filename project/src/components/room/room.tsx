@@ -15,8 +15,9 @@ export type RoomProp =  {
   removeActiveStates: () => void;
 }
 
-const mapStateToProps = ({authorizationStatus}:StateProps) => ({
+const mapStateToProps = ({authorizationStatus, currentOffers}:StateProps) => ({
   authorizationStatus,
+  currentOffers,
 });
 
 const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
@@ -34,7 +35,6 @@ type ConnectedRoomProps = RoomProp & PropsFromRedux;
 function Room(prop: ConnectedRoomProps): JSX.Element {
   const {container, room, mouseEnterHandler, removeActiveStates, onFavoriteClick, authorizationStatus} = prop;
   const [currentStatus, setCurrentStatus] = useState(Number(room.isFavorite));
-
   return (
     <article className={container === Container.FAVORITES ? 'favorites__card place-card' : 'cities__place-card place-card'}>
       {room.isPremium ?

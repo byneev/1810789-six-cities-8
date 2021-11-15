@@ -18,6 +18,7 @@ export enum ActionType {
   ChangeRating = 'user/changeRating',
   SetFavoritesOffers = 'user/changeFavoritesOffers',
   AddToFavorites = 'user/addToFavorites',
+  SetCurrentOffers = 'app/setCurrentOffers',
 }
 
 export const getChangeCity = (city: CitiesProps) => ({
@@ -41,10 +42,10 @@ export const getChangeSort = (sort: SortProps) => ({
   },
 } as const);
 
-export const getChangeAuthorization = (status: AuthoriztionProps) => ({
+export const getChangeAuthorization = (authorizationStatus: AuthoriztionProps) => ({
   type: ActionType.ChangeAuthorization,
   payload: {
-    status,
+    authorizationStatus,
   },
 } as const);
 
@@ -94,6 +95,13 @@ export const getChangeRating = (rating: number) => ({
   },
 } as const);
 
+export const getSetCurrentOffers = (currentOffers: OfferProp[]) => ({
+  type: ActionType.SetCurrentOffers,
+  payload: {
+    currentOffers,
+  },
+} as const);
+
 export const getSetFavoritesOffers = (offers:OfferProp[]) => ({
   type: ActionType.SetFavoritesOffers,
   payload: {
@@ -105,4 +113,4 @@ export const getAddToFavorites = () => ({
   type: ActionType.AddToFavorites,
 } as const);
 
-export type Actions = ReturnType<typeof getChangeSort> | ReturnType<typeof getChangeCity> | ReturnType<typeof getSetupOffers> | ReturnType<typeof getChangeAuthorization> | ReturnType<typeof getSetUserData> | ReturnType<typeof getLogout> | ReturnType<typeof getSetCurrentOffer> | ReturnType<typeof getSetNearbyOferrs> | ReturnType<typeof getRefreshMarkers> | ReturnType<typeof getSetCurrentComments> | ReturnType<typeof getChangeRating> | ReturnType<typeof getSetFavoritesOffers> | ReturnType<typeof getAddToFavorites>;
+export type Actions = ReturnType<typeof getChangeSort> | ReturnType<typeof getChangeCity> | ReturnType<typeof getSetupOffers> | ReturnType<typeof getChangeAuthorization> | ReturnType<typeof getSetUserData> | ReturnType<typeof getLogout> | ReturnType<typeof getSetCurrentOffer> | ReturnType<typeof getSetNearbyOferrs> | ReturnType<typeof getRefreshMarkers> | ReturnType<typeof getSetCurrentComments> | ReturnType<typeof getChangeRating> | ReturnType<typeof getSetFavoritesOffers> | ReturnType<typeof getAddToFavorites> | ReturnType<typeof getSetCurrentOffers>;

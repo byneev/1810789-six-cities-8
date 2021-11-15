@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { SortProps, SortType } from '../components/offersList/offers-list';
 import { CitiesProps, OfferProp } from '../mock/offer';
 
@@ -15,4 +16,3 @@ export const sortBySortType = (offers: OfferProp[], sort: SortProps): OfferProp[
       return offers;
   }
 };
-
