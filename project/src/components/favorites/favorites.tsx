@@ -2,19 +2,22 @@
 import { connect, ConnectedProps } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { cities } from '../../mock/offer';
-import { logoutFromCite, ThunkAppDispatch } from '../../store/api-actions';
+import { getFavoritesOffers, logoutFromCite, ThunkAppDispatch } from '../../store/api-actions';
 import { StateProps } from '../../store/reducer';
 import { AppRoute } from '../../utils/constants';
 import LocationItem from '../location-item/location-item';
 
-const mapStateToProps = ({favoriteOffers,  userData}: StateProps) => ({
-  favoriteOffers,
+const mapStateToProps = ({userData, favoritesOffers}: StateProps) => ({
   userData,
+  favoritesOffers,
 });
 
 const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
   onLogout(){
     dispatch(logoutFromCite());
+  },
+  getFavorites(){
+    dispatch(getFavoritesOffers());
   },
 });
 
@@ -22,8 +25,8 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 function Favorites(props: PropsFromRedux): JSX.Element {
-  const {favoriteOffers, userData, onLogout} = props;
-  const actualCities:string[] = cities.filter((city) => favoriteOffers.filter((item) => item.city.name === city).length !== 0);
+  const { userData, onLogout, favoritesOffers} = props;
+  const actualCities:string[] = cities.filter((city) => favoritesOffers.filter((item) => item.city.name === city).length !== 0);
   return (
     <div className="page">
       <header className="header">
@@ -58,7 +61,7 @@ function Favorites(props: PropsFromRedux): JSX.Element {
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
             <ul className="favorites__list">
-              {actualCities.map((city) => <LocationItem key={city} offers={favoriteOffers.filter((item) => item.city.name === city)} />)}
+              {actualCities.map((city) => <LocationItem key={city} offers={favoritesOffers.filter((item) => item.city.name === city)} />)}
             </ul>
           </section>
         </div>

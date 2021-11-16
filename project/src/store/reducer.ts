@@ -28,9 +28,9 @@ export type StateProps = {
   isNeedRefreshMarkers: boolean,
   currentComments: ReviewProp[],
   currentRating: number,
-  favoriteOffers: OfferProp[],
   isFavorite: boolean,
-  currentOffers: OfferProp[],
+  activeOfferId: number | null,
+  favoritesOffers: OfferProp[],
 };
 
 const initialState:StateProps = {
@@ -52,9 +52,9 @@ const initialState:StateProps = {
   isNeedRefreshMarkers: false,
   currentComments: [],
   currentRating: 3,
-  favoriteOffers: [],
   isFavorite: false,
-  currentOffers: [],
+  activeOfferId: null,
+  favoritesOffers: [],
 };
 
 export const reducer = (state:StateProps = initialState, action: Actions):StateProps => {
@@ -81,12 +81,12 @@ export const reducer = (state:StateProps = initialState, action: Actions):StateP
       return {...state, currentComments: action.payload.comments};
     case ActionType.ChangeRating:
       return {...state, currentRating: action.payload.rating};
-    case ActionType.SetFavoritesOffers:
-      return {...state, favoriteOffers: action.payload.offers};
-    case ActionType.AddToFavorites: // скорее всего это действие не нужно
+    case ActionType.AddToFavorites:
       return {...state, isFavorite: true};
-    case ActionType.SetCurrentOffers:
-      return {...state, currentOffers: action.payload.currentOffers};
+    case ActionType.SetFavoritesOffers:
+      return {...state, favoritesOffers: action.payload.favoritesOffers};
+    case ActionType.SetActiveOffer:
+      return {...state, activeOfferId: action.payload.activeOfferId};
     default:
       return state;
   }

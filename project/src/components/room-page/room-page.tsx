@@ -157,13 +157,13 @@ function RoomPage(props: ConnectedRoomPageProps):JSX.Element {
               </section>
             </div>
           </div>
-          <Map offers={nearbyOffers} activeOffer={currentOffer} styleClassName={'property'} />
+          <Map offers={nearbyOffers} styleClassName={'property'} />
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              <OffersList container={Container.ROOM} offers={nearbyOffers} mouseEnterHandler={(item) => null} removeActiveStates={() => null}/>
+              <OffersList container={Container.ROOM} offers={nearbyOffers} />
             </div>
           </section>
         </div>

@@ -16,9 +16,9 @@ export enum ActionType {
   RefreshMarkers = 'app/refreshMarkers',
   SetCurrentComments = 'user/setCurrentComments',
   ChangeRating = 'user/changeRating',
-  SetFavoritesOffers = 'user/changeFavoritesOffers',
   AddToFavorites = 'user/addToFavorites',
-  SetCurrentOffers = 'app/setCurrentOffers',
+  SetFavoritesOffers = 'app/setFavoritesOffers',
+  SetActiveOffer = 'user/setActiveOffer',
 }
 
 export const getChangeCity = (city: CitiesProps) => ({
@@ -95,22 +95,22 @@ export const getChangeRating = (rating: number) => ({
   },
 } as const);
 
-export const getSetCurrentOffers = (currentOffers: OfferProp[]) => ({
-  type: ActionType.SetCurrentOffers,
-  payload: {
-    currentOffers,
-  },
-} as const);
-
-export const getSetFavoritesOffers = (offers:OfferProp[]) => ({
-  type: ActionType.SetFavoritesOffers,
-  payload: {
-    offers,
-  },
-} as const);
-
 export const getAddToFavorites = () => ({
   type: ActionType.AddToFavorites,
 } as const);
 
-export type Actions = ReturnType<typeof getChangeSort> | ReturnType<typeof getChangeCity> | ReturnType<typeof getSetupOffers> | ReturnType<typeof getChangeAuthorization> | ReturnType<typeof getSetUserData> | ReturnType<typeof getLogout> | ReturnType<typeof getSetCurrentOffer> | ReturnType<typeof getSetNearbyOferrs> | ReturnType<typeof getRefreshMarkers> | ReturnType<typeof getSetCurrentComments> | ReturnType<typeof getChangeRating> | ReturnType<typeof getSetFavoritesOffers> | ReturnType<typeof getAddToFavorites> | ReturnType<typeof getSetCurrentOffers>;
+export const getSetFavoritesOffers = (favoritesOffers: OfferProp[]) => ({
+  type: ActionType.SetFavoritesOffers,
+  payload: {
+    favoritesOffers,
+  },
+} as const);
+
+export const getSetActiveOffer = (activeOfferId: number | null) => ({
+  type: ActionType.SetActiveOffer,
+  payload: {
+    activeOfferId,
+  },
+} as const);
+
+export type Actions = ReturnType<typeof getChangeSort> | ReturnType<typeof getChangeCity> | ReturnType<typeof getSetupOffers> | ReturnType<typeof getChangeAuthorization> | ReturnType<typeof getSetUserData> | ReturnType<typeof getLogout> | ReturnType<typeof getSetCurrentOffer> | ReturnType<typeof getSetNearbyOferrs> | ReturnType<typeof getRefreshMarkers> | ReturnType<typeof getSetCurrentComments> | ReturnType<typeof getChangeRating>  | ReturnType<typeof getAddToFavorites> | ReturnType<typeof getSetActiveOffer> | ReturnType<typeof getSetFavoritesOffers>;

@@ -18,7 +18,7 @@ function LocationItem(props:LocationItemProps):JSX.Element {
         </div>
       </div>
       <div className="favorites__places">
-        <OffersList container={Container.FAVORITES} offers={offers} mouseEnterHandler={(item) => null} removeActiveStates={() => null} />
+        <OffersList container={Container.FAVORITES} offers={offers} />
       </div>
     </li>
   );

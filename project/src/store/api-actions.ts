@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-import { APIRoute, AuthorizationStatus, City } from '../utils/constants';
-import { Actions, getChangeAuthorization, getChangeRating, getSetCurrentComments, getSetCurrentOffer, getSetCurrentOffers, getSetFavoritesOffers, getSetNearbyOferrs, getSetupOffers, getSetUserData } from './actions';
+import { APIRoute, AuthorizationStatus } from '../utils/constants';
+import { Actions, getChangeAuthorization, getChangeRating, getSetCurrentComments, getSetCurrentOffer, getSetFavoritesOffers, getSetNearbyOferrs, getSetupOffers, getSetUserData } from './actions';
 import { OfferProp } from '../mock/offer';
 import { convertOffersToClient, convertUserDataToClient, ServerOfferProp } from '../utils/adapter';
 import { ThunkAction, ThunkDispatch } from '@reduxjs/toolkit';
@@ -16,11 +16,10 @@ export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, StateProps, Ax
 export type ThunkAppDispatch = ThunkDispatch<StateProps, AxiosInstance, Actions>;
 
 export const loadOffersFromServer = ():ThunkActionResult =>
-  async (dispatch, _getState, api):Promise<void> => {
+  async (dispatch, getState, api) => {
     const {data} = await api.get<ServerOfferProp[]>(APIRoute.Hotels);
     const offersForClient = data.map((offer:ServerOfferProp):OfferProp => convertOffersToClient(offer));
-    dispatch(getSetupOffers(offersForClient));
-    dispatch(getSetCurrentOffers(getOffersByCity(offersForClient, City.PARIS)));
+    dispatch(getSetupOffers(getOffersByCity(offersForClient, getState().currentCity)));
   };
 
 export const checkAuthorizeStatus = ():ThunkActionResult =>
@@ -81,10 +80,8 @@ export const getFavoritesOffers = ():ThunkActionResult =>
   };
 
 export const addToFavorites = (id: number, status: number):ThunkActionResult =>
-  async (dispatch, getState, api) => {
-    const changedOffer = await api.post(`${APIRoute.Favorite}/${id}/${status}`);
-    dispatch(getSetFavoritesOffers(getState().favoriteOffers.map((offer) => offer.id === changedOffer.data.id ? changedOffer.data : offer)));
-    console.log(getState().currentOffers);
-    dispatch(getSetCurrentOffers(getState().currentOffers.map((offer) => offer.id === changedOffer.data.id ? changedOffer.data : offer)));
-    // здесь косяк
+  async (dispatch, _getState, api) => {
+    await api.post(`${APIRoute.Favorite}/${id}/${status}`);
+    await dispatch(getFavoritesOffers());
   };
+

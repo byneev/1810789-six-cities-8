@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
-import { MouseEvent, useState } from 'react';
+import { Dispatch, MouseEvent, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { OfferProp } from '../../mock/offer';
-import { getRefreshMarkers } from '../../store/actions';
+import { Actions, getSetActiveOffer } from '../../store/actions';
 import {addToFavorites, ThunkAppDispatch } from '../../store/api-actions';
 import { StateProps } from '../../store/reducer';
 import { AppRoute, AuthorizationStatus, Container } from '../../utils/constants';
@@ -11,18 +11,15 @@ import { AppRoute, AuthorizationStatus, Container } from '../../utils/constants'
 export type RoomProp =  {
   container: string;
   room: OfferProp;
-  mouseEnterHandler: (offerId: OfferProp) => void;
-  removeActiveStates: () => void;
 }
 
-const mapStateToProps = ({authorizationStatus, currentOffers}:StateProps) => ({
+const mapStateToProps = ({authorizationStatus}:StateProps) => ({
   authorizationStatus,
-  currentOffers,
 });
 
-const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
-  onRoomClick(){
-    dispatch(getRefreshMarkers(true));
+const mapDispatchToProps = (dispatch: Dispatch<Actions> & ThunkAppDispatch) => ({
+  setActiveId(id: number | null){
+    dispatch(getSetActiveOffer(id));
   },
   onFavoriteClick(id:number, status:number){
     dispatch(addToFavorites(id, status));
@@ -33,8 +30,10 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedRoomProps = RoomProp & PropsFromRedux;
 
 function Room(prop: ConnectedRoomProps): JSX.Element {
-  const {container, room, mouseEnterHandler, removeActiveStates, onFavoriteClick, authorizationStatus} = prop;
+  console.log('Room reload');
+  const {container, room, onFavoriteClick, authorizationStatus, setActiveId} = prop;
   const [currentStatus, setCurrentStatus] = useState(Number(room.isFavorite));
+  console.log(currentStatus);
   return (
     <article className={container === Container.FAVORITES ? 'favorites__card place-card' : 'cities__place-card place-card'}>
       {room.isPremium ?
@@ -43,7 +42,7 @@ function Room(prop: ConnectedRoomProps): JSX.Element {
         </div> : ''}
       <div className={container === Container.FAVORITES ? 'favorites__image-wrapper place-card__image-wrapper' : 'cities__image-wrapper place-card__image-wrapper'}>
         <Link to={`${AppRoute.ROOM}${room.id}`}>
-          <img onMouseEnter={() => mouseEnterHandler(room)} onMouseOut={() => removeActiveStates()} className='place-card__image' src={room.previewImage} width='260' height='200' alt={room.title} />
+          <img onMouseEnter={() => setActiveId(room.id)} onMouseOut={() => setActiveId(null)} className='place-card__image' src={room.previewImage} width='260' height='200' alt={room.title} />
         </Link>
       </div>
       <div className={ container === Container.FAVORITES ? 'favorites__card place-card__info' : 'place-card__info'} >
@@ -55,11 +54,11 @@ function Room(prop: ConnectedRoomProps): JSX.Element {
           {authorizationStatus === AuthorizationStatus.Auth ?
             <button onClick={(evt:MouseEvent<HTMLButtonElement>) => {
               evt.preventDefault();
-              onFavoriteClick(room.id, Number(!room.isFavorite));
-              setCurrentStatus(Number(!room.isFavorite));
-            }} className='place-card__bookmark-button button' type='button'
+              onFavoriteClick(room.id, Number(Boolean(!currentStatus)));
+              setCurrentStatus(Number(Boolean(!currentStatus)));
+            }} className={currentStatus ? 'place-card__bookmark-button button place-card__bookmark-button--active' : 'place-card__bookmark-button button'} type='button'
             >
-              <svg className={currentStatus ===0 ? 'place-card__bookmark-icon' : 'place-card__bookmark-icon place-card__bookmark-icon--active'} width='18' height='19'>
+              <svg className='place-card__bookmark-icon' width='18' height='19'>
                 <use xlinkHref='#icon-bookmark'></use>
               </svg>
               <span className='visually-hidden'>To bookmarks</span>

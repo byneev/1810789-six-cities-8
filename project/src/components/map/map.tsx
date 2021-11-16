@@ -11,7 +11,6 @@ import useLayer from '../../hooks/useLayer/useLayer';
 
 export type MapProps = {
   offers: OfferProp[];
-  activeOffer: OfferProp | undefined;
   styleClassName: string;
 }
 
@@ -27,16 +26,17 @@ const activeMarker = new Icon({
   iconAnchor: [14, 39],
 });
 
-const mapStateToProps = ({currentOffer, currentCity}:StateProps) => ({
+const mapStateToProps = ({currentOffer, currentCity, activeOfferId}:StateProps) => ({
   currentOffer,
   currentCity,
+  activeOfferId,
 });
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedMapProps = PropsFromRedux & MapProps;
 
 function Map(props: ConnectedMapProps) : JSX.Element {
-  const {offers, activeOffer, currentOffer, styleClassName, currentCity} = props;
+  const {offers, currentOffer, styleClassName, currentCity, activeOfferId} = props;
   const mapRef = useRef(null);
   const map = useMap(mapRef, offers[0], currentOffer);
   const layer = useLayer(map);
@@ -57,12 +57,12 @@ function Map(props: ConnectedMapProps) : JSX.Element {
       }
       offers.forEach((offer) => {
         const marker = new Marker([offer.location.latitude, offer.location.longitude]);
-        marker.setIcon(activeOffer !== undefined && offer.id === activeOffer.id ?
+        marker.setIcon(activeOfferId !== null && offer.id === activeOfferId ?
           activeMarker :
           inactiveMarker).addTo(layer);
       });
     }
-  }, [layer, activeOffer, offers, currentOffer, currentCity]);
+  }, [layer, activeOfferId, offers, currentOffer, currentCity]);
 
   return (
     <section ref={mapRef} className={`${styleClassName}__map map`}></section>

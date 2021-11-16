@@ -10,8 +10,6 @@ import Room from '../room/room';
 export type OffersListProps = {
   offers: OfferProp[];
   container: string;
-  mouseEnterHandler: (offerId: OfferProp) => void;
-  removeActiveStates: () => void;
 }
 
 export enum SortType {
@@ -32,12 +30,12 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedOffersListProps = PropsFromRedux & OffersListProps;
 
 function OffersList(props: ConnectedOffersListProps): JSX.Element {
-  const {container, offers, mouseEnterHandler, removeActiveStates, currentSort} = props;
+  const {container, offers, currentSort} = props;
   const sortedOffers:OfferProp[] = sortBySortType(offers, currentSort);
   return(
     <React.Fragment>
       {sortedOffers.map((offer) =>
-        <Room key={`${offer.id}-${offer.city.name}`} container={container} room={offer} mouseEnterHandler={mouseEnterHandler} removeActiveStates={removeActiveStates} />)}
+        <Room key={`${offer.id}-${offer.city.name}`} container={container} room={offer} />)}
     </React.Fragment>
   );
 }
