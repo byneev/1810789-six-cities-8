@@ -29,7 +29,7 @@ function Cities(props: PropsFromRedux):JSX.Element {
         </section>
         <div className='cities__right-section'>
           {offers.length !== 0
-            ? <Map offers={offers} styleClassName={'cities'}  />
+            ? <Map styleClassName={'cities'}  />
             : ''}
         </div>
       </div>

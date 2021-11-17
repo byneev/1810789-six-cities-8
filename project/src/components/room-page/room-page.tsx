@@ -6,7 +6,7 @@ import ReviewForm from '../review-form/review-form';
 import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
 import { connect, ConnectedProps } from 'react-redux';
-import { ThunkAppDispatch, logoutFromCite } from '../../store/api-actions';
+import { ThunkAppDispatch, logoutFromCite, loadOffersFromServer } from '../../store/api-actions';
 import { StateProps } from '../../store/reducer';
 import { getChangeCity, getSetCurrentOffer } from '../../store/actions';
 
@@ -19,8 +19,8 @@ const mapStateToProps = ({currentCity, currentOffer, authorizationStatus, userDa
   currentOffer,
   authorizationStatus,
   userData,
-  nearbyOffers,
   currentComments,
+  nearbyOffers,
 });
 
 const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({
@@ -29,6 +29,7 @@ const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({
   },
   onClick(){
     dispatch(getChangeCity(City.PARIS));
+    dispatch(loadOffersFromServer());
     dispatch(getSetCurrentOffer(null));
   },
 });
@@ -38,7 +39,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedRoomPageProps = RouteComponentProps<IdProps> & PropsFromRedux;
 
 function RoomPage(props: ConnectedRoomPageProps):JSX.Element {
-  const {currentOffer, authorizationStatus, userData, nearbyOffers, currentComments, onLogout, onClick} = props;
+  const {currentOffer, authorizationStatus, userData, currentComments, nearbyOffers, onLogout, onClick} = props;
 
   if (currentOffer === null) {
     return <div></div>;
@@ -58,7 +59,7 @@ function RoomPage(props: ConnectedRoomPageProps):JSX.Element {
                 {authorizationStatus === AuthorizationStatus.Auth ?
                   <>
                     <li className='header__nav-item user'>
-                      <Link className='header__nav-link header__nav-link--profile' to={AppRoute.MAIN}>
+                      <Link  className='header__nav-link header__nav-link--profile' to={AppRoute.MAIN}>
                         <div className='header__avatar-wrapper user__avatar-wrapper'></div>
                         <span className='header__user-name user__name'>{userData.email}</span>
                       </Link>
@@ -157,7 +158,7 @@ function RoomPage(props: ConnectedRoomPageProps):JSX.Element {
               </section>
             </div>
           </div>
-          <Map offers={nearbyOffers} styleClassName={'property'} />
+          <Map styleClassName={'property'} />
         </section>
         <div className="container">
           <section className="near-places places">

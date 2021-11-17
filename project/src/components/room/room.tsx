@@ -30,10 +30,8 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedRoomProps = RoomProp & PropsFromRedux;
 
 function Room(prop: ConnectedRoomProps): JSX.Element {
-  console.log('Room reload');
   const {container, room, onFavoriteClick, authorizationStatus, setActiveId} = prop;
   const [currentStatus, setCurrentStatus] = useState(Number(room.isFavorite));
-  console.log(currentStatus);
   return (
     <article className={container === Container.FAVORITES ? 'favorites__card place-card' : 'cities__place-card place-card'}>
       {room.isPremium ?

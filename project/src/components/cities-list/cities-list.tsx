@@ -31,7 +31,7 @@ function CitiesList(props: PropsFromRedux):JSX.Element {
           <li className='locations__item'>
             <a onClick={(evt:MouseEvent<HTMLAnchorElement>) => {
               evt.preventDefault();
-              onCityChange(currentCity);
+              onCityChange(City.PARIS);
             }} className={currentCity === City.PARIS
               ? 'locations__item-link tabs__item tabs__item--active'
               : 'locations__item-link tabs__item'} href='/'

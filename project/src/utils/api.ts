@@ -13,7 +13,6 @@ export const createAPI = (onUnauthorize: () => void, onNotFound: () => void):Axi
     (response: AxiosResponse) => response,
     (error: AxiosError) => {
       if (error.response?.status === HTTPStatusCode.Unauthorized) {
-        console.log('Hui');
         onUnauthorize();
       }
       if (error.response?.status === HTTPStatusCode.NotFound) {
