@@ -3,13 +3,13 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { cities } from '../../mock/offer';
 import { getFavoritesOffers, logoutFromCite, ThunkAppDispatch } from '../../store/api-actions';
-import { StateProps } from '../../store/reducer';
+import { RootStateProps } from '../../store/reducers/root-reducer';
 import { AppRoute } from '../../utils/constants';
 import LocationItem from '../location-item/location-item';
 
-const mapStateToProps = ({userData, favoritesOffers}: StateProps) => ({
-  userData,
-  favoritesOffers,
+const mapStateToProps = ({User, WebApp}: RootStateProps) => ({
+  userData: User.userData,
+  favoritesOffers: WebApp.favoritesOffers,
 });
 
 const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({

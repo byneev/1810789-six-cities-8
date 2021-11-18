@@ -3,7 +3,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { OfferProp } from '../../mock/offer';
-import { StateProps } from '../../store/reducer';
+import { RootStateProps } from '../../store/reducers/root-reducer';
 import { sortBySortType } from '../../utils/functions';
 import Room from '../room/room';
 
@@ -21,8 +21,8 @@ export enum SortType {
 
 export type SortProps = | SortType.HighFirst | SortType.LowFirst | SortType.Popular | SortType.RatedFirst;
 
-const mapStateToProps = ({currentSort}:StateProps) => ({
-  currentSort,
+const mapStateToProps = ({WebApp}:RootStateProps) => ({
+  currentSort: WebApp.currentSort,
 });
 
 const connector = connect(mapStateToProps);

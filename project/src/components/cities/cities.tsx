@@ -2,13 +2,13 @@
 import { Container } from '../../utils/constants';
 import Map from '../map/map';
 import OffersList from '../offersList/offers-list';
-import { StateProps } from '../../store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import Sort from '../sort/sort';
+import { RootStateProps } from '../../store/reducers/root-reducer';
 
-const mapStateToProps = ({currentCity, offers}:StateProps) => ({
-  currentCity,
-  offers,
+const mapStateToProps = ({WebApp}:RootStateProps) => ({
+  currentCity: WebApp.currentCity,
+  offers: WebApp.offers,
 });
 
 const connector = connect(mapStateToProps);

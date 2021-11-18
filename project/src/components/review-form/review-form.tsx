@@ -4,7 +4,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { RouteProps } from 'react-router-dom';
 import { getChangeRating } from '../../store/actions';
 import { ThunkAppDispatch, sendComment } from '../../store/api-actions';
-import { StateProps } from '../../store/reducer';
+import { RootStateProps } from '../../store/reducers/root-reducer';
 
 export type CommentData = {
   comment: string;
@@ -15,8 +15,8 @@ export type LoginProps = RouteProps & {
   onSubmitData: () => void;
 }
 
-const mapStateToProps = ({currentRating}:StateProps) => ({
-  currentRating,
+const mapStateToProps = ({User}:RootStateProps) => ({
+  currentRating: User.currentRating,
 });
 
 const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({

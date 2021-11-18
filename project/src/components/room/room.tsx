@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { OfferProp } from '../../mock/offer';
 import { Actions, getSetActiveOffer } from '../../store/actions';
 import {addToFavorites, ThunkAppDispatch } from '../../store/api-actions';
-import { StateProps } from '../../store/reducer';
+import { RootStateProps } from '../../store/reducers/root-reducer';
 import { AppRoute, AuthorizationStatus, Container } from '../../utils/constants';
 
 export type RoomProp =  {
@@ -13,8 +13,8 @@ export type RoomProp =  {
   room: OfferProp;
 }
 
-const mapStateToProps = ({authorizationStatus}:StateProps) => ({
-  authorizationStatus,
+const mapStateToProps = ({User}:RootStateProps) => ({
+  authorizationStatus: User.authorizationStatus,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions> & ThunkAppDispatch) => ({

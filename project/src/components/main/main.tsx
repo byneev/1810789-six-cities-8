@@ -2,14 +2,14 @@
 import { connect, ConnectedProps } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logoutFromCite, ThunkAppDispatch } from '../../store/api-actions';
-import { StateProps } from '../../store/reducer';
+import { RootStateProps } from '../../store/reducers/root-reducer';
 import { AppRoute, AuthorizationStatus } from '../../utils/constants';
 import CitiesList from '../cities-list/cities-list';
 import Cities from '../cities/cities';
 
-const mapStateToProps = ({authorizationStatus, userData}:StateProps) => ({
-  authorizationStatus,
-  userData,
+const mapStateToProps = ({User}:RootStateProps) => ({
+  authorizationStatus: User.authorizationStatus,
+  userData: User.userData,
 });
 
 const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({

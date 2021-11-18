@@ -1,10 +1,10 @@
 import { connect, ConnectedProps } from 'react-redux';
 import { ReviewProp } from '../../mock/review';
-import { StateProps } from '../../store/reducer';
+import { RootStateProps } from '../../store/reducers/root-reducer';
 import Review from '../review/review';
 
-const mapStateToProps = ({currentComments}:StateProps) => ({
-  currentComments,
+const mapStateToProps = ({User}:RootStateProps) => ({
+  currentComments: User.currentComments,
 });
 
 

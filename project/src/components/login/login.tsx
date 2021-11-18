@@ -2,9 +2,9 @@
 import { FormEvent, useRef } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Link, RouteProps } from 'react-router-dom';
-import { StateProps } from '../../store/reducer';
 import { AppRoute } from '../../utils/constants';
 import { loginToCite, ThunkAppDispatch } from '../../store/api-actions';
+import { RootStateProps } from '../../store/reducers/root-reducer';
 
 export type AuthData = {
   login: string;
@@ -15,8 +15,8 @@ export type LoginProps = RouteProps & {
   onSubmitData: () => void;
 }
 
-const mapStateToProps = ({currentCity}:StateProps) => ({
-  currentCity,
+const mapStateToProps = ({WebApp}:RootStateProps) => ({
+  currentCity: WebApp.currentCity,
 });
 
 const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({

@@ -5,9 +5,9 @@ import { useEffect, useRef} from 'react';
 import useMap from '../../hooks/useMap/useMap';
 import 'leaflet/dist/leaflet.css';
 import { connect, ConnectedProps } from 'react-redux';
-import { StateProps } from '../../store/reducer';
 import useLayer from '../../hooks/useLayer/useLayer';
 import { OfferProp } from '../../mock/offer';
+import { RootStateProps } from '../../store/reducers/root-reducer';
 
 export type MapProps = {
   styleClassName: string;
@@ -25,12 +25,12 @@ const activeMarker = new Icon({
   iconAnchor: [14, 39],
 });
 
-const mapStateToProps = ({currentOffer, currentCity, activeOfferId, offers, nearbyOffers}:StateProps) => ({
-  currentOffer,
-  currentCity,
-  activeOfferId,
-  offers,
-  nearbyOffers,
+const mapStateToProps = ({User, WebApp}:RootStateProps) => ({
+  currentOffer: WebApp.currentOffer,
+  currentCity: WebApp.currentCity,
+  activeOfferId: User.activeOfferId,
+  offers: WebApp.offers,
+  nearbyOffers: WebApp.nearbyOffers,
 });
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;

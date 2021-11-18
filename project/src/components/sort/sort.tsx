@@ -1,11 +1,11 @@
 import { connect, ConnectedProps } from 'react-redux';
-import { StateProps } from '../../store/reducer';
 import {Dispatch} from 'redux';
 import { Actions, getChangeSort } from '../../store/actions';
 import { SortProps, SortType } from '../offersList/offers-list';
+import { RootStateProps } from '../../store/reducers/root-reducer';
 
-const mapStateToProps = ({currentSort}: StateProps) => ({
-  currentSort,
+const mapStateToProps = ({WebApp}: RootStateProps) => ({
+  currentSort: WebApp.currentSort,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({

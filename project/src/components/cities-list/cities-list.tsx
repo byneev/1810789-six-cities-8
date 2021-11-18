@@ -4,11 +4,11 @@ import {Dispatch} from 'redux';
 import { CitiesProps} from '../../mock/offer';
 import { Actions, getChangeCity} from '../../store/actions';
 import { City } from '../../utils/constants';
-import { StateProps } from '../../store/reducer';
 import { loadOffersFromServer, ThunkAppDispatch } from '../../store/api-actions';
+import { RootStateProps } from '../../store/reducers/root-reducer';
 
-const mapStateToProps = ({currentCity}:StateProps ) => ({
-  currentCity,
+const mapStateToProps = ({WebApp}:RootStateProps ) => ({
+  currentCity: WebApp.currentCity,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions> & ThunkAppDispatch) => ({

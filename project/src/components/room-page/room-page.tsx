@@ -7,20 +7,20 @@ import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
 import { connect, ConnectedProps } from 'react-redux';
 import { ThunkAppDispatch, logoutFromCite, loadOffersFromServer } from '../../store/api-actions';
-import { StateProps } from '../../store/reducer';
 import { getChangeCity, getSetCurrentOffer } from '../../store/actions';
+import { RootStateProps } from '../../store/reducers/root-reducer';
 
 export type IdProps = {
   id: string
 }
 
-const mapStateToProps = ({currentCity, currentOffer, authorizationStatus, userData, nearbyOffers, currentComments}:StateProps) => ({
-  currentCity,
-  currentOffer,
-  authorizationStatus,
-  userData,
-  currentComments,
-  nearbyOffers,
+const mapStateToProps = ({User, WebApp}:RootStateProps) => ({
+  currentCity: WebApp.currentCity,
+  currentOffer: WebApp.currentOffer,
+  authorizationStatus: User.authorizationStatus,
+  userData: User.userData,
+  currentComments: User.currentComments,
+  nearbyOffers: WebApp.nearbyOffers,
 });
 
 const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({

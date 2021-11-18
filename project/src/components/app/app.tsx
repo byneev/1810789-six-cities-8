@@ -9,12 +9,12 @@ import Favorites from '../favorites/favorites';
 import { OfferProp } from '../../mock/offer';
 import { ReviewProp } from '../../mock/review';
 import RoomPage from '../room-page/room-page';
-import { StateProps } from '../../store/reducer';
 import { connect, ConnectedProps } from 'react-redux';
 import Spinner from '../spinner/spinner';
 import browserHistory from '../../utils/history';
 import { store } from '../..';
 import { loadCurrentComments, loadCurrentOffer, loadNearbyOffers } from '../../store/api-actions';
+import { RootStateProps } from '../../store/reducers/root-reducer';
 
 export type OfferProps = {
   offers: OfferProp[];
@@ -28,8 +28,8 @@ export type AppProps = OfferProps & ReviewProps & {
   cities: string[];
 }
 
-const mapStateToProps = ({isLoading}:StateProps) => ({
-  isLoading,
+const mapStateToProps = ({WebApp}:RootStateProps) => ({
+  isLoading: WebApp.isLoading,
 });
 
 const connector = connect(mapStateToProps);
