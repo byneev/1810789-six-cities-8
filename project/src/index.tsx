@@ -1,40 +1,43 @@
 /* eslint-disable no-console */
-import { applyMiddleware, createStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './components/app/app';
-import { cities, offers } from './mock/offer';
-import { reviews } from './mock/review';
-import { reducer } from './store/reducer';
-import {composeWithDevTools} from 'redux-devtools-extension';
-import thunk from 'redux-thunk';
 import { createAPI } from './utils/api';
 import { checkAuthorizeStatus, loadOffersFromServer } from './store/api-actions';
-import { getChangeAuthorization,  getSetUserData } from './store/actions';
+import { changeAuthorization,  setUserData } from './store/actions';
 import { AppRoute, AuthorizationStatus} from './utils/constants';
 import { Redirect } from 'react-router-dom';
 import { getUser } from './store/token';
+import { rootReducer } from './store/reducers/root-reducer';
 
 const api = createAPI(
-  () => store.dispatch(getChangeAuthorization(AuthorizationStatus.NoAuth)),
+  () => store.dispatch(changeAuthorization(AuthorizationStatus.NoAuth)),
   () => <Redirect to={AppRoute.NOTFOUND}/>,
 );
 
-export const store = createStore(reducer, composeWithDevTools(
-  applyMiddleware(thunk.withExtraArgument(api)),
-));
+export const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      thunk: {
+        extraArgument: api,
+      },
+    }),
+});
+
 store.dispatch(loadOffersFromServer());
 store.dispatch(checkAuthorizeStatus());
 const userDataFromLocalStorage = getUser();
 if (userDataFromLocalStorage) {
-  store.dispatch(getSetUserData(userDataFromLocalStorage));
+  store.dispatch(setUserData(userDataFromLocalStorage));
 }
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App offers={offers} reviews={reviews} cities={cities}/>
+      <App />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),

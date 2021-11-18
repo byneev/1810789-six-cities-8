@@ -1,6 +1,7 @@
+import { createReducer } from '@reduxjs/toolkit';
 import { ReviewProp } from '../../mock/review';
 import { AuthoriztionProps, AuthorizationStatus } from '../../utils/constants';
-import { Actions, ActionType } from './../actions';
+import { changeAuthorization, changeRating, logout, setActiveOffer, setCurrentComments, setUserData } from './../actions';
 import { Token } from './../token';
 
 export type UserDataProps = {
@@ -12,7 +13,7 @@ export type UserDataProps = {
   token: Token,
 }
 
-export type StateProps = {
+export type UserStateProps = {
   authorizationStatus: AuthoriztionProps,
   userData:UserDataProps,
   currentComments: ReviewProp[],
@@ -21,7 +22,7 @@ export type StateProps = {
   activeOfferId: number | null,
 };
 
-const initialState:StateProps = {
+const initialState:UserStateProps = {
   authorizationStatus: AuthorizationStatus.Unknown,
   userData: {
     name:'',
@@ -37,24 +38,25 @@ const initialState:StateProps = {
   activeOfferId: null,
 };
 
-export const userReducer = (state:StateProps = initialState, action: Actions):StateProps => {
-  switch (action.type) {
-    case ActionType.ChangeAuthorization:
-      return {...state, authorizationStatus: action.payload.authorizationStatus};
-    case ActionType.SetUserData:
-      return {...state, userData: action.payload.data};
-    case ActionType.Logout:
-      return {...state, authorizationStatus: AuthorizationStatus.NoAuth, userData: initialState.userData};
-    case ActionType.SetCurrentComments:
-      return {...state, currentComments: action.payload.comments};
-    case ActionType.ChangeRating:
-      return {...state, currentRating: action.payload.rating};
-    case ActionType.AddToFavorites:
-      return {...state, isFavorite: true};
-    case ActionType.SetActiveOffer:
-      return {...state, activeOfferId: action.payload.activeOfferId};
-    default:
-      return state;
-  }
-};
-
+export const userReducer = createReducer(initialState, (builder) => {
+  builder
+    .addCase(changeAuthorization, (state, {payload}) => {
+      state.authorizationStatus = payload;
+    })
+    .addCase(setUserData, (state, {payload}) => {
+      state.userData = payload;
+    })
+    .addCase(logout, (state, {payload}) => {
+      state.userData = payload;
+      state.authorizationStatus = AuthorizationStatus.NoAuth;
+    })
+    .addCase(setCurrentComments, (state, {payload}) => {
+      state.currentComments = payload;
+    })
+    .addCase(changeRating, (state, {payload}) => {
+      state.currentRating = payload;
+    })
+    .addCase(setActiveOffer, (state, {payload}) => {
+      state.activeOfferId = payload;
+    });
+});

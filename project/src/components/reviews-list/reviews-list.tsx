@@ -1,18 +1,10 @@
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { ReviewProp } from '../../mock/review';
-import { RootStateProps } from '../../store/reducers/root-reducer';
+import { getCurrentComments } from '../../store/selectors.ts/user-selector';
 import Review from '../review/review';
 
-const mapStateToProps = ({User}:RootStateProps) => ({
-  currentComments: User.currentComments,
-});
-
-
-const connector = connect(mapStateToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function ReviewsList(props: PropsFromRedux): JSX.Element {
-  const {currentComments} = props;
+function ReviewsList(): JSX.Element {
+  const currentComments = useSelector(getCurrentComments);
   return (
     <ul className="reviews__list">
       {currentComments.map((review:ReviewProp) => (
@@ -22,5 +14,4 @@ function ReviewsList(props: PropsFromRedux): JSX.Element {
   );
 }
 
-export default connector(ReviewsList);
-export {ReviewsList};
+export default ReviewsList;

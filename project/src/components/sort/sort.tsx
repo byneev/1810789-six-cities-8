@@ -1,24 +1,11 @@
-import { connect, ConnectedProps } from 'react-redux';
-import {Dispatch} from 'redux';
-import { Actions, getChangeSort } from '../../store/actions';
-import { SortProps, SortType } from '../offersList/offers-list';
-import { RootStateProps } from '../../store/reducers/root-reducer';
+import { useDispatch, useSelector} from 'react-redux';
+import {  changeSort } from '../../store/actions';
+import { getCurrentSort } from '../../store/selectors.ts/app-selector';
+import { SortType } from '../../utils/constants';
 
-const mapStateToProps = ({WebApp}: RootStateProps) => ({
-  currentSort: WebApp.currentSort,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
-  onSortChange(sort: SortProps) {
-    dispatch(getChangeSort(sort));
-  },
-});
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function Sort(props: PropsFromRedux):JSX.Element {
-  const {currentSort, onSortChange} = props;
+function Sort():JSX.Element {
+  const currentSort = useSelector(getCurrentSort);
+  const dispatch = useDispatch();
   return (
     <form className='places__sorting' action='#' method='get'>
       <span className='places__sorting-caption'>Sort by</span>
@@ -31,7 +18,7 @@ function Sort(props: PropsFromRedux):JSX.Element {
       <ul className='places__options places__options--custom places__options--opened'>
         <li onClick={
           () => {
-            onSortChange(SortType.Popular);
+            dispatch(changeSort(SortType.Popular));
           }
         } className={currentSort === SortType.Popular ? 'places__option places__option--active' : 'places__option'} tabIndex={0}
         >
@@ -39,7 +26,7 @@ function Sort(props: PropsFromRedux):JSX.Element {
         </li>
         <li onClick={
           () => {
-            onSortChange(SortType.LowFirst);
+            dispatch(changeSort(SortType.LowFirst));
           }
         } className={currentSort === SortType.LowFirst ? 'places__option places__option--active' : 'places__option'} tabIndex={0}
         >
@@ -47,7 +34,7 @@ function Sort(props: PropsFromRedux):JSX.Element {
         </li>
         <li onClick={
           () => {
-            onSortChange(SortType.HighFirst);
+            dispatch(changeSort(SortType.HighFirst));
           }
         } className={currentSort === SortType.HighFirst ? 'places__option places__option--active' : 'places__option'} tabIndex={0}
         >
@@ -55,7 +42,7 @@ function Sort(props: PropsFromRedux):JSX.Element {
         </li>
         <li onClick={
           () => {
-            onSortChange(SortType.RatedFirst);
+            dispatch(changeSort(SortType.RatedFirst));
           }
         } className={currentSort === SortType.RatedFirst ? 'places__option places__option--active' : 'places__option'} tabIndex={0}
         >
@@ -66,5 +53,4 @@ function Sort(props: PropsFromRedux):JSX.Element {
   );
 }
 
-export {Sort};
-export default connector(Sort);
+export default Sort;

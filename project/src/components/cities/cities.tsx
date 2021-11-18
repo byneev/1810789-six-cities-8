@@ -1,21 +1,13 @@
-/* eslint-disable no-console */
 import { Container } from '../../utils/constants';
 import Map from '../map/map';
 import OffersList from '../offersList/offers-list';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Sort from '../sort/sort';
-import { RootStateProps } from '../../store/reducers/root-reducer';
+import { getCurrentCity, getOffers } from '../../store/selectors.ts/app-selector';
 
-const mapStateToProps = ({WebApp}:RootStateProps) => ({
-  currentCity: WebApp.currentCity,
-  offers: WebApp.offers,
-});
-
-const connector = connect(mapStateToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function Cities(props: PropsFromRedux):JSX.Element {
-  const {currentCity, offers} = props;
+function Cities():JSX.Element {
+  const currentCity = useSelector(getCurrentCity);
+  const offers = useSelector(getOffers);
   return (
     <div className='cities'>
       <div className='cities__places-container container'>
@@ -37,5 +29,4 @@ function Cities(props: PropsFromRedux):JSX.Element {
   );
 }
 
-export default connector(Cities);
-export {Cities};
+export default Cities;

@@ -6,38 +6,16 @@ import { AppRoute} from '../../utils/constants';
 import NotFound from '../not-found/not-found';
 import PrivateRoute from '../private-route/private-route';
 import Favorites from '../favorites/favorites';
-import { OfferProp } from '../../mock/offer';
-import { ReviewProp } from '../../mock/review';
 import RoomPage from '../room-page/room-page';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Spinner from '../spinner/spinner';
 import browserHistory from '../../utils/history';
 import { store } from '../..';
 import { loadCurrentComments, loadCurrentOffer, loadNearbyOffers } from '../../store/api-actions';
-import { RootStateProps } from '../../store/reducers/root-reducer';
+import { getIsLoading } from '../../store/selectors.ts/app-selector';
 
-export type OfferProps = {
-  offers: OfferProp[];
-}
-
-export type ReviewProps = {
-  reviews: ReviewProp[];
-}
-
-export type AppProps = OfferProps & ReviewProps & {
-  cities: string[];
-}
-
-const mapStateToProps = ({WebApp}:RootStateProps) => ({
-  isLoading: WebApp.isLoading,
-});
-
-const connector = connect(mapStateToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedAppProps = AppProps & PropsFromRedux;
-
-function App(props: ConnectedAppProps): JSX.Element {
-  const {isLoading} = props;
+function App(): JSX.Element {
+  const isLoading = useSelector(getIsLoading);
   if (isLoading) {
     return (
       <Spinner />
@@ -61,7 +39,7 @@ function App(props: ConnectedAppProps): JSX.Element {
             store.dispatch(loadNearbyOffers(id));
             store.dispatch(loadCurrentComments(id));
 
-            return <RoomPage {...routeProps}/>;
+            return <RoomPage />;
           }
         }
         />
@@ -72,5 +50,4 @@ function App(props: ConnectedAppProps): JSX.Element {
     </BrowserRouter>);
 }
 
-export default connector(App);
-export {App};
+export default App;

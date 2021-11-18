@@ -4,10 +4,11 @@ import { Icon, Marker} from 'leaflet';
 import { useEffect, useRef} from 'react';
 import useMap from '../../hooks/useMap/useMap';
 import 'leaflet/dist/leaflet.css';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import useLayer from '../../hooks/useLayer/useLayer';
 import { OfferProp } from '../../mock/offer';
-import { RootStateProps } from '../../store/reducers/root-reducer';
+import { getCurrentOffer, getNearbyOffers, getOffers } from '../../store/selectors.ts/app-selector';
+import { getActiveOfferId } from '../../store/selectors.ts/user-selector';
 
 export type MapProps = {
   styleClassName: string;
@@ -25,19 +26,13 @@ const activeMarker = new Icon({
   iconAnchor: [14, 39],
 });
 
-const mapStateToProps = ({User, WebApp}:RootStateProps) => ({
-  currentOffer: WebApp.currentOffer,
-  currentCity: WebApp.currentCity,
-  activeOfferId: User.activeOfferId,
-  offers: WebApp.offers,
-  nearbyOffers: WebApp.nearbyOffers,
-});
-const connector = connect(mapStateToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedMapProps = PropsFromRedux & MapProps;
+function Map(props: MapProps) : JSX.Element {
+  const currentOffer = useSelector(getCurrentOffer);
+  const activeOfferId = useSelector(getActiveOfferId);
+  const offers = useSelector(getOffers);
+  const nearbyOffers = useSelector(getNearbyOffers);
 
-function Map(props: ConnectedMapProps) : JSX.Element {
-  const {offers, currentOffer, styleClassName, activeOfferId, nearbyOffers} = props;
+  const {styleClassName} = props;
   const mapRef = useRef(null);
   const map = useMap(mapRef, offers[0], currentOffer);
   const layer = useLayer(map);
@@ -91,5 +86,4 @@ function Map(props: ConnectedMapProps) : JSX.Element {
   );
 }
 
-export {Map};
-export default connector(Map);
+export default Map;

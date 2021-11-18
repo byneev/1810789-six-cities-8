@@ -1,7 +1,16 @@
 import { ReviewProp } from '../../mock/review';
 import { AuthoriztionProps } from '../../utils/constants';
-import { UserDataProps } from '../reducer';
 import { NameSpace, RootStateProps } from '../reducers/root-reducer';
+import { UserDataProps } from '../reducers/user-reducer';
+
+export type StateProps = {
+  authorizationStatus: AuthoriztionProps,
+  userData:UserDataProps,
+  currentComments: ReviewProp[],
+  currentRating: number,
+  isFavorite: boolean,
+  activeOfferId: number | null,
+};
 
 export const getAuthorizationStatus = (state: RootStateProps):AuthoriztionProps => state[NameSpace.user].authorizationStatus;
 

@@ -1,31 +1,17 @@
 /* eslint-disable no-console */
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { cities } from '../../mock/offer';
-import { getFavoritesOffers, logoutFromCite, ThunkAppDispatch } from '../../store/api-actions';
-import { RootStateProps } from '../../store/reducers/root-reducer';
+import { logoutFromCite } from '../../store/api-actions';
+import { getFavoriteOffers } from '../../store/selectors.ts/app-selector';
+import { getUserData } from '../../store/selectors.ts/user-selector';
 import { AppRoute } from '../../utils/constants';
 import LocationItem from '../location-item/location-item';
 
-const mapStateToProps = ({User, WebApp}: RootStateProps) => ({
-  userData: User.userData,
-  favoritesOffers: WebApp.favoritesOffers,
-});
-
-const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
-  onLogout(){
-    dispatch(logoutFromCite());
-  },
-  getFavorites(){
-    dispatch(getFavoritesOffers());
-  },
-});
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function Favorites(props: PropsFromRedux): JSX.Element {
-  const { userData, onLogout, favoritesOffers} = props;
+function Favorites(): JSX.Element {
+  const userData = useSelector(getUserData);
+  const favoritesOffers = useSelector(getFavoriteOffers);
+  const dispatch = useDispatch();
   const actualCities:string[] = cities.filter((city) => favoritesOffers.filter((item) => item.city.name === city).length !== 0);
   return (
     <div className="page">
@@ -46,7 +32,7 @@ function Favorites(props: PropsFromRedux): JSX.Element {
                   </Link>
                 </li>
                 <li className='header__nav-item'>
-                  <Link onClick={() => onLogout()} className='header__nav-link' to={AppRoute.LOGIN}>
+                  <Link onClick={() => dispatch(logoutFromCite())} className='header__nav-link' to={AppRoute.LOGIN}>
                     <span className='header__signout'>Sign out</span>
                   </Link>
                 </li>
@@ -74,5 +60,4 @@ function Favorites(props: PropsFromRedux): JSX.Element {
     </div>);
 }
 
-export default connector(Favorites);
-export {Favorites};
+export default Favorites;

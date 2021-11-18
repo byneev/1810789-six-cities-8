@@ -1,28 +1,16 @@
 /* eslint-disable no-console */
-import { connect, ConnectedProps } from 'react-redux';
+import {  useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { logoutFromCite, ThunkAppDispatch } from '../../store/api-actions';
-import { RootStateProps } from '../../store/reducers/root-reducer';
+import { logoutFromCite} from '../../store/api-actions';
+import { getAuthorizationStatus, getUserData } from '../../store/selectors.ts/user-selector';
 import { AppRoute, AuthorizationStatus } from '../../utils/constants';
 import CitiesList from '../cities-list/cities-list';
 import Cities from '../cities/cities';
 
-const mapStateToProps = ({User}:RootStateProps) => ({
-  authorizationStatus: User.authorizationStatus,
-  userData: User.userData,
-});
-
-const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({
-  onLogout(){
-    dispatch(logoutFromCite());
-  },
-});
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function Main(props:PropsFromRedux): JSX.Element {
-  const {authorizationStatus, userData, onLogout} = props;
+function Main(): JSX.Element {
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const userData = useSelector(getUserData);
+  const dispatch = useDispatch();
   return (
     <div className='page page--gray page--main'>
       <header className='header'>
@@ -44,7 +32,7 @@ function Main(props:PropsFromRedux): JSX.Element {
                       </Link>
                     </li>
                     <li className='header__nav-item'>
-                      <Link onClick={() => onLogout()} className='header__nav-link' to={AppRoute.LOGIN}>
+                      <Link onClick={() =>     dispatch(logoutFromCite())} className='header__nav-link' to={AppRoute.LOGIN}>
                         <span className='header__signout'>Sign out</span>
                       </Link>
                     </li>
@@ -71,5 +59,4 @@ function Main(props:PropsFromRedux): JSX.Element {
     </div>);
 }
 
-export default connector(Main);
-export {Main};
+export default Main;

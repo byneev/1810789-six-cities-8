@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 import { FormEvent, useRef } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import {  useDispatch, useSelector } from 'react-redux';
 import { Link, RouteProps } from 'react-router-dom';
 import { AppRoute } from '../../utils/constants';
-import { loginToCite, ThunkAppDispatch } from '../../store/api-actions';
-import { RootStateProps } from '../../store/reducers/root-reducer';
+import { loginToCite } from '../../store/api-actions';
+import { getCurrentCity } from '../../store/selectors.ts/app-selector';
 
 export type AuthData = {
   login: string;
@@ -15,21 +15,11 @@ export type LoginProps = RouteProps & {
   onSubmitData: () => void;
 }
 
-const mapStateToProps = ({WebApp}:RootStateProps) => ({
-  currentCity: WebApp.currentCity,
-});
+function Login(props: LoginProps):JSX.Element {
+  const currentCity = useSelector(getCurrentCity);
+  const dispatch = useDispatch();
 
-const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
-  onSubmit(authData:AuthData) {
-    dispatch(loginToCite(authData));
-  },
-});
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedLoginProps = PropsFromRedux & LoginProps;
-function Login(props: ConnectedLoginProps):JSX.Element {
-  const {currentCity, onSubmit, onSubmitData } = props;
+  const {onSubmitData } = props;
   const email = useRef<HTMLInputElement | null>(null);
   const password = useRef<HTMLInputElement | null>(null);
   return (
@@ -52,10 +42,10 @@ function Login(props: ConnectedLoginProps):JSX.Element {
             <form onSubmit={(evt:FormEvent<HTMLFormElement>) => {
               evt.preventDefault();
               if (email.current !== null && password.current !== null) {
-                onSubmit({
+                dispatch(loginToCite({
                   login: email.current.value,
                   password: password.current.value,
-                });
+                }));
                 onSubmitData();
               }
             }} className="login__form form" action="#" method="post"
@@ -84,7 +74,6 @@ function Login(props: ConnectedLoginProps):JSX.Element {
   );
 }
 
-export {Login};
-export default connector(Login);
+export default Login;
 
 

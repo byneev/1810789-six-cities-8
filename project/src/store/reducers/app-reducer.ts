@@ -1,6 +1,7 @@
-import { SortProps, SortType } from '../../components/offersList/offers-list';
+import { createReducer } from '@reduxjs/toolkit';
 import { CitiesProps, OfferProp } from '../../mock/offer';
-import { Actions, ActionType } from './../actions';
+import { SortProps, SortType } from '../../utils/constants';
+import { changeCity, changeSort, setCurrentOffer, setFavoritesOffers, setNearbyOferrs, setupOffers } from './../actions';
 
 export type AppStateProps = {
   currentCity: CitiesProps,
@@ -12,32 +13,38 @@ export type AppStateProps = {
   favoritesOffers: OfferProp[],
 };
 
+const popular = SortType.Popular;
+
 const initialState:AppStateProps = {
   currentCity: 'Paris',
   offers: [],
-  currentSort: SortType.Popular,
+  currentSort: popular,
   isLoading: true,
   currentOffer: null,
   nearbyOffers: [],
   favoritesOffers: [],
 };
 
-export const appReducer = (state:AppStateProps = initialState, action: Actions):AppStateProps => {
-  switch (action.type) {
-    case ActionType.SetupOffers:
-      return {...state, offers: action.payload.newOffers, isLoading: false};
-    case ActionType.ChangeCity:
-      return {...state, currentCity: action.payload.city, currentSort: initialState.currentSort};
-    case ActionType.ChangeSort:
-      return {...state, currentSort: action.payload.sort};
-    case ActionType.SetCurrentOffer:
-      return {...state, currentOffer: action.payload.offer};
-    case ActionType.SetNearbyOffers:
-      return {...state, nearbyOffers: action.payload.offers};
-    case ActionType.SetFavoritesOffers:
-      return {...state, favoritesOffers: action.payload.favoritesOffers};
-    default:
-      return state;
-  }
-};
-
+export const appReducer = createReducer(initialState, (builder) => {
+  builder
+    .addCase(setupOffers, (state, {payload}) => {
+      state.offers = payload;
+      state.isLoading = false;
+    })
+    .addCase(changeCity, (state, {payload}) => {
+      state.currentCity = payload.currentCity;
+      state.currentSort = payload.currentSort;
+    })
+    .addCase(changeSort, (state, {payload}) => {
+      state.currentSort = payload;
+    })
+    .addCase(setCurrentOffer, (state, {payload}) => {
+      state.currentOffer = payload;
+    })
+    .addCase(setNearbyOferrs, (state, {payload}) => {
+      state.nearbyOffers = payload;
+    })
+    .addCase(setFavoritesOffers, (state, {payload}) => {
+      state.favoritesOffers = payload;
+    });
+});

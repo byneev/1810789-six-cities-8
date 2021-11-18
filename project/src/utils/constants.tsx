@@ -11,6 +11,15 @@ export type CityProp = {
 
 export type AuthoriztionProps =  AuthorizationStatus.Auth | AuthorizationStatus.NoAuth | AuthorizationStatus.Unknown;
 
+export enum SortType {
+  HighFirst = 'Price: high to low',
+  LowFirst = 'Price: low to high',
+  RatedFirst = 'Top rated first',
+  Popular = 'Popular',
+}
+
+export type SortProps = SortType.HighFirst | SortType.LowFirst | SortType.Popular | SortType.RatedFirst;
+
 export const AppRoute = {
   MAIN: '/',
   LOGIN: '/login',

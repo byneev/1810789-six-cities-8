@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-import { SortProps, SortType } from '../components/offersList/offers-list';
 import { CitiesProps, OfferProp } from '../mock/offer';
+import { SortProps, SortType } from './constants';
 
 export const getOffersByCity = (offers: OfferProp[], city: CitiesProps):OfferProp[] => offers.filter((offer) => offer.city.name === city);
 

@@ -1,51 +1,33 @@
 /* eslint-disable no-console */
 import { ChangeEvent, FormEvent, useRef } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { RouteProps } from 'react-router-dom';
-import { getChangeRating } from '../../store/actions';
-import { ThunkAppDispatch, sendComment } from '../../store/api-actions';
-import { RootStateProps } from '../../store/reducers/root-reducer';
+import {  useDispatch, useSelector } from 'react-redux';
+import { changeRating } from '../../store/actions';
+import { sendComment } from '../../store/api-actions';
+import { getCurrentRating } from '../../store/selectors.ts/user-selector';
 
 export type CommentData = {
   comment: string;
   rating: number;
 };
 
-export type LoginProps = RouteProps & {
-  onSubmitData: () => void;
+export type ReviewFormProps = {
+  id: number;
 }
 
-const mapStateToProps = ({User}:RootStateProps) => ({
-  currentRating: User.currentRating,
-});
-
-const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
-  onSubmit(id:number, commentData:CommentData) {
-    dispatch(sendComment(id, commentData));
-  },
-  onChange(rating:number){
-    dispatch(getChangeRating(rating));
-  },
-});
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedReviewFormProps = PropsFromRedux & {
-  id:number,
-}
-
-function ReviewForm(props: ConnectedReviewFormProps):JSX.Element {
-  const {id, currentRating, onSubmit, onChange} = props;
+function ReviewForm(props: ReviewFormProps):JSX.Element {
+  const currentRating = useSelector(getCurrentRating);
+  const dispatch = useDispatch();
+  const {id} = props;
   const textarea = useRef<HTMLTextAreaElement | null>(null);
 
   return (
     <form className="reviews__form form" action="#" method="post" onSubmit={(evt: FormEvent<HTMLFormElement>) => {
       evt.preventDefault();
       if (textarea.current !== null && textarea.current.value !== '') {
-        onSubmit(id, {
+        dispatch(sendComment(id, {
           comment: textarea.current.value,
           rating: currentRating,
-        });
+        }));
         textarea.current.value = '';
       }
     } }
@@ -54,7 +36,7 @@ function ReviewForm(props: ConnectedReviewFormProps):JSX.Element {
       <div className="reviews__rating-form form__rating">
 
         <input onChange={(evt: ChangeEvent<HTMLInputElement>) => {
-          onChange(+evt.target.value);
+          dispatch(changeRating(+evt.target.value));
         } } className="form__rating-input visually-hidden" name="rating" value="5" id="5-stars" type="radio" checked={currentRating === 5}
         />
         <label htmlFor="5-stars" className="reviews__rating-label form__rating-label" title="good">
@@ -64,7 +46,7 @@ function ReviewForm(props: ConnectedReviewFormProps):JSX.Element {
         </label>
 
         <input onChange={(evt: ChangeEvent<HTMLInputElement>) => {
-          onChange(+evt.target.value);
+          dispatch(changeRating(+evt.target.value));
         } } className="form__rating-input visually-hidden" name="rating" value="4" id="4-stars" type="radio" checked={currentRating === 4}
         />
         <label htmlFor="4-stars" className="reviews__rating-label form__rating-label" title="good">
@@ -74,7 +56,7 @@ function ReviewForm(props: ConnectedReviewFormProps):JSX.Element {
         </label>
 
         <input onChange={(evt: ChangeEvent<HTMLInputElement>) => {
-          onChange(+evt.target.value);
+          dispatch(changeRating(+evt.target.value));
         } } className="form__rating-input visually-hidden" name="rating" value="3" id="3-stars" type="radio" defaultChecked={currentRating === 3}
         />
         <label htmlFor="3-stars" className="reviews__rating-label form__rating-label" title="good">
@@ -84,7 +66,7 @@ function ReviewForm(props: ConnectedReviewFormProps):JSX.Element {
         </label>
 
         <input onChange={(evt: ChangeEvent<HTMLInputElement>) => {
-          onChange(+evt.target.value);
+          dispatch(changeRating(+evt.target.value));
         } } className="form__rating-input visually-hidden" name="rating" value="2" id="2-stars" type="radio" checked={currentRating === 2}
         />
         <label htmlFor="2-stars" className="reviews__rating-label form__rating-label" title="good">
@@ -94,7 +76,7 @@ function ReviewForm(props: ConnectedReviewFormProps):JSX.Element {
         </label>
 
         <input onChange={(evt: ChangeEvent<HTMLInputElement>) => {
-          onChange(+evt.target.value);
+          dispatch(changeRating(+evt.target.value));
         } } className="form__rating-input visually-hidden" name="rating" value="1" id="1-stars" type="radio" checked={currentRating === 1}
         />
         <label htmlFor="1-stars" className="reviews__rating-label form__rating-label" title="good">
@@ -112,5 +94,4 @@ function ReviewForm(props: ConnectedReviewFormProps):JSX.Element {
   );
 }
 
-export {ReviewForm};
-export default connector(ReviewForm);
+export default ReviewForm;

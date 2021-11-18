@@ -1,5 +1,5 @@
-import { SortProps } from '../../components/offersList/offers-list';
 import { CitiesProps, OfferProp } from '../../mock/offer';
+import { SortProps } from '../../utils/constants';
 import { NameSpace, RootStateProps } from '../reducers/root-reducer';
 
 export const getCurrentCity = (state: RootStateProps):CitiesProps => state[NameSpace.webApp].currentCity;
@@ -14,4 +14,4 @@ export const getCurrentOffer = (state: RootStateProps): OfferProp | null => stat
 
 export const getNearbyOffers = (state: RootStateProps): OfferProp[] => state[NameSpace.webApp].nearbyOffers;
 
-export const getFavoritesOffers = (state: RootStateProps): OfferProp[] => state[NameSpace.webApp].favoritesOffers;
+export const getFavoriteOffers = (state: RootStateProps): OfferProp[] => state[NameSpace.webApp].favoritesOffers;

@@ -1,45 +1,23 @@
 /* eslint-disable no-console */
-import { Link, RouteComponentProps } from 'react-router-dom';
-import { AppRoute, AuthorizationStatus, City, Container } from '../../utils/constants';
+import { Link} from 'react-router-dom';
+import { AppRoute, AuthorizationStatus, City, Container, SortType } from '../../utils/constants';
 import OffersList from '../offersList/offers-list';
 import ReviewForm from '../review-form/review-form';
 import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
-import { connect, ConnectedProps } from 'react-redux';
-import { ThunkAppDispatch, logoutFromCite, loadOffersFromServer } from '../../store/api-actions';
-import { getChangeCity, getSetCurrentOffer } from '../../store/actions';
-import { RootStateProps } from '../../store/reducers/root-reducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutFromCite, loadOffersFromServer } from '../../store/api-actions';
+import { changeCity, setCurrentOffer } from '../../store/actions';
+import { getCurrentOffer, getNearbyOffers } from '../../store/selectors.ts/app-selector';
+import { getAuthorizationStatus, getCurrentComments, getUserData } from '../../store/selectors.ts/user-selector';
 
-export type IdProps = {
-  id: string
-}
-
-const mapStateToProps = ({User, WebApp}:RootStateProps) => ({
-  currentCity: WebApp.currentCity,
-  currentOffer: WebApp.currentOffer,
-  authorizationStatus: User.authorizationStatus,
-  userData: User.userData,
-  currentComments: User.currentComments,
-  nearbyOffers: WebApp.nearbyOffers,
-});
-
-const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({
-  onLogout(){
-    dispatch(logoutFromCite());
-  },
-  onClick(){
-    dispatch(getChangeCity(City.PARIS));
-    dispatch(loadOffersFromServer());
-    dispatch(getSetCurrentOffer(null));
-  },
-});
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedRoomPageProps = RouteComponentProps<IdProps> & PropsFromRedux;
-
-function RoomPage(props: ConnectedRoomPageProps):JSX.Element {
-  const {currentOffer, authorizationStatus, userData, currentComments, nearbyOffers, onLogout, onClick} = props;
+function RoomPage():JSX.Element {
+  const currentOffer = useSelector(getCurrentOffer);
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const userData = useSelector(getUserData);
+  const currentComments = useSelector(getCurrentComments);
+  const nearbyOffers = useSelector(getNearbyOffers);
+  const dispatch = useDispatch();
 
   if (currentOffer === null) {
     return <div></div>;
@@ -50,7 +28,12 @@ function RoomPage(props: ConnectedRoomPageProps):JSX.Element {
         <div className="container">
           <div className='header__wrapper'>
             <div className='header__left'>
-              <Link onClick={() => onClick()}  className='header__logo-link header__logo-link--active' to={AppRoute.MAIN}>
+              <Link onClick={() => {
+                dispatch(changeCity(City.PARIS, SortType.Popular));
+                dispatch(loadOffersFromServer());
+                dispatch(setCurrentOffer(null));
+              }}  className='header__logo-link header__logo-link--active' to={AppRoute.MAIN}
+              >
                 <img className='header__logo' src='img/logo.svg' alt='6 cities logo' width='81' height='41' />
               </Link>
             </div>
@@ -65,7 +48,7 @@ function RoomPage(props: ConnectedRoomPageProps):JSX.Element {
                       </Link>
                     </li>
                     <li className='header__nav-item'>
-                      <Link onClick={() => onLogout()} className='header__nav-link' to={AppRoute.LOGIN}>
+                      <Link onClick={() => dispatch(logoutFromCite())} className='header__nav-link' to={AppRoute.LOGIN}>
                         <span className='header__signout'>Sign out</span>
                       </Link>
                     </li>
@@ -173,5 +156,4 @@ function RoomPage(props: ConnectedRoomPageProps):JSX.Element {
   );
 }
 
-export default connector(RoomPage);
-export {RoomPage};
+export default RoomPage;

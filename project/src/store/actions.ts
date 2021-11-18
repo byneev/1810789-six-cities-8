@@ -1,8 +1,8 @@
-import { SortProps } from '../components/offersList/offers-list';
+import { createAction } from '@reduxjs/toolkit';
 import { CitiesProps, OfferProp } from '../mock/offer';
-import { convertCommentsToClient, ServerCommentProp } from '../utils/adapter';
-import { AuthoriztionProps } from '../utils/constants';
-import { UserDataProps } from './reducer';
+import { ReviewProp } from '../mock/review';
+import { AuthoriztionProps, SortProps } from '../utils/constants';
+import { UserDataProps } from './reducers/user-reducer';
 
 export enum ActionType {
   ChangeCity = 'app/changeCity',
@@ -21,96 +21,33 @@ export enum ActionType {
   SetActiveOffer = 'user/setActiveOffer',
 }
 
-export const getChangeCity = (city: CitiesProps) => ({
-  type: ActionType.ChangeCity,
-  payload: {
-    city,
-  },
-} as const);
+export const changeCity = createAction(ActionType.ChangeCity,
+  (currentCity: CitiesProps, currentSort: SortProps) => ({
+    payload: {
+      currentCity,
+      currentSort,
+    },
+  }));
 
-export const getSetupOffers = (offers: OfferProp[]) => ({
-  type: ActionType.SetupOffers,
-  payload: {
-    newOffers:offers,
-  },
-} as const);
+export const setupOffers = createAction<OfferProp[]>(ActionType.SetupOffers);
 
-export const getChangeSort = (sort: SortProps) => ({
-  type: ActionType.ChangeSort,
-  payload: {
-    sort,
-  },
-} as const);
+export const changeSort = createAction<SortProps>(ActionType.ChangeSort);
 
-export const getChangeAuthorization = (authorizationStatus: AuthoriztionProps) => ({
-  type: ActionType.ChangeAuthorization,
-  payload: {
-    authorizationStatus,
-  },
-} as const);
+export const changeAuthorization = createAction<AuthoriztionProps>(ActionType.ChangeAuthorization);
 
-export const getSetUserData = (data:UserDataProps ) => ({
-  type: ActionType.SetUserData,
-  payload: {
-    data,
-  },
-} as const);
+export const setUserData = createAction<UserDataProps>(ActionType.SetUserData);
 
-export const getLogout = () => ({
-  type: ActionType.Logout,
-} as const);
+export const logout = createAction<UserDataProps>(ActionType.Logout);
 
-export const getSetCurrentOffer = (offer:OfferProp | null) => ({
-  type: ActionType.SetCurrentOffer,
-  payload: {
-    offer,
-  },
-} as const);
+export const setCurrentOffer = createAction<OfferProp | null>(ActionType.SetCurrentOffer);
 
-export const getSetNearbyOferrs = (offers:OfferProp[]) => ({
-  type: ActionType.SetNearbyOffers,
-  payload: {
-    offers,
-  },
-} as const);
+export const setNearbyOferrs = createAction<OfferProp[]>(ActionType.SetNearbyOffers);
 
-export const getRefreshMarkers = (isNeedRefreshMarkers: boolean) => ({
-  type: ActionType.RefreshMarkers,
-  payload: {
-    isNeedRefreshMarkers,
-  },
-} as const);
+export const setCurrentComments = createAction<ReviewProp[]>(ActionType.SetCurrentComments);
 
-export const getSetCurrentComments = (comments: ServerCommentProp[]) => ({
-  type: ActionType.SetCurrentComments,
-  payload: {
-    comments: comments.map((comment) => convertCommentsToClient(comment)),
-  },
-} as const);
+export const changeRating = createAction<number>(ActionType.ChangeRating);
 
-export const getChangeRating = (rating: number) => ({
-  type: ActionType.ChangeRating,
-  payload: {
-    rating,
-  },
-} as const);
+export const setFavoritesOffers = createAction<OfferProp[]>(ActionType.SetFavoritesOffers);
 
-export const getAddToFavorites = () => ({
-  type: ActionType.AddToFavorites,
-} as const);
+export const setActiveOffer = createAction<number | null>(ActionType.SetActiveOffer);
 
-export const getSetFavoritesOffers = (favoritesOffers: OfferProp[]) => ({
-  type: ActionType.SetFavoritesOffers,
-  payload: {
-    favoritesOffers,
-  },
-} as const);
-
-export const getSetActiveOffer = (activeOfferId: number | null) => ({
-  type: ActionType.SetActiveOffer,
-  payload: {
-    activeOfferId,
-  },
-} as const);
-
-export type Actions = ReturnType<typeof getChangeSort> | ReturnType<typeof getChangeCity> | ReturnType<typeof getSetupOffers> | ReturnType<typeof getChangeAuthorization> | ReturnType<typeof getSetUserData> | ReturnType<typeof getLogout> | ReturnType<typeof getSetCurrentOffer> | ReturnType<typeof getSetNearbyOferrs> | ReturnType<typeof getRefreshMarkers> | ReturnType<typeof getSetCurrentComments> | ReturnType<typeof getChangeRating>  | ReturnType<typeof getAddToFavorites> | ReturnType<typeof getSetActiveOffer> | ReturnType<typeof getSetFavoritesOffers>;
