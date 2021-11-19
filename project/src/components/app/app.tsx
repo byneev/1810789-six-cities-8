@@ -11,8 +11,10 @@ import { useSelector } from 'react-redux';
 import Spinner from '../spinner/spinner';
 import browserHistory from '../../utils/history';
 import { store } from '../..';
-import { loadCurrentComments, loadCurrentOffer, loadNearbyOffers } from '../../store/api-actions';
 import { getIsLoading } from '../../store/selectors.ts/app-selector';
+import { NameSpace } from '../../store/reducers/root-reducer';
+import MainEmpty from '../main-empty/main-empty';
+import { loadCurrentOffer, loadNearbyOffers, loadCurrentComments } from '../../store/api-actions';
 
 function App(): JSX.Element {
   const isLoading = useSelector(getIsLoading);
@@ -25,7 +27,7 @@ function App(): JSX.Element {
     <BrowserRouter history={browserHistory}>
       <Switch>
         <Route path={AppRoute.MAIN} exact>
-          <Main />
+          {store.getState()[NameSpace.webApp].offers.length !== 0 ? <Main /> : <MainEmpty />}
         </Route>
         <Route path={AppRoute.LOGIN} render={({history}) => (
           <Login onSubmitData={() => history.push(AppRoute.MAIN)} />
@@ -38,8 +40,7 @@ function App(): JSX.Element {
             store.dispatch(loadCurrentOffer(id));
             store.dispatch(loadNearbyOffers(id));
             store.dispatch(loadCurrentComments(id));
-
-            return <RoomPage />;
+            return <RoomPage id={id}/>;
           }
         }
         />

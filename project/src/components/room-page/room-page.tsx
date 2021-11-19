@@ -6,22 +6,43 @@ import ReviewForm from '../review-form/review-form';
 import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutFromCite, loadOffersFromServer } from '../../store/api-actions';
-import { changeCity, setCurrentOffer } from '../../store/actions';
-import { getCurrentOffer, getNearbyOffers } from '../../store/selectors.ts/app-selector';
+import { logoutFromCite, loadOffersFromServer, addToFavorites } from '../../store/api-actions';
+import { changeCity} from '../../store/actions';
+import { getFavoriteOffers, getNearbyOffers, getOffers } from '../../store/selectors.ts/app-selector';
 import { getAuthorizationStatus, getCurrentComments, getUserData } from '../../store/selectors.ts/user-selector';
+import { MouseEvent } from 'react';
+import { OfferProp } from '../../mock/offer';
 
-function RoomPage():JSX.Element {
-  const currentOffer = useSelector(getCurrentOffer);
+export type RoomPageProps = {
+  id: number;
+}
+
+function RoomPage({id}:RoomPageProps):JSX.Element {
+  const dispatch = useDispatch();
+
+  const offers = useSelector(getOffers);
   const authorizationStatus = useSelector(getAuthorizationStatus);
   const userData = useSelector(getUserData);
   const currentComments = useSelector(getCurrentComments);
   const nearbyOffers = useSelector(getNearbyOffers);
-  const dispatch = useDispatch();
+  const favoritesOffers = useSelector(getFavoriteOffers);
+  let correctOffer:OfferProp = offers[0];
+  offers.forEach((offer) => {
+    if (offer.id === id) {
+      correctOffer = offer;
+    }
+  });
+  // const [currentStatus, setCurrentStatus] = useState(Number(correctOffer.isFavorite));
 
-  if (currentOffer === null) {
-    return <div></div>;
-  }
+  let isFavorite = false;
+  favoritesOffers.forEach((offer) => {
+    console.log(offer.id);
+    if (offer.id === correctOffer.id) {
+      isFavorite = true;
+    }
+  });
+  console.log(isFavorite);
+
   return (
     <div className="page">
       <header className="header">
@@ -31,8 +52,7 @@ function RoomPage():JSX.Element {
               <Link onClick={() => {
                 dispatch(changeCity(City.PARIS, SortType.Popular));
                 dispatch(loadOffersFromServer());
-                dispatch(setCurrentOffer(null));
-              }}  className='header__logo-link header__logo-link--active' to={AppRoute.MAIN}
+              }}  className='header__logo-link' to={AppRoute.MAIN}
               >
                 <img className='header__logo' src='img/logo.svg' alt='6 cities logo' width='81' height='41' />
               </Link>
@@ -42,7 +62,7 @@ function RoomPage():JSX.Element {
                 {authorizationStatus === AuthorizationStatus.Auth ?
                   <>
                     <li className='header__nav-item user'>
-                      <Link  className='header__nav-link header__nav-link--profile' to={AppRoute.MAIN}>
+                      <Link  className='header__nav-link header__nav-link--profile' to={AppRoute.FAVORITES}>
                         <div className='header__avatar-wrapper user__avatar-wrapper'></div>
                         <span className='header__user-name user__name'>{userData.email}</span>
                       </Link>
@@ -70,23 +90,27 @@ function RoomPage():JSX.Element {
         <section className="property">
           <div className="property__gallery-container container">
             <div className="property__gallery">
-              {currentOffer.images.map((item) => (
+              {correctOffer.images.map((item) => (
                 <div key={`${item}`} className="property__image-wrapper">
-                  <img className="property__image" src={item} alt={currentOffer.title} />
+                  <img className="property__image" src={item} alt={correctOffer.title} />
                 </div>
               ))}
             </div>
           </div>
           <div className="property__container container">
             <div className="property__wrapper">
-              {currentOffer.isPremium ?
+              {correctOffer.isPremium ?
                 <div className="property__mark">
                   <span>Premium</span>
                 </div> :
                 ''}
               <div className="property__name-wrapper">
-                <h1 className="property__name">{currentOffer.title}</h1>
-                <button className="property__bookmark-button button" type="button">
+                <h1 className="property__name">{correctOffer.title}</h1>
+                <button onClick={(evt:MouseEvent<HTMLButtonElement>) => {
+                  evt.preventDefault();
+                  dispatch(addToFavorites(correctOffer.id, Number(!isFavorite)));
+                }} className={isFavorite ? 'property__bookmark-button button property__bookmark-button--active' : 'property__bookmark-button button'} type="button"
+                >
                   <svg className="property__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>
@@ -98,21 +122,21 @@ function RoomPage():JSX.Element {
                   <span style={{width: '80%'}}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
-                <span className="property__rating-value rating__value">{currentOffer.rating}</span>
+                <span className="property__rating-value rating__value">{correctOffer.rating}</span>
               </div>
               <ul className="property__features">
-                <li className="property__feature property__feature--entire">{currentOffer.type}</li>
-                <li className="property__feature property__feature--bedrooms">{currentOffer.bedrooms} Bedrooms</li>
-                <li className="property__feature property__feature--adults">Max {currentOffer.maxAdults} adults</li>
+                <li className="property__feature property__feature--entire">{correctOffer.type}</li>
+                <li className="property__feature property__feature--bedrooms">{correctOffer.bedrooms} Bedrooms</li>
+                <li className="property__feature property__feature--adults">Max {correctOffer.maxAdults} adults</li>
               </ul>
               <div className="property__price">
-                <b className="property__price-value">&euro;{currentOffer.price}</b>
+                <b className="property__price-value">&euro;{correctOffer.price}</b>
                 <span className="property__price-text">&nbsp;night</span>
               </div>
               <div className="property__inside">
                 <h2 className="property__inside-title">What&apos;s inside</h2>
                 <ul className="property__inside-list">
-                  {currentOffer.goods.map((item) => (
+                  {correctOffer.goods.map((item) => (
                     <li key={`${item}`} className="property__inside-item">{item}</li>
                   ))}
                 </ul>
@@ -123,20 +147,20 @@ function RoomPage():JSX.Element {
                   <div className="property__avatar-wrapper property__avatar-wrapper--pro user__avatar-wrapper">
                     <img className="property__avatar user__avatar" src="img/avatar-angelina.jpg" width="74" height="74" alt="Host avatar" />
                   </div>
-                  <span className="property__user-name"> {currentOffer.host.name} </span>
-                  {currentOffer.host.isPro ?
+                  <span className="property__user-name"> {correctOffer.host.name} </span>
+                  {correctOffer.host.isPro ?
                     <span className="property__user-status"> Pro </span> :
                     ''}
                 </div>
                 <div className="property__description">
-                  <p className="property__text">{currentOffer.description}</p>
+                  <p className="property__text">{correctOffer.description}</p>
                 </div>
               </div>
               <section className="property__reviews reviews">
                 <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{currentComments.length}</span></h2>
                 <ReviewsList />
                 {authorizationStatus === AuthorizationStatus.Auth ?
-                  <ReviewForm id={currentOffer.id}/> :
+                  <ReviewForm id={correctOffer.id}/> :
                   ''}
               </section>
             </div>

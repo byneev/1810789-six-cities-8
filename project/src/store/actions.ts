@@ -19,6 +19,7 @@ export enum ActionType {
   AddToFavorites = 'user/addToFavorites',
   SetFavoritesOffers = 'app/setFavoritesOffers',
   SetActiveOffer = 'user/setActiveOffer',
+  ChangeOffers = 'app/changeOffers',
 }
 
 export const changeCity = createAction(ActionType.ChangeCity,
@@ -50,4 +51,6 @@ export const changeRating = createAction<number>(ActionType.ChangeRating);
 export const setFavoritesOffers = createAction<OfferProp[]>(ActionType.SetFavoritesOffers);
 
 export const setActiveOffer = createAction<number | null>(ActionType.SetActiveOffer);
+
+export const changeOffers = createAction<OfferProp[]>(ActionType.ChangeOffers);
 

@@ -14,7 +14,7 @@ function Favorites(): JSX.Element {
   const dispatch = useDispatch();
   const actualCities:string[] = cities.filter((city) => favoritesOffers.filter((item) => item.city.name === city).length !== 0);
   return (
-    <div className="page">
+    <div className={favoritesOffers.length !== 0 ? 'page' : 'page page--favorites-empty'}>
       <header className="header">
         <div className="container">
           <div className='header__wrapper'>
@@ -42,13 +42,21 @@ function Favorites(): JSX.Element {
         </div>
       </header>
 
-      <main className="page__main page__main--favorites">
+      <main className={favoritesOffers.length !== 0 ? 'page__main page__main--favorites' : 'page__main--favorites-empty'}>
         <div className="page__favorites-container container">
-          <section className="favorites">
-            <h1 className="favorites__title">Saved listing</h1>
-            <ul className="favorites__list">
-              {actualCities.map((city) => <LocationItem key={city} offers={favoritesOffers.filter((item) => item.city.name === city)} />)}
-            </ul>
+          <section className={favoritesOffers.length !== 0 ? 'favorites' : 'favorites favorites--empty'}>
+            <h1 className="visually-hidden">Favorites{favoritesOffers.length === 0 ? ' (empty)' : ''}</h1>
+            {favoritesOffers.length === 0 ?
+              <div className="favorites__status-wrapper">
+                <b className="favorites__status">Nothing yet saved.</b>
+                <p className="favorites__status-description">Save properties to narrow down search or plan your future trips.</p>
+              </div> :
+              <>
+                <h1 className="favorites__title">Saved listing</h1>
+                <ul className="favorites__list">
+                  {actualCities.map((city) => <LocationItem key={city} offers={favoritesOffers.filter((item) => item.city.name === city)} />)}
+                </ul>
+              </>}
           </section>
         </div>
       </main>

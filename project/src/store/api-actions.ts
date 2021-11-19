@@ -76,15 +76,15 @@ export const sendComment = (id:number, {comment, rating}:CommentData):ThunkActio
     dispatch(changeRating(3));
   };
 
-export const getFavoritesOffers = ():ThunkActionResult =>
+export const getFavoritesOffers = ():ThunkActionResult => //вызывать когда нужно получить текущие fav
   async (dispatch, _getState, api) => {
     const offers = await api.get(APIRoute.Favorite);
     dispatch(setFavoritesOffers(offers.data.map((offer:ServerOfferProp) => convertOffersToClient(offer))));
   };
 
 export const addToFavorites = (id: number, status: number):ThunkActionResult =>
-  async (dispatch, _getState, api) => {
+  async (_dispatch, _getState, api) => {
     await api.post(`${APIRoute.Favorite}/${id}/${status}`);
-    await dispatch(getFavoritesOffers());
+    // здесь будет локальный экшн в зависимости от status
   };
 
