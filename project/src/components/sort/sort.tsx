@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+import { useState } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import {  changeSort } from '../../store/actions';
 import { getCurrentSort } from '../../store/selectors.ts/app-selector';
@@ -5,19 +7,21 @@ import { SortType } from '../../utils/constants';
 
 function Sort():JSX.Element {
   const currentSort = useSelector(getCurrentSort);
+  const [isOpened, setIsOpened] = useState<boolean>(false);
   const dispatch = useDispatch();
   return (
     <form className='places__sorting' action='#' method='get'>
-      <span className='places__sorting-caption'>Sort by</span>
-      <span className='places__sorting-type' tabIndex={0}>
+      <span className='places__sorting-caption'>Sort by </span>
+      <span onClick={() => setIsOpened(!isOpened)} className='places__sorting-type' tabIndex={0}>
         {currentSort}
-        <svg className='places__sorting-arrow' width='7' height='4'>
-          <use xlinkHref='#icon-arrow-select'></use>
+        <svg  className='places__sorting-arrow' width='7' height='4'>
+          <use  xlinkHref='#icon-arrow-select'></use>
         </svg>
       </span>
-      <ul className='places__options places__options--custom places__options--opened'>
+      <ul className={isOpened ? 'places__options places__options--custom places__options--opened' : 'places__options places__options--custom'}>
         <li onClick={
           () => {
+            setIsOpened(false);
             dispatch(changeSort(SortType.Popular));
           }
         } className={currentSort === SortType.Popular ? 'places__option places__option--active' : 'places__option'} tabIndex={0}
@@ -26,6 +30,7 @@ function Sort():JSX.Element {
         </li>
         <li onClick={
           () => {
+            setIsOpened(false);
             dispatch(changeSort(SortType.LowFirst));
           }
         } className={currentSort === SortType.LowFirst ? 'places__option places__option--active' : 'places__option'} tabIndex={0}
@@ -34,6 +39,7 @@ function Sort():JSX.Element {
         </li>
         <li onClick={
           () => {
+            setIsOpened(false);
             dispatch(changeSort(SortType.HighFirst));
           }
         } className={currentSort === SortType.HighFirst ? 'places__option places__option--active' : 'places__option'} tabIndex={0}
@@ -42,6 +48,7 @@ function Sort():JSX.Element {
         </li>
         <li onClick={
           () => {
+            setIsOpened(false);
             dispatch(changeSort(SortType.RatedFirst));
           }
         } className={currentSort === SortType.RatedFirst ? 'places__option places__option--active' : 'places__option'} tabIndex={0}

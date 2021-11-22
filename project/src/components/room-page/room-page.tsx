@@ -6,42 +6,30 @@ import ReviewForm from '../review-form/review-form';
 import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutFromCite, loadOffersFromServer, addToFavorites } from '../../store/api-actions';
-import { changeCity} from '../../store/actions';
-import { getFavoriteOffers, getNearbyOffers, getOffers } from '../../store/selectors.ts/app-selector';
+import { logoutFromCite, loadOffersFromServer, addToFavorites} from '../../store/api-actions';
+import { changeCity, setupOffers} from '../../store/actions';
+import { getCurrentOffer, getFavoriteOffers, getNearbyOffers } from '../../store/selectors.ts/app-selector';
 import { getAuthorizationStatus, getCurrentComments, getUserData } from '../../store/selectors.ts/user-selector';
-import { MouseEvent } from 'react';
-import { OfferProp } from '../../mock/offer';
-
+import { MouseEvent, useState } from 'react';
 export type RoomPageProps = {
   id: number;
 }
 
 function RoomPage({id}:RoomPageProps):JSX.Element {
   const dispatch = useDispatch();
-
-  const offers = useSelector(getOffers);
+  const correctOffer = useSelector(getCurrentOffer);
   const authorizationStatus = useSelector(getAuthorizationStatus);
   const userData = useSelector(getUserData);
   const currentComments = useSelector(getCurrentComments);
   const nearbyOffers = useSelector(getNearbyOffers);
   const favoritesOffers = useSelector(getFavoriteOffers);
-  let correctOffer:OfferProp = offers[0];
-  offers.forEach((offer) => {
-    if (offer.id === id) {
-      correctOffer = offer;
-    }
-  });
-  // const [currentStatus, setCurrentStatus] = useState(Number(correctOffer.isFavorite));
-
+  const [isChanged, setIsChanged] = useState<boolean>(false);
   let isFavorite = false;
   favoritesOffers.forEach((offer) => {
-    console.log(offer.id);
     if (offer.id === correctOffer.id) {
       isFavorite = true;
     }
   });
-  console.log(isFavorite);
 
   return (
     <div className="page">
@@ -51,7 +39,10 @@ function RoomPage({id}:RoomPageProps):JSX.Element {
             <div className='header__left'>
               <Link onClick={() => {
                 dispatch(changeCity(City.PARIS, SortType.Popular));
-                dispatch(loadOffersFromServer());
+                if (isChanged) {
+                  dispatch(setupOffers([]));
+                  dispatch(loadOffersFromServer());
+                }
               }}  className='header__logo-link' to={AppRoute.MAIN}
               >
                 <img className='header__logo' src='img/logo.svg' alt='6 cities logo' width='81' height='41' />
@@ -106,16 +97,19 @@ function RoomPage({id}:RoomPageProps):JSX.Element {
                 ''}
               <div className="property__name-wrapper">
                 <h1 className="property__name">{correctOffer.title}</h1>
-                <button onClick={(evt:MouseEvent<HTMLButtonElement>) => {
-                  evt.preventDefault();
-                  dispatch(addToFavorites(correctOffer.id, Number(!isFavorite)));
-                }} className={isFavorite ? 'property__bookmark-button button property__bookmark-button--active' : 'property__bookmark-button button'} type="button"
-                >
-                  <svg className="property__bookmark-icon" width="31" height="33">
-                    <use xlinkHref="#icon-bookmark"></use>
-                  </svg>
-                  <span className="visually-hidden">To bookmarks</span>
-                </button>
+                {authorizationStatus === AuthorizationStatus.Auth ?
+                  <button onClick={(evt:MouseEvent<HTMLButtonElement>) => {
+                    evt.preventDefault();
+                    dispatch(addToFavorites(correctOffer.id, Number(!isFavorite)));
+                    setIsChanged(!isChanged);
+                  }} className={isFavorite ? 'property__bookmark-button button property__bookmark-button--active' : 'property__bookmark-button button'} type="button"
+                  >
+                    <svg className="property__bookmark-icon" width="31" height="33">
+                      <use xlinkHref="#icon-bookmark"></use>
+                    </svg>
+                    <span className="visually-hidden">To bookmarks</span>
+                  </button> :
+                  ''}
               </div>
               <div className="property__rating rating">
                 <div className="property__stars rating__stars">

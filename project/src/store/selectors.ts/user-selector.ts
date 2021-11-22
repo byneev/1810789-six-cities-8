@@ -1,4 +1,4 @@
-import { ReviewProp } from '../../mock/review';
+import { ReviewProp } from '../../types/review';
 import { AuthoriztionProps } from '../../utils/constants';
 import { NameSpace, RootStateProps } from '../reducers/root-reducer';
 import { UserDataProps } from '../reducers/user-reducer';
@@ -10,6 +10,7 @@ export type StateProps = {
   currentRating: number,
   isFavorite: boolean,
   activeOfferId: number | null,
+  isFormDisabled: boolean,
 };
 
 export const getAuthorizationStatus = (state: RootStateProps):AuthoriztionProps => state[NameSpace.user].authorizationStatus;
@@ -23,3 +24,5 @@ export const getCurrentRating = (state: RootStateProps):number => state[NameSpac
 export const getIsFavorite = (state: RootStateProps):boolean => state[NameSpace.user].isFavorite;
 
 export const getActiveOfferId = (state: RootStateProps): number | null => state[NameSpace.user].activeOfferId;
+
+export const getIsFormDisabled = (state: RootStateProps): boolean => state[NameSpace.user].isFormDisabled;

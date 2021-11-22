@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { cities } from '../../mock/offer';
-import { logoutFromCite } from '../../store/api-actions';
+import { cities } from '../../types/offer';
+import { changeCity, setupOffers } from '../../store/actions';
+import { loadOffersFromServer, logoutFromCite } from '../../store/api-actions';
 import { getFavoriteOffers } from '../../store/selectors.ts/app-selector';
 import { getUserData } from '../../store/selectors.ts/user-selector';
-import { AppRoute } from '../../utils/constants';
+import { AppRoute, City, SortType } from '../../utils/constants';
 import LocationItem from '../location-item/location-item';
 
 function Favorites(): JSX.Element {
@@ -19,7 +20,12 @@ function Favorites(): JSX.Element {
         <div className="container">
           <div className='header__wrapper'>
             <div className='header__left'>
-              <Link className='header__logo-link header__logo-link--active' to={AppRoute.MAIN}>
+              <Link onClick={() => {
+                dispatch(changeCity(City.PARIS, SortType.Popular));
+                dispatch(setupOffers([]));
+                dispatch(loadOffersFromServer());
+              }} className='header__logo-link header__logo-link--active' to={AppRoute.MAIN}
+              >
                 <img className='header__logo' src='img/logo.svg' alt='6 cities logo' width='81' height='41' />
               </Link>
             </div>

@@ -1,4 +1,4 @@
-import { OfferProp } from '../../mock/offer';
+import { OfferProp } from '../../types/offer';
 import { Container } from '../../utils/constants';
 import OffersList from '../offersList/offers-list';
 

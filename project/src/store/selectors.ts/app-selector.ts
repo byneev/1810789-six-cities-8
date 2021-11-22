@@ -1,4 +1,4 @@
-import { CitiesProps, OfferProp } from '../../mock/offer';
+import { CitiesProps, OfferProp } from '../../types/offer';
 import { SortProps } from '../../utils/constants';
 import { NameSpace, RootStateProps } from '../reducers/root-reducer';
 
@@ -10,7 +10,7 @@ export const getCurrentSort = (state: RootStateProps):SortProps => state[NameSpa
 
 export const getIsLoading = (state: RootStateProps):boolean => state[NameSpace.webApp].isLoading;
 
-export const getCurrentOffer = (state: RootStateProps): OfferProp | null => state[NameSpace.webApp].currentOffer;
+export const getCurrentOffer = (state: RootStateProps): OfferProp => state[NameSpace.webApp].currentOffer;
 
 export const getNearbyOffers = (state: RootStateProps): OfferProp[] => state[NameSpace.webApp].nearbyOffers;
 

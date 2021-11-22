@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { APIRoute, AuthorizationStatus } from '../utils/constants';
-import { changeAuthorization, changeRating, setCurrentComments, setCurrentOffer, setFavoritesOffers, setNearbyOferrs, setupOffers, setUserData } from './actions';
-import { OfferProp } from '../mock/offer';
+import { changeAuthorization, changeRating, setCurrentComments, setCurrentOffer, setFavoritesOffers, setIsFormDisabled, setNearbyOferrs, setupOffers, setUserData } from './actions';
+import { OfferProp } from '../types/offer';
 import { convertCommentsToClient, convertOffersToClient, convertUserDataToClient, ServerCommentProp, ServerOfferProp } from '../utils/adapter';
 import { Action, ThunkAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
@@ -71,20 +71,22 @@ export const loadCurrentComments = (id:number):ThunkActionResult =>
 
 export const sendComment = (id:number, {comment, rating}:CommentData):ThunkActionResult =>
   async (dispatch, _getState, api) => {
+    dispatch(setIsFormDisabled(true));
     const comments = await api.post(`${APIRoute.Comments}/${id}`, {comment, rating});
+    dispatch(setIsFormDisabled(false));
     dispatch(setCurrentComments(comments.data.map((commentFromServer:ServerCommentProp) => convertCommentsToClient(commentFromServer))));
     dispatch(changeRating(3));
   };
 
-export const getFavoritesOffers = ():ThunkActionResult => //вызывать когда нужно получить текущие fav
+export const getFavoritesOffers = ():ThunkActionResult =>
   async (dispatch, _getState, api) => {
     const offers = await api.get(APIRoute.Favorite);
     dispatch(setFavoritesOffers(offers.data.map((offer:ServerOfferProp) => convertOffersToClient(offer))));
   };
 
 export const addToFavorites = (id: number, status: number):ThunkActionResult =>
-  async (_dispatch, _getState, api) => {
+  async (dispatch, _getState, api) => {
     await api.post(`${APIRoute.Favorite}/${id}/${status}`);
-    // здесь будет локальный экшн в зависимости от status
+    dispatch(getFavoritesOffers());
   };
 

@@ -3,7 +3,9 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } f
 import { getToken } from '../store/token';
 import { HTTPStatusCode } from './constants';
 
-export const createAPI = (onUnauthorize: () => void, onNotFound: () => void):AxiosInstance => {
+export type DefaultFunctionProps = () => void;
+
+export const createAPI = (onUnauthorize: DefaultFunctionProps, onNotFound: DefaultFunctionProps, onBadRequest: DefaultFunctionProps):AxiosInstance => {
   const api = axios.create({
     baseURL: 'https://8.react.pages.academy/six-cities',
     timeout: 5000,
@@ -17,6 +19,9 @@ export const createAPI = (onUnauthorize: () => void, onNotFound: () => void):Axi
       }
       if (error.response?.status === HTTPStatusCode.NotFound) {
         onNotFound();
+      }
+      if (error.response?.status === HTTPStatusCode.BadRequest) {
+        onBadRequest();
       }
       return Promise.reject(error);
     },

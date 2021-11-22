@@ -2,7 +2,7 @@
 import {  MouseEvent, useState } from 'react';
 import {  useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { OfferProp } from '../../mock/offer';
+import { OfferProp } from '../../types/offer';
 import { setActiveOffer } from '../../store/actions';
 import {addToFavorites } from '../../store/api-actions';
 import { getAuthorizationStatus } from '../../store/selectors.ts/user-selector';

@@ -1,10 +1,12 @@
 /* eslint-disable no-console */
-import { FormEvent, useRef } from 'react';
+import { FormEvent, useRef} from 'react';
 import {  useDispatch, useSelector } from 'react-redux';
 import { Link, RouteProps } from 'react-router-dom';
-import { AppRoute } from '../../utils/constants';
-import { loginToCite } from '../../store/api-actions';
+import { AppRoute, City, SortType } from '../../utils/constants';
+import { loadOffersFromServer, loginToCite } from '../../store/api-actions';
 import { getCurrentCity } from '../../store/selectors.ts/app-selector';
+import { changeCity } from '../../store/actions';
+import { toast } from 'react-toastify';
 
 export type AuthData = {
   login: string;
@@ -28,7 +30,11 @@ function Login(props: LoginProps):JSX.Element {
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
-              <Link className="header__logo-link" to={AppRoute.MAIN}>
+              <Link onClick={() => {
+                dispatch(changeCity(City.PARIS, SortType.Popular));
+                dispatch(loadOffersFromServer());
+              }} className="header__logo-link" to={AppRoute.MAIN}
+              >
                 <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
               </Link>
             </div>
@@ -41,12 +47,18 @@ function Login(props: LoginProps):JSX.Element {
             <h1 className="login__title">Sign in</h1>
             <form onSubmit={(evt:FormEvent<HTMLFormElement>) => {
               evt.preventDefault();
-              if (email.current !== null && password.current !== null) {
-                dispatch(loginToCite({
-                  login: email.current.value,
-                  password: password.current.value,
-                }));
-                onSubmitData();
+              if (email.current && password.current) {
+                if (!password.current.value.match('(?=.*?[a-zA-Z])(?=.*?[0-9])')) {
+                  toast.error('Password should contain at least one letter and one digit');
+                } else {
+                  dispatch(changeCity(City.PARIS, SortType.Popular));
+                  dispatch(loadOffersFromServer());
+                  dispatch(loginToCite({
+                    login: email.current.value,
+                    password: password.current.value,
+                  }));
+                  onSubmitData();
+                }
               }
             }} className="login__form form" action="#" method="post"
             >
@@ -56,7 +68,7 @@ function Login(props: LoginProps):JSX.Element {
               </div>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">Password</label>
-                <input ref={password} className="login__input form__input" type="password" name="password" placeholder="Password" required />
+                <input ref={password} className="login__input form__input" type="password" name="password" placeholder="Password" required/>
               </div>
               <button className="login__submit form__submit button" type="submit">Sign in</button>
             </form>

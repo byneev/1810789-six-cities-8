@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { CitiesProps, OfferProp } from '../../mock/offer';
+import { CitiesProps, OfferProp } from '../../types/offer';
 import { SortProps, SortType } from '../../utils/constants';
 import { changeCity, changeOffers, changeSort, setCurrentOffer, setFavoritesOffers, setNearbyOferrs, setupOffers } from './../actions';
 
@@ -8,7 +8,7 @@ export type AppStateProps = {
   offers: OfferProp[],
   currentSort: SortProps,
   isLoading: boolean,
-  currentOffer: OfferProp | null,
+  currentOffer: OfferProp,
   nearbyOffers: OfferProp[],
   favoritesOffers: OfferProp[],
 };
@@ -22,7 +22,7 @@ const initialState:AppStateProps = {
   isLoading: true,
   nearbyOffers: [],
   favoritesOffers: [],
-  currentOffer:     {
+  currentOffer: {
     'bedrooms': 3,
     'city': {
       'location': {
@@ -81,12 +81,6 @@ export const appReducer = createReducer(initialState, (builder) => {
       state.favoritesOffers = payload;
     })
     .addCase(changeOffers, (state, {payload}) => {
-      state.offers = payload;
+      state.offers[payload.id - 1] = payload;
     });
-    .add(pushToFavorites, (state, {payload}) => {
-      state.favoritesOffers.push(payload);
-    })
-    .add(removeFromFavorites, (state, {payload}) => {
-      state.favoritesOffers.remove(payload);
-    })
 });

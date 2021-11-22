@@ -1,4 +1,4 @@
-import { CitiesProps } from '../mock/offer';
+import { CitiesProps } from '../types/offer';
 
 export type CityProp = {
   AMSTERDAM: CitiesProps,
@@ -60,4 +60,5 @@ export enum AuthorizationStatus {
 export enum HTTPStatusCode {
   Unauthorized = 401,
   NotFound = 404,
+  BadRequest = 400,
 }

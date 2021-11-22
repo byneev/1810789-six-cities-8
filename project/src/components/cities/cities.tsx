@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Container } from '../../utils/constants';
 import Map from '../map/map';
 import OffersList from '../offersList/offers-list';

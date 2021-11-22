@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { OfferProp } from '../../mock/offer';
+import { OfferProp } from '../../types/offer';
 import { getCurrentSort } from '../../store/selectors.ts/app-selector';
 import { sortBySortType } from '../../utils/functions';
 import Room from '../room/room';

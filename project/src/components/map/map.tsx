@@ -6,7 +6,7 @@ import useMap from '../../hooks/useMap/useMap';
 import 'leaflet/dist/leaflet.css';
 import { useSelector } from 'react-redux';
 import useLayer from '../../hooks/useLayer/useLayer';
-import { OfferProp } from '../../mock/offer';
+import { OfferProp } from '../../types/offer';
 import { getCurrentOffer, getNearbyOffers, getOffers } from '../../store/selectors.ts/app-selector';
 import { getActiveOfferId } from '../../store/selectors.ts/user-selector';
 

@@ -1,6 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
-import { CitiesProps, OfferProp } from '../mock/offer';
-import { ReviewProp } from '../mock/review';
+import { CitiesProps, OfferProp } from '../types/offer';
+import { ReviewProp } from '../types/review';
 import { AuthoriztionProps, SortProps } from '../utils/constants';
 import { UserDataProps } from './reducers/user-reducer';
 
@@ -20,6 +20,7 @@ export enum ActionType {
   SetFavoritesOffers = 'app/setFavoritesOffers',
   SetActiveOffer = 'user/setActiveOffer',
   ChangeOffers = 'app/changeOffers',
+  SetFormCondition = 'add/setFormCondition',
 }
 
 export const changeCity = createAction(ActionType.ChangeCity,
@@ -40,7 +41,7 @@ export const setUserData = createAction<UserDataProps>(ActionType.SetUserData);
 
 export const logout = createAction<UserDataProps>(ActionType.Logout);
 
-export const setCurrentOffer = createAction<OfferProp | null>(ActionType.SetCurrentOffer);
+export const setCurrentOffer = createAction<OfferProp>(ActionType.SetCurrentOffer);
 
 export const setNearbyOferrs = createAction<OfferProp[]>(ActionType.SetNearbyOffers);
 
@@ -52,5 +53,7 @@ export const setFavoritesOffers = createAction<OfferProp[]>(ActionType.SetFavori
 
 export const setActiveOffer = createAction<number | null>(ActionType.SetActiveOffer);
 
-export const changeOffers = createAction<OfferProp[]>(ActionType.ChangeOffers);
+export const changeOffers = createAction<OfferProp>(ActionType.ChangeOffers);
+
+export const setIsFormDisabled = createAction<boolean>(ActionType.SetFormCondition);
 
