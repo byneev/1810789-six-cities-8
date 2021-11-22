@@ -1,46 +1,26 @@
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { OfferProp } from '../../mock/offer';
-import { StateProps } from '../../store/reducer';
+import { useSelector } from 'react-redux';
+import { OfferProp } from '../../types/offer';
+import { getCurrentSort } from '../../store/selectors.ts/app-selector';
 import { sortBySortType } from '../../utils/functions';
 import Room from '../room/room';
 
 export type OffersListProps = {
   offers: OfferProp[];
   container: string;
-  mouseEnterHandler: (offerId: OfferProp) => void;
-  removeActiveStates: () => void;
-}
+};
 
-export enum SortType {
-  HighFirst = 'Price: high to low',
-  LowFirst = 'Price: low to high',
-  RatedFirst = 'Top rated first',
-  Popular = 'Popular',
-}
-
-export type SortProps = | SortType.HighFirst | SortType.LowFirst | SortType.Popular | SortType.RatedFirst;
-
-const mapStateToProps = ({currentSort}:StateProps) => ({
-  currentSort,
-});
-
-const connector = connect(mapStateToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedOffersListProps = PropsFromRedux & OffersListProps;
-
-function OffersList(props: ConnectedOffersListProps): JSX.Element {
-  const {container, offers, mouseEnterHandler, removeActiveStates, currentSort} = props;
-  const sortedOffers:OfferProp[] = sortBySortType(offers, currentSort);
-  return(
+function OffersList(props: OffersListProps): JSX.Element {
+  const currentSort = useSelector(getCurrentSort);
+  const { container, offers } = props;
+  const sortedOffers: OfferProp[] = sortBySortType(offers, currentSort);
+  return (
     <React.Fragment>
-      {sortedOffers.map((offer) =>
-        <Room key={`${offer.id}-${offer.city.name}`} container={container} room={offer} mouseEnterHandler={mouseEnterHandler} removeActiveStates={removeActiveStates} />)}
+      {sortedOffers.map((offer) => (
+        <Room key={`${offer.id}-${offer.city.name}`} container={container} room={offer} />
+      ))}
     </React.Fragment>
   );
 }
 
-export {OffersList};
-export default connector(OffersList);
+export default OffersList;

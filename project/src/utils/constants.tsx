@@ -1,15 +1,24 @@
-import { CitiesProps } from '../mock/offer';
+import { CitiesProps } from '../types/offer';
 
 export type CityProp = {
-  AMSTERDAM: CitiesProps,
-  DUSSELDORF: CitiesProps,
-  HAMBURG: CitiesProps,
-  BRUSSELS: CitiesProps,
-  COLOGNE: CitiesProps,
-  PARIS: CitiesProps,
+  AMSTERDAM: CitiesProps;
+  DUSSELDORF: CitiesProps;
+  HAMBURG: CitiesProps;
+  BRUSSELS: CitiesProps;
+  COLOGNE: CitiesProps;
+  PARIS: CitiesProps;
 };
 
-export type AuthoriztionProps =  AuthorizationStatus.Auth | AuthorizationStatus.NoAuth | AuthorizationStatus.Unknown;
+export type AuthoriztionProps = AuthorizationStatus.Auth | AuthorizationStatus.NoAuth | AuthorizationStatus.Unknown;
+
+export enum SortType {
+  HighFirst = 'Price: high to low',
+  LowFirst = 'Price: low to high',
+  RatedFirst = 'Top rated first',
+  Popular = 'Popular',
+}
+
+export type SortProps = SortType.HighFirst | SortType.LowFirst | SortType.Popular | SortType.RatedFirst;
 
 export const AppRoute = {
   MAIN: '/',
@@ -19,7 +28,7 @@ export const AppRoute = {
   NOTFOUND: '/404',
 };
 
-export const City:CityProp = {
+export const City: CityProp = {
   AMSTERDAM: 'Amsterdam',
   DUSSELDORF: 'Dusseldorf',
   HAMBURG: 'Hamburg',
@@ -51,4 +60,5 @@ export enum AuthorizationStatus {
 export enum HTTPStatusCode {
   Unauthorized = 401,
   NotFound = 404,
+  BadRequest = 400,
 }

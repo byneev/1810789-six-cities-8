@@ -1,6 +1,6 @@
-import { CitiesProps, OfferProp } from '../mock/offer';
-import { ReviewProp } from '../mock/review';
-import { UserDataProps } from '../store/reducer';
+import { CitiesProps, OfferProp } from '../types/offer';
+import { ReviewProp } from '../types/review';
+import { UserDataProps } from '../store/reducers/user-reducer';
 import { Token } from '../store/token';
 
 export type ServerOfferProp = {

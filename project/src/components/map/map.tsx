@@ -1,73 +1,60 @@
-/* eslint-disable no-console */
-/* eslint-disable react-hooks/exhaustive-deps */
-import { Icon, Marker} from 'leaflet';
-import { useEffect, useRef} from 'react';
+import { Icon, Marker } from 'leaflet';
+import { useEffect, useRef } from 'react';
 import useMap from '../../hooks/useMap/useMap';
-import type {  OfferProp } from '../../mock/offer';
 import 'leaflet/dist/leaflet.css';
-import { connect, ConnectedProps } from 'react-redux';
-import { StateProps } from '../../store/reducer';
+import { useSelector } from 'react-redux';
 import useLayer from '../../hooks/useLayer/useLayer';
+import { OfferProp } from '../../types/offer';
+import { getCurrentCity, getCurrentOffer, getNearbyOffers, getOffersSelectorByCity } from '../../store/selectors.ts/app-selector';
+import { getActiveOfferId } from '../../store/selectors.ts/user-selector';
 
 export type MapProps = {
-  offers: OfferProp[];
-  activeOffer: OfferProp | undefined;
   styleClassName: string;
-}
+};
 
 const inactiveMarker = new Icon({
-  iconUrl:'/img/pin.svg',
+  iconUrl: '/img/pin.svg',
   iconSize: [27, 39],
   iconAnchor: [14, 39],
 });
 
 const activeMarker = new Icon({
-  iconUrl:'/img/pin-active.svg',
+  iconUrl: '/img/pin-active.svg',
   iconSize: [27, 39],
   iconAnchor: [14, 39],
 });
 
-const mapStateToProps = ({currentOffer, currentCity}:StateProps) => ({
-  currentOffer,
-  currentCity,
-});
-const connector = connect(mapStateToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedMapProps = PropsFromRedux & MapProps;
-
-function Map(props: ConnectedMapProps) : JSX.Element {
-  const {offers, activeOffer, currentOffer, styleClassName, currentCity} = props;
+function Map(props: MapProps): JSX.Element {
+  const currentOffer = useSelector(getCurrentOffer);
+  const activeOfferId = useSelector(getActiveOfferId);
+  const nearbyOffers = useSelector(getNearbyOffers);
+  const currentCity = useSelector(getCurrentCity);
+  const { styleClassName } = props;
   const mapRef = useRef(null);
+  const offers = useSelector(getOffersSelectorByCity(currentCity));
   const map = useMap(mapRef, offers[0], currentOffer);
   const layer = useLayer(map);
 
   useEffect(() => {
     if (map && offers && layer) {
-      map.flyTo(
-        [offers[0].city.location.latitude, offers[0].city.location.longitude] ,
-        offers[0].city.location.zoom,
-        {duration: 1.5});
-      if (currentOffer) {
-        layer.clearLayers();
-        new Marker([currentOffer.location.latitude, currentOffer.location.longitude]).setIcon(activeMarker).addTo(layer);
-        map.setView(
-          [currentOffer.location.latitude, currentOffer.location.longitude] ,
-          currentOffer.location.zoom - 2,
-        );
+      layer.clearLayers();
+      map.setView([offers[0].city.location.latitude, offers[0].city.location.longitude], offers[0].city.location.zoom);
+      let currentOffers: OfferProp[] = offers;
+      if (styleClassName === 'property') {
+        currentOffers = nearbyOffers;
       }
-      offers.forEach((offer) => {
+      currentOffers.forEach((offer) => {
         const marker = new Marker([offer.location.latitude, offer.location.longitude]);
-        marker.setIcon(activeOffer !== undefined && offer.id === activeOffer.id ?
-          activeMarker :
-          inactiveMarker).addTo(layer);
+        if (styleClassName === 'property') {
+          marker.setIcon(inactiveMarker).addTo(layer);
+        } else {
+          marker.setIcon(activeOfferId !== null && offer.id === activeOfferId ? activeMarker : inactiveMarker).addTo(layer);
+        }
       });
     }
-  }, [layer, activeOffer, offers, currentOffer, currentCity]);
+  }, [map, layer, offers, activeOfferId, currentCity, nearbyOffers, styleClassName]);
 
-  return (
-    <section ref={mapRef} className={`${styleClassName}__map map`}></section>
-  );
+  return <section ref={mapRef} className={`${styleClassName}__map map`}></section>;
 }
 
-export {Map};
-export default connector(Map);
+export default Map;

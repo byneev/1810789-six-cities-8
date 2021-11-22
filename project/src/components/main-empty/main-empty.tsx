@@ -1,13 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { changeCity, setupOffers } from '../../store/actions';
-import { loadOffersFromServer, logoutFromCite } from '../../store/api-actions';
+import { logoutFromCite } from '../../store/api-actions';
 import { getAuthorizationStatus, getUserData } from '../../store/selectors.ts/user-selector';
-import { AppRoute, AuthorizationStatus, City, SortType } from '../../utils/constants';
+import { AppRoute, AuthorizationStatus } from '../../utils/constants';
 import CitiesList from '../cities-list/cities-list';
-import Cities from '../cities/cities';
 
-function Main(): JSX.Element {
+function MainEmpty(): JSX.Element {
   const authorizationStatus = useSelector(getAuthorizationStatus);
   const userData = useSelector(getUserData);
   const dispatch = useDispatch();
@@ -17,15 +15,7 @@ function Main(): JSX.Element {
         <div className='container'>
           <div className='header__wrapper'>
             <div className='header__left'>
-              <Link
-                onClick={() => {
-                  dispatch(changeCity(City.PARIS, SortType.Popular));
-                  dispatch(setupOffers([]));
-                  dispatch(loadOffersFromServer());
-                }}
-                className='header__logo-link header__logo-link--active'
-                to={AppRoute.MAIN}
-              >
+              <Link className='header__logo-link header__logo-link--active' to={AppRoute.MAIN}>
                 <img className='header__logo' src='img/logo.svg' alt='6 cities logo' width='81' height='41' />
               </Link>
             </div>
@@ -59,13 +49,23 @@ function Main(): JSX.Element {
         </div>
       </header>
 
-      <main className='page__main page__main--index'>
+      <main className='page__main page__main--index page__main--index-empty'>
         <h1 className='visually-hidden'>Cities</h1>
         <CitiesList />
-        <Cities />
+        <div className='cities'>
+          <div className='cities__places-container cities__places-container--empty container'>
+            <section className='cities__no-places'>
+              <div className='cities__status-wrapper tabs__content'>
+                <b className='cities__status'>No places to stay available</b>
+                <p className='cities__status-description'>We could not find any property available at the moment in Dusseldorf</p>
+              </div>
+            </section>
+            <div className='cities__right-section'></div>
+          </div>
+        </div>
       </main>
     </div>
   );
 }
 
-export default Main;
+export default MainEmpty;

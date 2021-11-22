@@ -1,26 +1,19 @@
-import { connect, ConnectedProps } from 'react-redux';
-import { ReviewProp } from '../../mock/review';
-import { StateProps } from '../../store/reducer';
+import { useSelector } from 'react-redux';
+import { ReviewProp } from '../../types/review';
+import { getCurrentComments } from '../../store/selectors.ts/user-selector';
 import Review from '../review/review';
+import { sortReviewsByData } from '../../utils/functions';
 
-const mapStateToProps = ({currentComments}:StateProps) => ({
-  currentComments,
-});
-
-
-const connector = connect(mapStateToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function ReviewsList(props: PropsFromRedux): JSX.Element {
-  const {currentComments} = props;
+function ReviewsList(): JSX.Element {
+  const currentComments = useSelector(getCurrentComments);
+  const comments = sortReviewsByData(currentComments);
   return (
-    <ul className="reviews__list">
-      {currentComments.map((review:ReviewProp) => (
+    <ul className='reviews__list'>
+      {comments.slice(0, 10).map((review: ReviewProp) => (
         <Review key={review.id} review={review} />
       ))}
     </ul>
   );
 }
 
-export default connector(ReviewsList);
-export {ReviewsList};
+export default ReviewsList;

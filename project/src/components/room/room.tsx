@@ -1,53 +1,61 @@
-/* eslint-disable no-console */
-import { connect, ConnectedProps } from 'react-redux';
+import { MouseEvent, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { OfferProp } from '../../mock/offer';
-import { getRefreshMarkers } from '../../store/actions';
-import {ThunkAppDispatch } from '../../store/api-actions';
-import { AppRoute, Container } from '../../utils/constants';
+import { OfferProp } from '../../types/offer';
+import { changeOffers, setActiveOffer } from '../../store/actions';
+import { addToFavorites } from '../../store/api-actions';
+import { getAuthorizationStatus } from '../../store/selectors.ts/user-selector';
+import { AppRoute, AuthorizationStatus, Container } from '../../utils/constants';
 
-export type RoomProp =  {
+export type RoomProp = {
   container: string;
   room: OfferProp;
-  mouseEnterHandler: (offerId: OfferProp) => void;
-  removeActiveStates: () => void;
-}
+};
 
-const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
-  onRoomClick(){
-    dispatch(getRefreshMarkers(true));
-  },
-});
-const connector = connect(null, mapDispatchToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedRoomProps = RoomProp & PropsFromRedux;
-
-function Room(prop: ConnectedRoomProps): JSX.Element {
-  const {container, room, mouseEnterHandler, removeActiveStates} = prop;
-
+function Room(prop: RoomProp): JSX.Element {
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const dispatch = useDispatch();
+  const { container, room } = prop;
+  const [currentStatus, setCurrentStatus] = useState(Number(room.isFavorite));
   return (
     <article className={container === Container.FAVORITES ? 'favorites__card place-card' : 'cities__place-card place-card'}>
-      {room.isPremium ?
+      {room.isPremium ? (
         <div className='place-card__mark'>
           <span>Premium</span>
-        </div> : ''}
+        </div>
+      ) : (
+        ''
+      )}
       <div className={container === Container.FAVORITES ? 'favorites__image-wrapper place-card__image-wrapper' : 'cities__image-wrapper place-card__image-wrapper'}>
         <Link to={`${AppRoute.ROOM}${room.id}`}>
-          <img onMouseEnter={() => mouseEnterHandler(room)} onMouseOut={() => removeActiveStates()} className='place-card__image' src={room.previewImage} width='260' height='200' alt={room.title} />
+          <img onMouseEnter={() => dispatch(setActiveOffer(room.id))} onMouseOut={() => dispatch(setActiveOffer(null))} className='place-card__image' src={room.previewImage} width='260' height='200' alt={room.title} />
         </Link>
       </div>
-      <div className={ container === Container.FAVORITES ? 'favorites__card place-card__info' : 'place-card__info'} >
+      <div className={container === Container.FAVORITES ? 'favorites__card place-card__info' : 'place-card__info'}>
         <div className='place-card__price-wrapper'>
           <div className='place-card__price'>
             <b className='place-card__price-value'>&euro;{room.price}</b>
             <span className='place-card__price-text'>&#47;&nbsp;night</span>
           </div>
-          <button className='place-card__bookmark-button button' type='button'>
-            <svg className='place-card__bookmark-icon' width='18' height='19'>
-              <use xlinkHref='#icon-bookmark'></use>
-            </svg>
-            <span className='visually-hidden'>To bookmarks</span>
-          </button>
+          {authorizationStatus === AuthorizationStatus.Auth ? (
+            <button
+              onClick={(evt: MouseEvent<HTMLButtonElement>) => {
+                evt.preventDefault();
+                dispatch(addToFavorites(room.id, Number(Boolean(!currentStatus))));
+                dispatch(changeOffers({ ...room, isFavorite: Boolean(!currentStatus) }));
+                setCurrentStatus(Number(Boolean(!currentStatus)));
+              }}
+              className={currentStatus ? 'place-card__bookmark-button button place-card__bookmark-button--active' : 'place-card__bookmark-button button'}
+              type='button'
+            >
+              <svg className='place-card__bookmark-icon' width='18' height='19'>
+                <use xlinkHref='#icon-bookmark'></use>
+              </svg>
+              <span className='visually-hidden'>To bookmarks</span>
+            </button>
+          ) : (
+            ''
+          )}
         </div>
         <div className='place-card__rating rating'>
           <div className='place-card__stars rating__stars'>
@@ -64,5 +72,4 @@ function Room(prop: ConnectedRoomProps): JSX.Element {
   );
 }
 
-export {Room};
-export default connector(Room);
+export default Room;
