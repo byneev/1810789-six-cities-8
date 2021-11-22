@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../utils/constants';
 
-function NotFound():JSX.Element {
+function NotFound(): JSX.Element {
   return (
     <>
       <p>Error 404</p>

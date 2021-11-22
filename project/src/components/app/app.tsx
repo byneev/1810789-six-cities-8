@@ -1,8 +1,7 @@
-/* eslint-disable no-console */
 import { Router as BrowserRouter, Route, Switch } from 'react-router-dom';
 import Login from '../login/login';
 import Main from '../main/main';
-import { AppRoute} from '../../utils/constants';
+import { AppRoute } from '../../utils/constants';
 import NotFound from '../not-found/not-found';
 import PrivateRoute from '../private-route/private-route';
 import Favorites from '../favorites/favorites';
@@ -19,9 +18,7 @@ import { loadCurrentOffer, loadNearbyOffers, loadCurrentComments } from '../../s
 function App(): JSX.Element {
   const isLoading = useSelector(getIsLoading);
   if (isLoading) {
-    return (
-      <Spinner />
-    );
+    return <Spinner />;
   }
   return (
     <BrowserRouter history={browserHistory}>
@@ -29,26 +26,25 @@ function App(): JSX.Element {
         <Route path={AppRoute.MAIN} exact>
           {store.getState()[NameSpace.webApp].offers.length !== 0 ? <Main /> : <MainEmpty />}
         </Route>
-        <Route path={AppRoute.LOGIN} render={({history}) => (
-          <Login onSubmitData={() => history.push(AppRoute.MAIN)} />
-        )} exact
-        />
+        <Route path={AppRoute.LOGIN} render={({ history }) => <Login onSubmitData={() => history.push(AppRoute.MAIN)} />} exact />
         <PrivateRoute path={AppRoute.FAVORITES} render={() => <Favorites />} />
-        <Route path='/offer/:id' exact render={
-          (routeProps) => {
+        <Route
+          path='/offer/:id'
+          exact
+          render={(routeProps) => {
             const id = +routeProps.match.params.id;
             store.dispatch(loadCurrentOffer(id));
             store.dispatch(loadNearbyOffers(id));
             store.dispatch(loadCurrentComments(id));
-            return <RoomPage id={id}/>;
-          }
-        }
+            return <RoomPage />;
+          }}
         />
-        <Route >
+        <Route>
           <NotFound />
         </Route>
       </Switch>
-    </BrowserRouter>);
+    </BrowserRouter>
+  );
 }
 
 export default App;

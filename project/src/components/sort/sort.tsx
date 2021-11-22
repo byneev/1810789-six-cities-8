@@ -1,11 +1,10 @@
-/* eslint-disable no-console */
 import { useState } from 'react';
-import { useDispatch, useSelector} from 'react-redux';
-import {  changeSort } from '../../store/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeSort } from '../../store/actions';
 import { getCurrentSort } from '../../store/selectors.ts/app-selector';
 import { SortType } from '../../utils/constants';
 
-function Sort():JSX.Element {
+function Sort(): JSX.Element {
   const currentSort = useSelector(getCurrentSort);
   const [isOpened, setIsOpened] = useState<boolean>(false);
   const dispatch = useDispatch();
@@ -14,46 +13,50 @@ function Sort():JSX.Element {
       <span className='places__sorting-caption'>Sort by </span>
       <span onClick={() => setIsOpened(!isOpened)} className='places__sorting-type' tabIndex={0}>
         {currentSort}
-        <svg  className='places__sorting-arrow' width='7' height='4'>
-          <use  xlinkHref='#icon-arrow-select'></use>
+        <svg className='places__sorting-arrow' width='7' height='4'>
+          <use xlinkHref='#icon-arrow-select'></use>
         </svg>
       </span>
       <ul className={isOpened ? 'places__options places__options--custom places__options--opened' : 'places__options places__options--custom'}>
-        <li onClick={
-          () => {
+        <li
+          onClick={() => {
             setIsOpened(false);
             dispatch(changeSort(SortType.Popular));
-          }
-        } className={currentSort === SortType.Popular ? 'places__option places__option--active' : 'places__option'} tabIndex={0}
+          }}
+          className={currentSort === SortType.Popular ? 'places__option places__option--active' : 'places__option'}
+          tabIndex={0}
         >
-      Popular
+          Popular
         </li>
-        <li onClick={
-          () => {
+        <li
+          onClick={() => {
             setIsOpened(false);
             dispatch(changeSort(SortType.LowFirst));
-          }
-        } className={currentSort === SortType.LowFirst ? 'places__option places__option--active' : 'places__option'} tabIndex={0}
+          }}
+          className={currentSort === SortType.LowFirst ? 'places__option places__option--active' : 'places__option'}
+          tabIndex={0}
         >
-      Price: low to high
+          Price: low to high
         </li>
-        <li onClick={
-          () => {
+        <li
+          onClick={() => {
             setIsOpened(false);
             dispatch(changeSort(SortType.HighFirst));
-          }
-        } className={currentSort === SortType.HighFirst ? 'places__option places__option--active' : 'places__option'} tabIndex={0}
+          }}
+          className={currentSort === SortType.HighFirst ? 'places__option places__option--active' : 'places__option'}
+          tabIndex={0}
         >
-      Price: high to low
+          Price: high to low
         </li>
-        <li onClick={
-          () => {
+        <li
+          onClick={() => {
             setIsOpened(false);
             dispatch(changeSort(SortType.RatedFirst));
-          }
-        } className={currentSort === SortType.RatedFirst ? 'places__option places__option--active' : 'places__option'} tabIndex={0}
+          }}
+          className={currentSort === SortType.RatedFirst ? 'places__option places__option--active' : 'places__option'}
+          tabIndex={0}
         >
-      Top rated first
+          Top rated first
         </li>
       </ul>
     </form>

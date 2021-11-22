@@ -1,9 +1,8 @@
-/* eslint-disable no-console */
 import { CitiesProps, OfferProp } from '../types/offer';
 import { ReviewProp } from '../types/review';
 import { SortProps, SortType } from './constants';
 
-export const getOffersByCity = (offers: OfferProp[], city: CitiesProps):OfferProp[] => offers.filter((offer) => offer.city.name === city);
+export const getOffersByCity = (offers: OfferProp[], city: CitiesProps): OfferProp[] => offers.filter((offer) => offer.city.name === city);
 
 export const sortBySortType = (offers: OfferProp[], sort: SortProps): OfferProp[] => {
   switch (sort) {
@@ -18,5 +17,4 @@ export const sortBySortType = (offers: OfferProp[], sort: SortProps): OfferProp[
   }
 };
 
-export const sortReviewsByData = (reviews: ReviewProp[]):ReviewProp[] => reviews.slice().sort((reviewA: ReviewProp, reviewB: ReviewProp) => Date.parse(reviewB.date) - Date.parse(reviewA.date));
-
+export const sortReviewsByData = (reviews: ReviewProp[]): ReviewProp[] => reviews.slice().sort((reviewA: ReviewProp, reviewB: ReviewProp) => Date.parse(reviewB.date) - Date.parse(reviewA.date));

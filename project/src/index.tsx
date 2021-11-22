@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { configureStore } from '@reduxjs/toolkit';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -6,19 +5,19 @@ import { Provider } from 'react-redux';
 import App from './components/app/app';
 import { createAPI } from './utils/api';
 import { checkAuthorizeStatus, getFavoritesOffers, loadOffersFromServer } from './store/api-actions';
-import { changeAuthorization,  setUserData } from './store/actions';
-import { AppRoute, AuthorizationStatus} from './utils/constants';
+import { changeAuthorization, setUserData } from './store/actions';
+import { AppRoute, AuthorizationStatus } from './utils/constants';
 import { Redirect } from 'react-router-dom';
 import { getUser } from './store/token';
 import { rootReducer } from './store/reducers/root-reducer';
-import {toast, ToastContainer} from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const api = createAPI(
   () => {
     store.dispatch(changeAuthorization(AuthorizationStatus.NoAuth));
   },
-  () => <Redirect to={AppRoute.NOTFOUND}/>,
+  () => <Redirect to={AppRoute.NOTFOUND} />,
   () => toast.error('Something goes wrong'),
 );
 

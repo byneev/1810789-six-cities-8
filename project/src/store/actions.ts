@@ -23,13 +23,12 @@ export enum ActionType {
   SetFormCondition = 'add/setFormCondition',
 }
 
-export const changeCity = createAction(ActionType.ChangeCity,
-  (currentCity: CitiesProps, currentSort: SortProps) => ({
-    payload: {
-      currentCity,
-      currentSort,
-    },
-  }));
+export const changeCity = createAction(ActionType.ChangeCity, (currentCity: CitiesProps, currentSort: SortProps) => ({
+  payload: {
+    currentCity,
+    currentSort,
+  },
+}));
 
 export const setupOffers = createAction<OfferProp[]>(ActionType.SetupOffers);
 
@@ -56,4 +55,3 @@ export const setActiveOffer = createAction<number | null>(ActionType.SetActiveOf
 export const changeOffers = createAction<OfferProp>(ActionType.ChangeOffers);
 
 export const setIsFormDisabled = createAction<boolean>(ActionType.SetFormCondition);
-

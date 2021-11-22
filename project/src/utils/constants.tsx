@@ -1,15 +1,15 @@
 import { CitiesProps } from '../types/offer';
 
 export type CityProp = {
-  AMSTERDAM: CitiesProps,
-  DUSSELDORF: CitiesProps,
-  HAMBURG: CitiesProps,
-  BRUSSELS: CitiesProps,
-  COLOGNE: CitiesProps,
-  PARIS: CitiesProps,
+  AMSTERDAM: CitiesProps;
+  DUSSELDORF: CitiesProps;
+  HAMBURG: CitiesProps;
+  BRUSSELS: CitiesProps;
+  COLOGNE: CitiesProps;
+  PARIS: CitiesProps;
 };
 
-export type AuthoriztionProps =  AuthorizationStatus.Auth | AuthorizationStatus.NoAuth | AuthorizationStatus.Unknown;
+export type AuthoriztionProps = AuthorizationStatus.Auth | AuthorizationStatus.NoAuth | AuthorizationStatus.Unknown;
 
 export enum SortType {
   HighFirst = 'Price: high to low',
@@ -28,7 +28,7 @@ export const AppRoute = {
   NOTFOUND: '/404',
 };
 
-export const City:CityProp = {
+export const City: CityProp = {
   AMSTERDAM: 'Amsterdam',
   DUSSELDORF: 'Dusseldorf',
   HAMBURG: 'Hamburg',
