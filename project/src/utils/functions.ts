@@ -1,8 +1,6 @@
-import { CitiesProps, OfferProp } from '../types/offer';
+import { OfferProp } from '../types/offer';
 import { ReviewProp } from '../types/review';
 import { SortProps, SortType } from './constants';
-
-export const getOffersByCity = (offers: OfferProp[], city: CitiesProps): OfferProp[] => offers.filter((offer) => offer.city.name === city);
 
 export const sortBySortType = (offers: OfferProp[], sort: SortProps): OfferProp[] => {
   switch (sort) {

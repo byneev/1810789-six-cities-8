@@ -3,15 +3,14 @@ import Map from '../map/map';
 import OffersList from '../offersList/offers-list';
 import { useSelector } from 'react-redux';
 import Sort from '../sort/sort';
-import { getCurrentCity, getOffers } from '../../store/selectors.ts/app-selector';
-import { getOffersByCity } from '../../utils/functions';
+import { getCurrentCity, getOffersSelectorByCity } from '../../store/selectors.ts/app-selector';
 
 function Cities(): JSX.Element {
   const currentCity = useSelector(getCurrentCity);
-  const offers = useSelector(getOffers);
-  const currentOffers = getOffersByCity(offers, currentCity);
+  const offersSelector = getOffersSelectorByCity(currentCity);
+  const currentOffers = useSelector(offersSelector);
 
-  if (offers.length === 0) {
+  if (currentOffers.length === 0) {
     return (
       <div className='cities'>
         <div className='cities__places-container cities__places-container--empty container'>
@@ -37,7 +36,7 @@ function Cities(): JSX.Element {
             <OffersList container={Container.MAIN} offers={currentOffers} />
           </div>
         </section>
-        <div className='cities__right-section'>{offers.length !== 0 ? <Map styleClassName={'cities'} /> : ''}</div>
+        <div className='cities__right-section'>{currentOffers.length !== 0 ? <Map styleClassName={'cities'} /> : ''}</div>
       </div>
     </div>
   );

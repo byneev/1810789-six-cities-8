@@ -5,9 +5,8 @@ import 'leaflet/dist/leaflet.css';
 import { useSelector } from 'react-redux';
 import useLayer from '../../hooks/useLayer/useLayer';
 import { OfferProp } from '../../types/offer';
-import { getCurrentCity, getCurrentOffer, getNearbyOffers, getOffers } from '../../store/selectors.ts/app-selector';
+import { getCurrentCity, getCurrentOffer, getNearbyOffers, getOffersSelectorByCity } from '../../store/selectors.ts/app-selector';
 import { getActiveOfferId } from '../../store/selectors.ts/user-selector';
-import { getOffersByCity } from '../../utils/functions';
 
 export type MapProps = {
   styleClassName: string;
@@ -28,12 +27,11 @@ const activeMarker = new Icon({
 function Map(props: MapProps): JSX.Element {
   const currentOffer = useSelector(getCurrentOffer);
   const activeOfferId = useSelector(getActiveOfferId);
-  const allOffers = useSelector(getOffers);
   const nearbyOffers = useSelector(getNearbyOffers);
   const currentCity = useSelector(getCurrentCity);
   const { styleClassName } = props;
   const mapRef = useRef(null);
-  const offers = getOffersByCity(allOffers, currentCity);
+  const offers = useSelector(getOffersSelectorByCity(currentCity));
   const map = useMap(mapRef, offers[0], currentOffer);
   const layer = useLayer(map);
 
