@@ -14,8 +14,8 @@ function LocationItem(props: LocationItemProps): JSX.Element {
   return (
     <li className='favorites__locations-items'>
       <div className={offers[0].city.name === currentCity ?
-        'favorites__locations locations' :
-        'favorites__locations locations locations--current'}
+        'favorites__locations locations locations--current' :
+        'favorites__locations locations'}
       >
         <div className='locations__item'>
           <a className='locations__item-link' href='/'>
