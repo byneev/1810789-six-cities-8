@@ -41,6 +41,7 @@ if (userDataFromLocalStorage) {
   store.dispatch(getFavoritesOffers());
 }
 
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
