@@ -10,8 +10,7 @@ import { useSelector } from 'react-redux';
 import Spinner from '../spinner/spinner';
 import browserHistory from '../../utils/history';
 import { store } from '../..';
-import { getIsLoading } from '../../store/selectors.ts/app-selector';
-import { NameSpace } from '../../store/reducers/root-reducer';
+import { getIsLoading, getOffers } from '../../store/selectors.ts/app-selector';
 import MainEmpty from '../main-empty/main-empty';
 import { loadCurrentOffer, loadNearbyOffers, loadCurrentComments } from '../../store/api-actions';
 
@@ -24,7 +23,7 @@ function App(): JSX.Element {
     <BrowserRouter history={browserHistory}>
       <Switch>
         <Route path={AppRoute.MAIN} exact>
-          {store.getState()[NameSpace.webApp].offers.length !== 0 ? <Main /> : <MainEmpty />}
+          {getOffers(store.getState()).length !== 0 ? <Main /> : <MainEmpty />}
         </Route>
         <Route path={AppRoute.LOGIN} render={({ history }) => <Login onSubmitData={() => history.push(AppRoute.MAIN)} />} exact />
         <PrivateRoute path={AppRoute.FAVORITES} render={() => <Favorites />} />

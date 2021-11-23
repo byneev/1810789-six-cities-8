@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { MouseEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -17,6 +18,7 @@ function Room(prop: RoomProp): JSX.Element {
   const dispatch = useDispatch();
   const { container, room } = prop;
   const [currentStatus, setCurrentStatus] = useState(Number(room.isFavorite));
+  const starsCount = room.rating * 20;
   return (
     <article className={container === Container.FAVORITES ? 'favorites__card place-card' : 'cities__place-card place-card'}>
       {room.isPremium ? (
@@ -59,7 +61,7 @@ function Room(prop: RoomProp): JSX.Element {
         </div>
         <div className='place-card__rating rating'>
           <div className='place-card__stars rating__stars'>
-            <span style={{ width: '80%' }}></span>
+            <span style={{ width: `${starsCount}%` }}></span>
             <span className='visually-hidden'>{room.rating}</span>
           </div>
         </div>

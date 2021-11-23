@@ -7,8 +7,7 @@ import { getCurrentCity, getOffersSelectorByCity } from '../../store/selectors.t
 
 function Cities(): JSX.Element {
   const currentCity = useSelector(getCurrentCity);
-  const offersSelector = getOffersSelectorByCity(currentCity);
-  const currentOffers = useSelector(offersSelector);
+  const currentOffers = useSelector(getOffersSelectorByCity(currentCity));
 
   if (currentOffers.length === 0) {
     return (

@@ -42,6 +42,9 @@ export const logoutFromCite = (): ThunkActionResult => async (dispatch, _getStat
   await api.delete(APIRoute.Logout);
   removeData();
   dispatch(changeAuthorization(AuthorizationStatus.NoAuth));
+  dispatch(setupOffers([]));
+  dispatch(setFavoritesOffers([]));
+  dispatch(loadOffersFromServer());
 };
 
 export const loadCurrentOffer =

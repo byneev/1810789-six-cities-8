@@ -19,6 +19,7 @@ function RoomPage(): JSX.Element {
   const currentComments = useSelector(getCurrentComments);
   const nearbyOffers = useSelector(getNearbyOffers);
   const favoritesOffers = useSelector(getFavoriteOffers);
+  const starsCount = correctOffer.rating * 20;
   let isFavorite = false;
   favoritesOffers.forEach((offer) => {
     if (offer.id === correctOffer.id) {
@@ -115,7 +116,7 @@ function RoomPage(): JSX.Element {
               </div>
               <div className='property__rating rating'>
                 <div className='property__stars rating__stars'>
-                  <span style={{ width: '80%' }}></span>
+                  <span style={{ width: `${starsCount}%` }}></span>
                   <span className='visually-hidden'>Rating</span>
                 </div>
                 <span className='property__rating-value rating__value'>{correctOffer.rating}</span>

@@ -10,7 +10,7 @@ function LocationItem(props: LocationItemProps): JSX.Element {
   const { offers } = props;
   return (
     <li className='favorites__locations-items'>
-      <div className='favorites__locations locations locations--current'>
+      <div className='favorites__locations locations'>
         <div className='locations__item'>
           <a className='locations__item-link' href='/'>
             <span>{offers[0].city.name}</span>

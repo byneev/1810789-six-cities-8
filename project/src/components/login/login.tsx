@@ -2,7 +2,7 @@ import { FormEvent, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, RouteProps } from 'react-router-dom';
 import { AppRoute, City, SortType } from '../../utils/constants';
-import { loadOffersFromServer, loginToCite } from '../../store/api-actions';
+import { loginToCite } from '../../store/api-actions';
 import { getCurrentCity } from '../../store/selectors.ts/app-selector';
 import { changeCity } from '../../store/actions';
 import { toast } from 'react-toastify';
@@ -32,7 +32,6 @@ function Login(props: LoginProps): JSX.Element {
               <Link
                 onClick={() => {
                   dispatch(changeCity(City.PARIS, SortType.Popular));
-                  dispatch(loadOffersFromServer());
                 }}
                 className='header__logo-link'
                 to={AppRoute.MAIN}
@@ -55,7 +54,6 @@ function Login(props: LoginProps): JSX.Element {
                     toast.error('Password should contain at least one letter and one digit');
                   } else {
                     dispatch(changeCity(City.PARIS, SortType.Popular));
-                    dispatch(loadOffersFromServer());
                     dispatch(
                       loginToCite({
                         login: email.current.value,
