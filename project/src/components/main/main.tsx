@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { changeCity, setupOffers } from '../../store/actions';
-import { loadOffersFromServer, logoutFromCite } from '../../store/api-actions';
+import { changeCity } from '../../store/actions';
+import { logoutFromCite } from '../../store/api-actions';
 import { getAuthorizationStatus, getUserData } from '../../store/selectors.ts/user-selector';
 import { AppRoute, AuthorizationStatus, City, SortType } from '../../utils/constants';
 import CitiesList from '../cities-list/cities-list';
@@ -11,6 +12,7 @@ function Main(): JSX.Element {
   const authorizationStatus = useSelector(getAuthorizationStatus);
   const userData = useSelector(getUserData);
   const dispatch = useDispatch();
+
   return (
     <div className='page page--gray page--main'>
       <header className='header'>
@@ -20,8 +22,6 @@ function Main(): JSX.Element {
               <Link
                 onClick={() => {
                   dispatch(changeCity(City.PARIS, SortType.Popular));
-                  dispatch(setupOffers([]));
-                  dispatch(loadOffersFromServer());
                 }}
                 className='header__logo-link header__logo-link--active'
                 to={AppRoute.MAIN}

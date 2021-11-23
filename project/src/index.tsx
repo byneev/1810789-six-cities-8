@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { configureStore } from '@reduxjs/toolkit';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -39,6 +40,7 @@ if (userDataFromLocalStorage) {
   store.dispatch(setUserData(userDataFromLocalStorage));
   store.dispatch(getFavoritesOffers());
 }
+
 
 ReactDOM.render(
   <React.StrictMode>

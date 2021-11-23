@@ -17,6 +17,8 @@ export const getOffersFromAmsterdam = createSelector(getOffers, (offers: OfferPr
 
 export const getOffersFromCologne = createSelector(getOffers, (offers: OfferProp[]) => offers.filter((offer) => offer.city.name === City.COLOGNE));
 
+export const getOffersFromHamburg = createSelector(getOffers, (offers: OfferProp[]) => offers.filter((offer) => offer.city.name === City.HAMBURG));
+
 export const getCurrentSort = (state: RootStateProps): SortProps => state[NameSpace.webApp].currentSort;
 
 export const getIsLoading = (state: RootStateProps): boolean => state[NameSpace.webApp].isLoading;
@@ -39,6 +41,8 @@ export const getOffersSelectorByCity = (currentCity: CitiesProps): ((state: Root
       return getOffersFromAmsterdam;
     case City.COLOGNE:
       return getOffersFromCologne;
+    case City.HAMBURG:
+      return getOffersFromHamburg;
     default:
       return getOffers;
   }

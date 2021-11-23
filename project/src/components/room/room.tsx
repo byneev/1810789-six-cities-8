@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { MouseEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -17,6 +18,7 @@ function Room(prop: RoomProp): JSX.Element {
   const dispatch = useDispatch();
   const { container, room } = prop;
   const [currentStatus, setCurrentStatus] = useState(Number(room.isFavorite));
+  const starsCount = room.rating * 20;
   return (
     <article className={container === Container.FAVORITES ? 'favorites__card place-card' : 'cities__place-card place-card'}>
       {room.isPremium ? (
@@ -28,10 +30,10 @@ function Room(prop: RoomProp): JSX.Element {
       )}
       <div className={container === Container.FAVORITES ? 'favorites__image-wrapper place-card__image-wrapper' : 'cities__image-wrapper place-card__image-wrapper'}>
         <Link to={`${AppRoute.ROOM}${room.id}`}>
-          <img onMouseEnter={() => dispatch(setActiveOffer(room.id))} onMouseOut={() => dispatch(setActiveOffer(null))} className='place-card__image' src={room.previewImage} width='260' height='200' alt={room.title} />
+          <img onMouseEnter={() => dispatch(setActiveOffer(room.id))} onMouseOut={() => dispatch(setActiveOffer(null))} className='place-card__image' src={room.previewImage} width={container === Container.FAVORITES ? '150' : '260'} height={container === Container.FAVORITES ? '110' : '200'} alt={room.title} />
         </Link>
       </div>
-      <div className={container === Container.FAVORITES ? 'favorites__card place-card__info' : 'place-card__info'}>
+      <div className={container === Container.FAVORITES ? 'favorites__card-info place-card__info' : 'place-card__info'}>
         <div className='place-card__price-wrapper'>
           <div className='place-card__price'>
             <b className='place-card__price-value'>&euro;{room.price}</b>
@@ -59,7 +61,7 @@ function Room(prop: RoomProp): JSX.Element {
         </div>
         <div className='place-card__rating rating'>
           <div className='place-card__stars rating__stars'>
-            <span style={{ width: '80%' }}></span>
+            <span style={{ width: `${starsCount}%` }}></span>
             <span className='visually-hidden'>{room.rating}</span>
           </div>
         </div>
