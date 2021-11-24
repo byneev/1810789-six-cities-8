@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { MouseEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { OfferProp } from '../../types/offer';
 import { changeOffers, setActiveOffer } from '../../store/actions';
 import { addToFavorites } from '../../store/api-actions';
@@ -19,6 +19,8 @@ function Room(prop: RoomProp): JSX.Element {
   const { container, room } = prop;
   const [currentStatus, setCurrentStatus] = useState(Number(room.isFavorite));
   const starsCount = room.rating * 20;
+  const history = useHistory();
+
   return (
     <article className={container === Container.FAVORITES ? 'favorites__card place-card' : 'cities__place-card place-card'}>
       {room.isPremium ? (
@@ -39,25 +41,25 @@ function Room(prop: RoomProp): JSX.Element {
             <b className='place-card__price-value'>&euro;{room.price}</b>
             <span className='place-card__price-text'>&#47;&nbsp;night</span>
           </div>
-          {authorizationStatus === AuthorizationStatus.Auth ? (
-            <button
-              onClick={(evt: MouseEvent<HTMLButtonElement>) => {
-                evt.preventDefault();
+          <button
+            onClick={(evt: MouseEvent<HTMLButtonElement>) => {
+              evt.preventDefault();
+              if (authorizationStatus === AuthorizationStatus.Auth) {
                 dispatch(addToFavorites(room.id, Number(Boolean(!currentStatus))));
                 dispatch(changeOffers({ ...room, isFavorite: Boolean(!currentStatus) }));
                 setCurrentStatus(Number(Boolean(!currentStatus)));
-              }}
-              className={currentStatus ? 'place-card__bookmark-button button place-card__bookmark-button--active' : 'place-card__bookmark-button button'}
-              type='button'
-            >
-              <svg className='place-card__bookmark-icon' width='18' height='19'>
-                <use xlinkHref='#icon-bookmark'></use>
-              </svg>
-              <span className='visually-hidden'>To bookmarks</span>
-            </button>
-          ) : (
-            ''
-          )}
+              } else {
+                history.push(AppRoute.LOGIN);
+              }
+            }}
+            className={currentStatus ? 'place-card__bookmark-button button place-card__bookmark-button--active' : 'place-card__bookmark-button button'}
+            type='button'
+          >
+            <svg className='place-card__bookmark-icon' width='18' height='19'>
+              <use xlinkHref='#icon-bookmark'></use>
+            </svg>
+            <span className='visually-hidden'>To bookmarks</span>
+          </button>
         </div>
         <div className='place-card__rating rating'>
           <div className='place-card__stars rating__stars'>

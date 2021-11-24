@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus, City, Container, SortType } from '../../utils/constants';
 import OffersList from '../offersList/offers-list';
 import ReviewForm from '../review-form/review-form';
@@ -20,6 +20,7 @@ function RoomPage(): JSX.Element {
   const nearbyOffers = useSelector(getNearbyOffers);
   const favoritesOffers = useSelector(getFavoriteOffers);
   const starsCount = correctOffer.rating * 20;
+  const history = useHistory();
   let isFavorite = false;
   favoritesOffers.forEach((offer) => {
     if (offer.id === correctOffer.id) {
@@ -95,24 +96,24 @@ function RoomPage(): JSX.Element {
               )}
               <div className='property__name-wrapper'>
                 <h1 className='property__name'>{correctOffer.title}</h1>
-                {authorizationStatus === AuthorizationStatus.Auth ? (
-                  <button
-                    onClick={(evt: MouseEvent<HTMLButtonElement>) => {
-                      evt.preventDefault();
+                <button
+                  onClick={(evt: MouseEvent<HTMLButtonElement>) => {
+                    evt.preventDefault();
+                    if (authorizationStatus === AuthorizationStatus.Auth) {
                       dispatch(addToFavorites(correctOffer.id, Number(!isFavorite)));
                       dispatch(changeOffers({ ...correctOffer, isFavorite: !isFavorite }));
-                    }}
-                    className={isFavorite ? 'property__bookmark-button button property__bookmark-button--active' : 'property__bookmark-button button'}
-                    type='button'
-                  >
-                    <svg className='property__bookmark-icon' width='31' height='33'>
-                      <use xlinkHref='#icon-bookmark'></use>
-                    </svg>
-                    <span className='visually-hidden'>To bookmarks</span>
-                  </button>
-                ) : (
-                  ''
-                )}
+                    } else {
+                      history.push(AppRoute.LOGIN);
+                    }
+                  }}
+                  className={isFavorite ? 'property__bookmark-button button property__bookmark-button--active' : 'property__bookmark-button button'}
+                  type='button'
+                >
+                  <svg className='property__bookmark-icon' width='31' height='33'>
+                    <use xlinkHref='#icon-bookmark'></use>
+                  </svg>
+                  <span className='visually-hidden'>To bookmarks</span>
+                </button>
               </div>
               <div className='property__rating rating'>
                 <div className='property__stars rating__stars'>
