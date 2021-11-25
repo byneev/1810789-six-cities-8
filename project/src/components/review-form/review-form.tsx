@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeRating } from '../../store/actions';
@@ -30,7 +31,7 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
       method='post'
       onSubmit={(evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
-        if (textarea.current !== null) {
+        if (textarea.current !== null && currentRating !== null) {
           dispatch(
             sendComment(id, {
               comment: textarea.current.value,
@@ -38,6 +39,7 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
             }),
           );
           setIsSubmitActive(false);
+          dispatch(changeRating(null));
           textarea.current.value = '';
         }
       }}
@@ -92,7 +94,7 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
           value='3'
           id='3-stars'
           type='radio'
-          defaultChecked={currentRating === 3}
+          checked={currentRating === 3}
         />
         <label htmlFor='3-stars' className='reviews__rating-label form__rating-label' title='good'>
           <svg className='form__star-image' width='37' height='33'>
@@ -141,6 +143,8 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
         onChange={() => {
           if (textarea.current !== null && textarea.current.value.length <= MAX_CHARACTERS_COUNT && textarea.current.value.length >= MIN_CHARACTERS_COUNT) {
             setIsSubmitActive(true);
+          } else {
+            setIsSubmitActive(false);
           }
         }}
         ref={textarea}

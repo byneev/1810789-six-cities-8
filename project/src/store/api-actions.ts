@@ -1,18 +1,17 @@
 import { APIRoute, AuthorizationStatus } from '../utils/constants';
-import { changeAuthorization, changeRating, setCurrentComments, setCurrentOffer, setFavoritesOffers, setIsFormDisabled, setNearbyOferrs, setupOffers, setUserData } from './actions';
+import { changeAuthorization, setCurrentComments, setCurrentOffer, setFavoritesOffers, setIsFormDisabled, setNearbyOferrs, setupOffers, setUserData } from './actions';
 import { OfferProp } from '../types/offer';
 import { convertCommentsToClient, convertOffersToClient, convertUserDataToClient, ServerCommentProp, ServerOfferProp } from '../utils/adapter';
-import { Action, ThunkAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { Action, ThunkAction } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { AuthData } from '../components/login/login';
 import { removeData, setData } from './token';
 import { toast } from 'react-toastify';
 import { CommentData } from '../components/review-form/review-form';
 import { RootStateProps } from './reducers/root-reducer';
-import { UserStateProps, UserDataProps } from './reducers/user-reducer';
+import { UserDataProps } from './reducers/user-reducer';
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, RootStateProps, AxiosInstance, Action>;
-export type ThunkAppDispatch = ThunkDispatch<UserStateProps, AxiosInstance, Action>;
 
 export const loadOffersFromServer = (): ThunkActionResult => async (dispatch, getState, api) => {
   const { data } = await api.get<ServerOfferProp[]>(APIRoute.Hotels);
@@ -72,11 +71,15 @@ export const sendComment =
   (id: number, { comment, rating }: CommentData): ThunkActionResult =>
     async (dispatch, _getState, api) => {
       dispatch(setIsFormDisabled(true));
-      const comments = await api.post(`${APIRoute.Comments}/${id}`, { comment, rating });
-      dispatch(setIsFormDisabled(false));
+      const comments = await api.post(`${APIRoute.Comments}/${id}`, { comment, rating })
+        .catch((error) => {
+          toast.warn('Error has occurred with sending comment to server');
+          dispatch(setIsFormDisabled(false));
+          throw error;
+        });
       dispatch(setCurrentComments(comments.data.map((commentFromServer: ServerCommentProp) => convertCommentsToClient(commentFromServer))));
-      dispatch(changeRating(3));
     };
+
 
 export const getFavoritesOffers = (): ThunkActionResult => async (dispatch, _getState, api) => {
   const offers = await api.get(APIRoute.Favorite);

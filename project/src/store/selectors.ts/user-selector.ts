@@ -19,9 +19,7 @@ export const getUserData = (state: RootStateProps): UserDataProps => state[NameS
 
 export const getCurrentComments = (state: RootStateProps): ReviewProp[] => state[NameSpace.user].currentComments;
 
-export const getCurrentRating = (state: RootStateProps): number => state[NameSpace.user].currentRating;
-
-export const getIsFavorite = (state: RootStateProps): boolean => state[NameSpace.user].isFavorite;
+export const getCurrentRating = (state: RootStateProps): number | null => state[NameSpace.user].currentRating;
 
 export const getActiveOfferId = (state: RootStateProps): number | null => state[NameSpace.user].activeOfferId;
 

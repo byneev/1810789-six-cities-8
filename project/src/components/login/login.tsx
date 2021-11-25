@@ -1,9 +1,10 @@
 import { FormEvent, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, RouteProps } from 'react-router-dom';
-import { AppRoute, City, SortType } from '../../utils/constants';
+import { Link, Redirect, RouteProps } from 'react-router-dom';
+import { AppRoute, AuthorizationStatus, City, SortType } from '../../utils/constants';
 import { loginToCite } from '../../store/api-actions';
 import { getCurrentCity } from '../../store/selectors.ts/app-selector';
+import { getAuthorizationStatus } from '../../store/selectors.ts/user-selector';
 import { changeCity } from '../../store/actions';
 import { toast } from 'react-toastify';
 
@@ -18,11 +19,16 @@ export type LoginProps = RouteProps & {
 
 function Login(props: LoginProps): JSX.Element {
   const currentCity = useSelector(getCurrentCity);
+  const authorizationStatus = useSelector(getAuthorizationStatus);
   const dispatch = useDispatch();
-
   const { onSubmitData } = props;
   const email = useRef<HTMLInputElement | null>(null);
   const password = useRef<HTMLInputElement | null>(null);
+
+  if (authorizationStatus === AuthorizationStatus.Auth) {
+    return <Redirect to={AppRoute.MAIN} />;
+  }
+
   return (
     <div className='page page--gray page--login'>
       <header className='header'>

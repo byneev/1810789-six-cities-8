@@ -42,6 +42,9 @@ function Map(props: MapProps): JSX.Element {
       let currentOffers: OfferProp[] = offers;
       if (styleClassName === 'property') {
         currentOffers = nearbyOffers;
+        new Marker([currentOffer.location.latitude, currentOffer.location.longitude])
+          .setIcon(activeMarker)
+          .addTo(layer);
       }
       currentOffers.forEach((offer) => {
         const marker = new Marker([offer.location.latitude, offer.location.longitude]);
@@ -52,7 +55,7 @@ function Map(props: MapProps): JSX.Element {
         }
       });
     }
-  }, [map, layer, offers, activeOfferId, currentCity, nearbyOffers, styleClassName]);
+  }, [map, layer, offers, activeOfferId, currentCity, nearbyOffers, styleClassName, currentOffer]);
 
   return <section ref={mapRef} className={`${styleClassName}__map map`}></section>;
 }

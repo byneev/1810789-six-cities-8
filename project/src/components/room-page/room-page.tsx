@@ -78,7 +78,7 @@ function RoomPage(): JSX.Element {
         <section className='property'>
           <div className='property__gallery-container container'>
             <div className='property__gallery'>
-              {correctOffer.images.map((item) => (
+              {correctOffer.images.slice(0, 6).map((item) => (
                 <div key={`${item}`} className='property__image-wrapper'>
                   <img className='property__image' src={item} alt={correctOffer.title} />
                 </div>

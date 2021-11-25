@@ -22,7 +22,7 @@ function Room(prop: RoomProp): JSX.Element {
   const history = useHistory();
 
   return (
-    <article className={container === Container.FAVORITES ? 'favorites__card place-card' : 'cities__place-card place-card'}>
+    <article onMouseOver={() => dispatch(setActiveOffer(room.id))} onMouseLeave={() => dispatch(setActiveOffer(null))} className={container === Container.FAVORITES ? 'favorites__card place-card' : 'cities__place-card place-card'}>
       {room.isPremium ? (
         <div className='place-card__mark'>
           <span>Premium</span>
@@ -31,9 +31,7 @@ function Room(prop: RoomProp): JSX.Element {
         ''
       )}
       <div className={container === Container.FAVORITES ? 'favorites__image-wrapper place-card__image-wrapper' : 'cities__image-wrapper place-card__image-wrapper'}>
-        <Link to={`${AppRoute.ROOM}${room.id}`}>
-          <img onMouseEnter={() => dispatch(setActiveOffer(room.id))} onMouseOut={() => dispatch(setActiveOffer(null))} className='place-card__image' src={room.previewImage} width={container === Container.FAVORITES ? '150' : '260'} height={container === Container.FAVORITES ? '110' : '200'} alt={room.title} />
-        </Link>
+        <img className='place-card__image' src={room.previewImage} width={container === Container.FAVORITES ? '150' : '260'} height={container === Container.FAVORITES ? '110' : '200'} alt={room.title} />
       </div>
       <div className={container === Container.FAVORITES ? 'favorites__card-info place-card__info' : 'place-card__info'}>
         <div className='place-card__price-wrapper'>
@@ -68,7 +66,7 @@ function Room(prop: RoomProp): JSX.Element {
           </div>
         </div>
         <h2 className='place-card__name'>
-          <a href='/'>{room.title}</a>
+          <Link to={`${AppRoute.ROOM}${room.id}`}>{room.title}</Link>
         </h2>
         <p className='place-card__type'>{room.type}</p>
       </div>

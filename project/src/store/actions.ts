@@ -13,10 +13,8 @@ export enum ActionType {
   Logout = 'user/logout',
   SetCurrentOffer = 'app/setCurrentOffer',
   SetNearbyOffers = 'app/setNearbyOffers',
-  RefreshMarkers = 'app/refreshMarkers',
   SetCurrentComments = 'user/setCurrentComments',
   ChangeRating = 'user/changeRating',
-  AddToFavorites = 'user/addToFavorites',
   SetFavoritesOffers = 'app/setFavoritesOffers',
   SetActiveOffer = 'user/setActiveOffer',
   ChangeOffers = 'app/changeOffers',
@@ -46,7 +44,7 @@ export const setNearbyOferrs = createAction<OfferProp[]>(ActionType.SetNearbyOff
 
 export const setCurrentComments = createAction<ReviewProp[]>(ActionType.SetCurrentComments);
 
-export const changeRating = createAction<number>(ActionType.ChangeRating);
+export const changeRating = createAction<number | null>(ActionType.ChangeRating);
 
 export const setFavoritesOffers = createAction<OfferProp[]>(ActionType.SetFavoritesOffers);
 

@@ -17,7 +17,7 @@ export type UserStateProps = {
   authorizationStatus: AuthoriztionProps;
   userData: UserDataProps;
   currentComments: ReviewProp[];
-  currentRating: number;
+  currentRating: number | null;
   isFavorite: boolean;
   activeOfferId: number | null;
   isFormDisabled: boolean;
@@ -34,7 +34,7 @@ const initialState: UserStateProps = {
     avatarUrl: '',
   },
   currentComments: [],
-  currentRating: 3,
+  currentRating: null,
   isFavorite: false,
   activeOfferId: null,
   isFormDisabled: false,
