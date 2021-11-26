@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { cities } from '../../types/offer';
-import { changeCity } from '../../store/actions';
+import { changeAuthorization, changeCity } from '../../store/actions';
 import { logoutFromCite } from '../../store/api-actions';
 import { getFavoriteOffers } from '../../store/selectors.ts/app-selector';
 import { getUserData } from '../../store/selectors.ts/user-selector';
-import { AppRoute, City, SortType } from '../../utils/constants';
+import { AppRoute, AuthorizationStatus, City, SortType } from '../../utils/constants';
 import LocationItem from '../location-item/location-item';
 
 function Favorites(): JSX.Element {
@@ -38,7 +38,11 @@ function Favorites(): JSX.Element {
                   </Link>
                 </li>
                 <li className='header__nav-item'>
-                  <Link onClick={() => dispatch(logoutFromCite())} className='header__nav-link' to={AppRoute.LOGIN}>
+                  <Link onClick={() => {
+                    dispatch(changeAuthorization(AuthorizationStatus.NoAuth));
+                    dispatch(logoutFromCite());
+                  }} className='header__nav-link' to={AppRoute.LOGIN}
+                  >
                     <span className='header__signout'>Sign out</span>
                   </Link>
                 </li>

@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { ReviewProp } from '../../types/review';
 import { AuthoriztionProps, AuthorizationStatus } from '../../utils/constants';
-import { changeAuthorization, changeRating, logout, setActiveOffer, setCurrentComments, setIsFormDisabled, setUserData } from './../actions';
+import { changeAuthorization, changeRating, logout, setActiveOffer, setCurrentComments, setIsDataSended, setIsFormDisabled, setUserData } from './../actions';
 import { Token } from './../token';
 
 export type UserDataProps = {
@@ -21,6 +21,7 @@ export type UserStateProps = {
   isFavorite: boolean;
   activeOfferId: number | null;
   isFormDisabled: boolean;
+  isDataSended: boolean;
 };
 
 const initialState: UserStateProps = {
@@ -38,6 +39,7 @@ const initialState: UserStateProps = {
   isFavorite: false,
   activeOfferId: null,
   isFormDisabled: false,
+  isDataSended: false,
 };
 
 export const userReducer = createReducer(initialState, (builder) => {
@@ -63,5 +65,8 @@ export const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase(setIsFormDisabled, (state, { payload }) => {
       state.isFormDisabled = payload;
+    })
+    .addCase(setIsDataSended, (state, { payload }) => {
+      state.isDataSended = payload;
     });
 });

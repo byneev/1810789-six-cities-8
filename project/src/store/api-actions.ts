@@ -1,5 +1,6 @@
+/* eslint-disable no-console */
 import { APIRoute, AuthorizationStatus } from '../utils/constants';
-import { changeAuthorization, setCurrentComments, setCurrentOffer, setFavoritesOffers, setIsFormDisabled, setNearbyOferrs, setupOffers, setUserData } from './actions';
+import { changeAuthorization, setCurrentComments, setCurrentOffer, setFavoritesOffers, setIsDataSended, setIsFormDisabled, setNearbyOferrs, setupOffers, setUserData } from './actions';
 import { OfferProp } from '../types/offer';
 import { convertCommentsToClient, convertOffersToClient, convertUserDataToClient, ServerCommentProp, ServerOfferProp } from '../utils/adapter';
 import { Action, ThunkAction } from '@reduxjs/toolkit';
@@ -40,7 +41,6 @@ export const loginToCite =
 export const logoutFromCite = (): ThunkActionResult => async (dispatch, _getState, api) => {
   await api.delete(APIRoute.Logout);
   removeData();
-  dispatch(changeAuthorization(AuthorizationStatus.NoAuth));
   dispatch(setupOffers([]));
   dispatch(setFavoritesOffers([]));
   dispatch(loadOffersFromServer());
@@ -70,14 +70,19 @@ export const loadCurrentComments =
 export const sendComment =
   (id: number, { comment, rating }: CommentData): ThunkActionResult =>
     async (dispatch, _getState, api) => {
-      dispatch(setIsFormDisabled(true));
-      const comments = await api.post(`${APIRoute.Comments}/${id}`, { comment, rating })
-        .catch((error) => {
+      await api.post(`${APIRoute.Comments}/${id}`, { comment, rating })
+        .then((comments) => {
+          dispatch(setCurrentComments(comments.data.map((commentFromServer: ServerCommentProp) => convertCommentsToClient(commentFromServer))));
+          dispatch(setIsDataSended(true));
+        })
+        .catch(() => {
+          dispatch(setIsDataSended(false));
           toast.warn('Error has occurred with sending comment to server');
+        })
+        .finally(() => {
+          dispatch(setIsDataSended(false));
           dispatch(setIsFormDisabled(false));
-          throw error;
         });
-      dispatch(setCurrentComments(comments.data.map((commentFromServer: ServerCommentProp) => convertCommentsToClient(commentFromServer))));
     };
 
 

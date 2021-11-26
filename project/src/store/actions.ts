@@ -19,6 +19,7 @@ export enum ActionType {
   SetActiveOffer = 'user/setActiveOffer',
   ChangeOffers = 'app/changeOffers',
   SetFormCondition = 'add/setFormCondition',
+  SetIsDataSended = 'user/setIsDataSended',
 }
 
 export const changeCity = createAction(ActionType.ChangeCity, (currentCity: CitiesProps, currentSort: SortProps) => ({
@@ -53,3 +54,5 @@ export const setActiveOffer = createAction<number | null>(ActionType.SetActiveOf
 export const changeOffers = createAction<OfferProp>(ActionType.ChangeOffers);
 
 export const setIsFormDisabled = createAction<boolean>(ActionType.SetFormCondition);
+
+export const setIsDataSended = createAction<boolean>(ActionType.SetIsDataSended);

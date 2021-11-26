@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeRating } from '../../store/actions';
+import { changeRating, setIsFormDisabled } from '../../store/actions';
 import { sendComment } from '../../store/api-actions';
-import { getCurrentRating, getIsFormDisabled } from '../../store/selectors.ts/user-selector';
+import { getCurrentRating, getIsDataSended, getIsFormDisabled } from '../../store/selectors.ts/user-selector';
 
 export type CommentData = {
   comment: string;
@@ -20,17 +20,29 @@ const MIN_CHARACTERS_COUNT = 50;
 function ReviewForm(props: ReviewFormProps): JSX.Element {
   const currentRating = useSelector(getCurrentRating);
   const isFormDisabled = useSelector(getIsFormDisabled);
+  const isDataSended = useSelector(getIsDataSended);
+  console.log(isDataSended);
   const dispatch = useDispatch();
   const { id } = props;
   const textarea = useRef<HTMLTextAreaElement | null>(null);
-  const [isSubmitActive, setIsSubmitActive] = useState(false);
+  const form = useRef<HTMLFormElement | null>(null);
+  const [isTextAreaValided, setisTextAreaValided] = useState(false);
+  const isSubmitActive = isTextAreaValided && currentRating !== null;
+
+  if (isDataSended && isFormDisabled) {
+    form.current?.reset();
+    dispatch(changeRating(null));
+  }
+
   return (
     <form
+      ref={form}
       className='reviews__form form'
       action='#'
       method='post'
       onSubmit={(evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
+        dispatch(setIsFormDisabled(true));
         if (textarea.current !== null && currentRating !== null) {
           dispatch(
             sendComment(id, {
@@ -38,9 +50,6 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
               rating: currentRating,
             }),
           );
-          setIsSubmitActive(false);
-          dispatch(changeRating(null));
-          textarea.current.value = '';
         }
       }}
     >
@@ -142,9 +151,9 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
         disabled={isFormDisabled}
         onChange={() => {
           if (textarea.current !== null && textarea.current.value.length <= MAX_CHARACTERS_COUNT && textarea.current.value.length >= MIN_CHARACTERS_COUNT) {
-            setIsSubmitActive(true);
+            setisTextAreaValided(true);
           } else {
-            setIsSubmitActive(false);
+            setisTextAreaValided(false);
           }
         }}
         ref={textarea}

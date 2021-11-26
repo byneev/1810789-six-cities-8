@@ -24,3 +24,5 @@ export const getCurrentRating = (state: RootStateProps): number | null => state[
 export const getActiveOfferId = (state: RootStateProps): number | null => state[NameSpace.user].activeOfferId;
 
 export const getIsFormDisabled = (state: RootStateProps): boolean => state[NameSpace.user].isFormDisabled;
+
+export const getIsDataSended = (state: RootStateProps): boolean => state[NameSpace.user].isDataSended;
