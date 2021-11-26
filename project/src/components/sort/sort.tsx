@@ -2,12 +2,19 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeSort } from '../../store/actions';
 import { getCurrentSort } from '../../store/selectors.ts/app-selector';
-import { SortType } from '../../utils/constants';
+import { DefaultFunctionProps } from '../../utils/api';
+import { SortProps, SortType } from '../../utils/constants';
 
 function Sort(): JSX.Element {
   const currentSort = useSelector(getCurrentSort);
   const [isOpened, setIsOpened] = useState<boolean>(false);
   const dispatch = useDispatch();
+
+  const sortItemClickHandle = (sort: SortProps):DefaultFunctionProps => () => {
+    setIsOpened(false);
+    dispatch(changeSort(SortType.Popular));
+  };
+
   return (
     <form className='places__sorting' action='#' method='get'>
       <span className='places__sorting-caption'>Sort by </span>
@@ -19,40 +26,28 @@ function Sort(): JSX.Element {
       </span>
       <ul className={isOpened ? 'places__options places__options--custom places__options--opened' : 'places__options places__options--custom'}>
         <li
-          onClick={() => {
-            setIsOpened(false);
-            dispatch(changeSort(SortType.Popular));
-          }}
+          onClick={sortItemClickHandle(SortType.Popular)}
           className={currentSort === SortType.Popular ? 'places__option places__option--active' : 'places__option'}
           tabIndex={0}
         >
           Popular
         </li>
         <li
-          onClick={() => {
-            setIsOpened(false);
-            dispatch(changeSort(SortType.LowFirst));
-          }}
+          onClick={sortItemClickHandle(SortType.LowFirst)}
           className={currentSort === SortType.LowFirst ? 'places__option places__option--active' : 'places__option'}
           tabIndex={0}
         >
           Price: low to high
         </li>
         <li
-          onClick={() => {
-            setIsOpened(false);
-            dispatch(changeSort(SortType.HighFirst));
-          }}
+          onClick={sortItemClickHandle(SortType.HighFirst)}
           className={currentSort === SortType.HighFirst ? 'places__option places__option--active' : 'places__option'}
           tabIndex={0}
         >
           Price: high to low
         </li>
         <li
-          onClick={() => {
-            setIsOpened(false);
-            dispatch(changeSort(SortType.RatedFirst));
-          }}
+          onClick={sortItemClickHandle(SortType.RatedFirst)}
           className={currentSort === SortType.RatedFirst ? 'places__option places__option--active' : 'places__option'}
           tabIndex={0}
         >

@@ -13,6 +13,16 @@ function Favorites(): JSX.Element {
   const favoritesOffers = useSelector(getFavoriteOffers);
   const dispatch = useDispatch();
   const actualCities: string[] = cities.filter((city) => favoritesOffers.filter((item) => item.city.name === city).length !== 0);
+
+  const logoClickHandle = () => {
+    dispatch(changeCity(City.PARIS, SortType.Popular));
+  };
+
+  const logoutClickHandle = () => {
+    dispatch(changeAuthorization(AuthorizationStatus.NoAuth));
+    dispatch(logoutFromCite());
+  };
+
   return (
     <div className={favoritesOffers.length !== 0 ? 'page' : 'page page--favorites-empty'}>
       <header className='header'>
@@ -20,9 +30,7 @@ function Favorites(): JSX.Element {
           <div className='header__wrapper'>
             <div className='header__left'>
               <Link
-                onClick={() => {
-                  dispatch(changeCity(City.PARIS, SortType.Popular));
-                }}
+                onClick={logoClickHandle}
                 className='header__logo-link header__logo-link--active'
                 to={AppRoute.MAIN}
               >
@@ -38,11 +46,7 @@ function Favorites(): JSX.Element {
                   </Link>
                 </li>
                 <li className='header__nav-item'>
-                  <Link onClick={() => {
-                    dispatch(changeAuthorization(AuthorizationStatus.NoAuth));
-                    dispatch(logoutFromCite());
-                  }} className='header__nav-link' to={AppRoute.LOGIN}
-                  >
+                  <Link onClick={logoutClickHandle} className='header__nav-link' to={AppRoute.LOGIN}>
                     <span className='header__signout'>Sign out</span>
                   </Link>
                 </li>

@@ -6,7 +6,7 @@ import ReviewsList from '../reviews-list/reviews-list';
 import Map from '../map/map';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutFromCite, addToFavorites } from '../../store/api-actions';
-import { changeCity, changeOffers } from '../../store/actions';
+import { changeAuthorization, changeCity, changeOffers } from '../../store/actions';
 import { getCurrentOffer, getFavoriteOffers, getNearbyOffers } from '../../store/selectors.ts/app-selector';
 import { getAuthorizationStatus, getCurrentComments, getUserData } from '../../store/selectors.ts/user-selector';
 import { MouseEvent } from 'react';
@@ -28,6 +28,23 @@ function RoomPage(): JSX.Element {
     }
   });
 
+  const logoClickHandle = () => dispatch(changeCity(City.PARIS, SortType.Popular));
+
+  const logoutClickHandle = () => {
+    dispatch(changeAuthorization(AuthorizationStatus.NoAuth));
+    dispatch(logoutFromCite());
+  };
+
+  const addToFavoritesHandle = (evt: MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      dispatch(addToFavorites(correctOffer.id, Number(!isFavorite)));
+      dispatch(changeOffers({ ...correctOffer, isFavorite: !isFavorite }));
+    } else {
+      history.push(AppRoute.LOGIN);
+    }
+  };
+
   return (
     <div className='page'>
       <header className='header'>
@@ -35,9 +52,7 @@ function RoomPage(): JSX.Element {
           <div className='header__wrapper'>
             <div className='header__left'>
               <Link
-                onClick={() => {
-                  dispatch(changeCity(City.PARIS, SortType.Popular));
-                }}
+                onClick={logoClickHandle}
                 className='header__logo-link'
                 to={AppRoute.MAIN}
               >
@@ -55,7 +70,7 @@ function RoomPage(): JSX.Element {
                       </Link>
                     </li>
                     <li className='header__nav-item'>
-                      <Link onClick={() => dispatch(logoutFromCite())} className='header__nav-link' to={AppRoute.LOGIN}>
+                      <Link onClick={logoutClickHandle} className='header__nav-link' to={AppRoute.LOGIN}>
                         <span className='header__signout'>Sign out</span>
                       </Link>
                     </li>
@@ -97,15 +112,7 @@ function RoomPage(): JSX.Element {
               <div className='property__name-wrapper'>
                 <h1 className='property__name'>{correctOffer.title}</h1>
                 <button
-                  onClick={(evt: MouseEvent<HTMLButtonElement>) => {
-                    evt.preventDefault();
-                    if (authorizationStatus === AuthorizationStatus.Auth) {
-                      dispatch(addToFavorites(correctOffer.id, Number(!isFavorite)));
-                      dispatch(changeOffers({ ...correctOffer, isFavorite: !isFavorite }));
-                    } else {
-                      history.push(AppRoute.LOGIN);
-                    }
-                  }}
+                  onClick={addToFavoritesHandle}
                   className={isFavorite ? 'property__bookmark-button button property__bookmark-button--active' : 'property__bookmark-button button'}
                   type='button'
                 >

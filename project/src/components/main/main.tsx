@@ -1,7 +1,7 @@
-/* eslint-disable no-console */
+
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { changeCity } from '../../store/actions';
+import { changeAuthorization, changeCity } from '../../store/actions';
 import { logoutFromCite } from '../../store/api-actions';
 import { getAuthorizationStatus, getUserData } from '../../store/selectors.ts/user-selector';
 import { AppRoute, AuthorizationStatus, City, SortType } from '../../utils/constants';
@@ -13,6 +13,15 @@ function Main(): JSX.Element {
   const userData = useSelector(getUserData);
   const dispatch = useDispatch();
 
+  const logoClickHandle = () => {
+    dispatch(changeCity(City.PARIS, SortType.Popular));
+  };
+
+  const logoutClickHandle = () => {
+    dispatch(changeAuthorization(AuthorizationStatus.NoAuth));
+    dispatch(logoutFromCite());
+  };
+
   return (
     <div className='page page--gray page--main'>
       <header className='header'>
@@ -20,9 +29,7 @@ function Main(): JSX.Element {
           <div className='header__wrapper'>
             <div className='header__left'>
               <Link
-                onClick={() => {
-                  dispatch(changeCity(City.PARIS, SortType.Popular));
-                }}
+                onClick={logoClickHandle}
                 className='header__logo-link header__logo-link--active'
                 to={AppRoute.MAIN}
               >
@@ -40,7 +47,7 @@ function Main(): JSX.Element {
                       </Link>
                     </li>
                     <li className='header__nav-item'>
-                      <Link onClick={() => dispatch(logoutFromCite())} className='header__nav-link' to={AppRoute.LOGIN}>
+                      <Link onClick={logoutClickHandle} className='header__nav-link' to={AppRoute.LOGIN}>
                         <span className='header__signout'>Sign out</span>
                       </Link>
                     </li>

@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+
 import { UserDataProps } from './reducers/user-reducer';
 
 export type Token = string;

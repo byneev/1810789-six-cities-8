@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { changeAuthorization } from '../../store/actions';
 import { logoutFromCite } from '../../store/api-actions';
 import { getAuthorizationStatus, getUserData } from '../../store/selectors.ts/user-selector';
 import { AppRoute, AuthorizationStatus } from '../../utils/constants';
@@ -9,6 +10,11 @@ function MainEmpty(): JSX.Element {
   const authorizationStatus = useSelector(getAuthorizationStatus);
   const userData = useSelector(getUserData);
   const dispatch = useDispatch();
+  const logoutClickHandle = () => {
+    dispatch(changeAuthorization(AuthorizationStatus.NoAuth));
+    dispatch(logoutFromCite());
+  };
+
   return (
     <div className='page page--gray page--main'>
       <header className='header'>
@@ -30,7 +36,7 @@ function MainEmpty(): JSX.Element {
                       </Link>
                     </li>
                     <li className='header__nav-item'>
-                      <Link onClick={() => dispatch(logoutFromCite())} className='header__nav-link' to={AppRoute.LOGIN}>
+                      <Link onClick={logoutClickHandle} className='header__nav-link' to={AppRoute.LOGIN}>
                         <span className='header__signout'>Sign out</span>
                       </Link>
                     </li>

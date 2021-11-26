@@ -3,10 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changeCity } from '../../store/actions';
 import { City, SortType } from '../../utils/constants';
 import { getCurrentCity } from '../../store/selectors.ts/app-selector';
+import { CitiesProps } from '../../types/offer';
+
+export type EventFunctionProps = (evt: MouseEvent<HTMLAnchorElement>) => void;
 
 function CitiesList(): JSX.Element {
   const currentCity = useSelector(getCurrentCity);
   const dispatch = useDispatch();
+
+  const cityListCLickHandle = (city: CitiesProps):EventFunctionProps =>
+    (evt) => {
+      evt.preventDefault();
+      dispatch(changeCity(city, SortType.Popular));
+    };
 
   return (
     <div className='tabs'>
@@ -14,10 +23,7 @@ function CitiesList(): JSX.Element {
         <ul className='locations__list tabs__list'>
           <li className='locations__item'>
             <a
-              onClick={(evt: MouseEvent<HTMLAnchorElement>) => {
-                evt.preventDefault();
-                dispatch(changeCity(City.PARIS, SortType.Popular));
-              }}
+              onClick={cityListCLickHandle(City.PARIS)}
               className={currentCity === City.PARIS ? 'locations__item-link tabs__item tabs__item--active' : 'locations__item-link tabs__item'}
               href='/'
             >
@@ -26,10 +32,7 @@ function CitiesList(): JSX.Element {
           </li>
           <li className='locations__item'>
             <a
-              onClick={(evt: MouseEvent<HTMLAnchorElement>) => {
-                evt.preventDefault();
-                dispatch(changeCity(City.COLOGNE, SortType.Popular));
-              }}
+              onClick={cityListCLickHandle(City.COLOGNE)}
               className={currentCity === City.COLOGNE ? 'locations__item-link tabs__item tabs__item--active' : 'locations__item-link tabs__item'}
               href='/'
             >
@@ -38,10 +41,7 @@ function CitiesList(): JSX.Element {
           </li>
           <li className='locations__item'>
             <a
-              onClick={(evt: MouseEvent<HTMLAnchorElement>) => {
-                evt.preventDefault();
-                dispatch(changeCity(City.BRUSSELS, SortType.Popular));
-              }}
+              onClick={cityListCLickHandle(City.BRUSSELS)}
               className={currentCity === City.BRUSSELS ? 'locations__item-link tabs__item tabs__item--active' : 'locations__item-link tabs__item'}
               href='/'
             >
@@ -50,10 +50,7 @@ function CitiesList(): JSX.Element {
           </li>
           <li className='locations__item'>
             <a
-              onClick={(evt: MouseEvent<HTMLAnchorElement>) => {
-                evt.preventDefault();
-                dispatch(changeCity(City.AMSTERDAM, SortType.Popular));
-              }}
+              onClick={cityListCLickHandle(City.AMSTERDAM)}
               className={currentCity === City.AMSTERDAM ? 'locations__item-link tabs__item tabs__item--active' : 'locations__item-link tabs__item'}
               href='/'
             >
@@ -62,10 +59,7 @@ function CitiesList(): JSX.Element {
           </li>
           <li className='locations__item'>
             <a
-              onClick={(evt: MouseEvent<HTMLAnchorElement>) => {
-                evt.preventDefault();
-                dispatch(changeCity(City.HAMBURG, SortType.Popular));
-              }}
+              onClick={cityListCLickHandle(City.HAMBURG)}
               className={currentCity === City.HAMBURG ? 'locations__item-link tabs__item tabs__item--active' : 'locations__item-link tabs__item'}
               href='/'
             >
@@ -74,10 +68,7 @@ function CitiesList(): JSX.Element {
           </li>
           <li className='locations__item'>
             <a
-              onClick={(evt: MouseEvent<HTMLAnchorElement>) => {
-                evt.preventDefault();
-                dispatch(changeCity(City.DUSSELDORF, SortType.Popular));
-              }}
+              onClick={cityListCLickHandle(City.DUSSELDORF)}
               className={currentCity === City.DUSSELDORF ? 'locations__item-link tabs__item tabs__item--active' : 'locations__item-link tabs__item'}
               href='/'
             >

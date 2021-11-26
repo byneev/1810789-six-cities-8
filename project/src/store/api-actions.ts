@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+
 import { APIRoute, AuthorizationStatus } from '../utils/constants';
 import { changeAuthorization, setCurrentComments, setCurrentOffer, setFavoritesOffers, setIsDataSended, setIsFormDisabled, setNearbyOferrs, setupOffers, setUserData } from './actions';
 import { OfferProp } from '../types/offer';

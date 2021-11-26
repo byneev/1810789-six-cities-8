@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+
 import { MouseEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
@@ -21,8 +21,23 @@ function Room(prop: RoomProp): JSX.Element {
   const starsCount = room.rating * 20;
   const history = useHistory();
 
+  const offerMouseOverHandle = () => dispatch(setActiveOffer(room.id));
+
+  const offerMouseLeaveHandle = () => dispatch(setActiveOffer(null));
+
+  const addToFavoritesHandle = (evt: MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      dispatch(addToFavorites(room.id, Number(Boolean(!currentStatus))));
+      dispatch(changeOffers({ ...room, isFavorite: Boolean(!currentStatus) }));
+      setCurrentStatus(Number(Boolean(!currentStatus)));
+    } else {
+      history.push(AppRoute.LOGIN);
+    }
+  };
+
   return (
-    <article onMouseOver={() => dispatch(setActiveOffer(room.id))} onMouseLeave={() => dispatch(setActiveOffer(null))} className={container === Container.FAVORITES ? 'favorites__card place-card' : 'cities__place-card place-card'}>
+    <article onMouseOver={offerMouseOverHandle} onMouseLeave={offerMouseLeaveHandle} className={container === Container.FAVORITES ? 'favorites__card place-card' : 'cities__place-card place-card'}>
       {room.isPremium ? (
         <div className='place-card__mark'>
           <span>Premium</span>
@@ -40,16 +55,7 @@ function Room(prop: RoomProp): JSX.Element {
             <span className='place-card__price-text'>&#47;&nbsp;night</span>
           </div>
           <button
-            onClick={(evt: MouseEvent<HTMLButtonElement>) => {
-              evt.preventDefault();
-              if (authorizationStatus === AuthorizationStatus.Auth) {
-                dispatch(addToFavorites(room.id, Number(Boolean(!currentStatus))));
-                dispatch(changeOffers({ ...room, isFavorite: Boolean(!currentStatus) }));
-                setCurrentStatus(Number(Boolean(!currentStatus)));
-              } else {
-                history.push(AppRoute.LOGIN);
-              }
-            }}
+            onClick={addToFavoritesHandle}
             className={currentStatus ? 'place-card__bookmark-button button place-card__bookmark-button--active' : 'place-card__bookmark-button button'}
             type='button'
           >

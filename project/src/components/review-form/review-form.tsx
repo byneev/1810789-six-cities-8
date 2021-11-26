@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+
 import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeRating, setIsFormDisabled } from '../../store/actions';
@@ -21,7 +21,6 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
   const currentRating = useSelector(getCurrentRating);
   const isFormDisabled = useSelector(getIsFormDisabled);
   const isDataSended = useSelector(getIsDataSended);
-  console.log(isDataSended);
   const dispatch = useDispatch();
   const { id } = props;
   const textarea = useRef<HTMLTextAreaElement | null>(null);
@@ -34,24 +33,38 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
     dispatch(changeRating(null));
   }
 
+  const formSubmitHandle = (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    dispatch(setIsFormDisabled(true));
+    if (textarea.current !== null && currentRating !== null) {
+      dispatch(
+        sendComment(id, {
+          comment: textarea.current.value,
+          rating: currentRating,
+        }),
+      );
+    }
+  };
+
+  const reviewChangeHandle = () => {
+    if (textarea.current !== null && textarea.current.value.length <= MAX_CHARACTERS_COUNT && textarea.current.value.length >= MIN_CHARACTERS_COUNT) {
+      setisTextAreaValided(true);
+    } else {
+      setisTextAreaValided(false);
+    }
+  };
+
+  const ratingChangeHandle = (evt: ChangeEvent<HTMLInputElement>) => {
+    dispatch(changeRating(+evt.target.value));
+  };
+
   return (
     <form
       ref={form}
       className='reviews__form form'
       action='#'
       method='post'
-      onSubmit={(evt: FormEvent<HTMLFormElement>) => {
-        evt.preventDefault();
-        dispatch(setIsFormDisabled(true));
-        if (textarea.current !== null && currentRating !== null) {
-          dispatch(
-            sendComment(id, {
-              comment: textarea.current.value,
-              rating: currentRating,
-            }),
-          );
-        }
-      }}
+      onSubmit={formSubmitHandle}
     >
       <label className='reviews__label form__label' htmlFor='review'>
         Your review
@@ -59,9 +72,7 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
       <div className='reviews__rating-form form__rating'>
         <input
           disabled={isFormDisabled}
-          onChange={(evt: ChangeEvent<HTMLInputElement>) => {
-            dispatch(changeRating(+evt.target.value));
-          }}
+          onChange={ratingChangeHandle}
           className='form__rating-input visually-hidden'
           name='rating'
           value='5'
@@ -77,9 +88,7 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
 
         <input
           disabled={isFormDisabled}
-          onChange={(evt: ChangeEvent<HTMLInputElement>) => {
-            dispatch(changeRating(+evt.target.value));
-          }}
+          onChange={ratingChangeHandle}
           className='form__rating-input visually-hidden'
           name='rating'
           value='4'
@@ -95,9 +104,7 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
 
         <input
           disabled={isFormDisabled}
-          onChange={(evt: ChangeEvent<HTMLInputElement>) => {
-            dispatch(changeRating(+evt.target.value));
-          }}
+          onChange={ratingChangeHandle}
           className='form__rating-input visually-hidden'
           name='rating'
           value='3'
@@ -113,9 +120,7 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
 
         <input
           disabled={isFormDisabled}
-          onChange={(evt: ChangeEvent<HTMLInputElement>) => {
-            dispatch(changeRating(+evt.target.value));
-          }}
+          onChange={ratingChangeHandle}
           className='form__rating-input visually-hidden'
           name='rating'
           value='2'
@@ -131,9 +136,7 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
 
         <input
           disabled={isFormDisabled}
-          onChange={(evt: ChangeEvent<HTMLInputElement>) => {
-            dispatch(changeRating(+evt.target.value));
-          }}
+          onChange={ratingChangeHandle}
           className='form__rating-input visually-hidden'
           name='rating'
           value='1'
@@ -149,13 +152,7 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
       </div>
       <textarea
         disabled={isFormDisabled}
-        onChange={() => {
-          if (textarea.current !== null && textarea.current.value.length <= MAX_CHARACTERS_COUNT && textarea.current.value.length >= MIN_CHARACTERS_COUNT) {
-            setisTextAreaValided(true);
-          } else {
-            setisTextAreaValided(false);
-          }
-        }}
+        onChange={reviewChangeHandle}
         ref={textarea}
         className='reviews__textarea form__textarea'
         id='review'

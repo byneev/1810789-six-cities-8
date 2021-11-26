@@ -29,6 +29,28 @@ function Login(props: LoginProps): JSX.Element {
     return <Redirect to={AppRoute.MAIN} />;
   }
 
+  const logoClickHandle = () => {
+    dispatch(changeCity(City.PARIS, SortType.Popular));
+  };
+
+  const formSubmitHandle = (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    if (email.current && password.current) {
+      if (!password.current.value.match('(?=.*?[a-zA-Z])(?=.*?[0-9])')) {
+        toast.error('Password should contain at least one letter and one digit');
+      } else {
+        dispatch(changeCity(City.PARIS, SortType.Popular));
+        dispatch(
+          loginToCite({
+            login: email.current.value,
+            password: password.current.value,
+          }),
+        );
+        onSubmitData();
+      }
+    }
+  };
+
   return (
     <div className='page page--gray page--login'>
       <header className='header'>
@@ -36,9 +58,7 @@ function Login(props: LoginProps): JSX.Element {
           <div className='header__wrapper'>
             <div className='header__left'>
               <Link
-                onClick={() => {
-                  dispatch(changeCity(City.PARIS, SortType.Popular));
-                }}
+                onClick={logoClickHandle}
                 className='header__logo-link'
                 to={AppRoute.MAIN}
               >
@@ -53,23 +73,7 @@ function Login(props: LoginProps): JSX.Element {
           <section className='login'>
             <h1 className='login__title'>Sign in</h1>
             <form
-              onSubmit={(evt: FormEvent<HTMLFormElement>) => {
-                evt.preventDefault();
-                if (email.current && password.current) {
-                  if (!password.current.value.match('(?=.*?[a-zA-Z])(?=.*?[0-9])')) {
-                    toast.error('Password should contain at least one letter and one digit');
-                  } else {
-                    dispatch(changeCity(City.PARIS, SortType.Popular));
-                    dispatch(
-                      loginToCite({
-                        login: email.current.value,
-                        password: password.current.value,
-                      }),
-                    );
-                    onSubmitData();
-                  }
-                }
-              }}
+              onSubmit={formSubmitHandle}
               className='login__form form'
               action='#'
               method='post'
