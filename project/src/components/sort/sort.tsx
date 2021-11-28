@@ -12,7 +12,7 @@ function Sort(): JSX.Element {
 
   const sortItemClickHandle = (sort: SortProps):DefaultFunctionProps => () => {
     setIsOpened(false);
-    dispatch(changeSort(SortType.Popular));
+    dispatch(changeSort(sort));
   };
 
   return (
