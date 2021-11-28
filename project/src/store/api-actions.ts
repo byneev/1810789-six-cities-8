@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 
 import { APIRoute, AuthorizationStatus } from '../utils/constants';
 import { changeAuthorization, setCurrentComments, setCurrentOffer, setFavoritesOffers, setIsDataSended, setIsFormDisabled, setNearbyOferrs, setupOffers, setUserData } from './actions';
@@ -14,7 +15,7 @@ import { UserDataProps } from './reducers/user-reducer';
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, RootStateProps, AxiosInstance, Action>;
 
-export const loadOffersFromServer = (): ThunkActionResult => async (dispatch, getState, api) => {
+export const loadOffersFromServer = (): ThunkActionResult => async (dispatch, _getState, api) => {
   const { data } = await api.get<ServerOfferProp[]>(APIRoute.Hotels);
   const offersForClient = data.map((offer: ServerOfferProp): OfferProp => convertOffersToClient(offer));
   dispatch(setupOffers(offersForClient));

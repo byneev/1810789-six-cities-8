@@ -15,7 +15,7 @@ export type AppStateProps = {
 
 const popular = SortType.Popular;
 
-const initialState: AppStateProps = {
+export const initialState: AppStateProps = {
   currentCity: 'Paris',
   offers: [],
   currentSort: popular,

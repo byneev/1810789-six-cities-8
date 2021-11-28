@@ -24,7 +24,7 @@ export type UserStateProps = {
   isDataSended: boolean;
 };
 
-const initialState: UserStateProps = {
+export const initialState: UserStateProps = {
   authorizationStatus: AuthorizationStatus.Unknown,
   userData: {
     name: '',
