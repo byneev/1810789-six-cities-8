@@ -113,6 +113,7 @@ function RoomPage(): JSX.Element {
               <div className='property__name-wrapper'>
                 <h1 className='property__name'>{correctOffer.title}</h1>
                 <button
+                  data-testid='add-favorites-roompage'
                   onClick={addToFavoritesHandle}
                   className={isFavorite ? 'property__bookmark-button button property__bookmark-button--active' : 'property__bookmark-button button'}
                   type='button'

@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, Redirect, RouteProps } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus, City, SortType } from '../../utils/constants';
 import { loginToCite } from '../../store/api-actions';
-import { getCurrentCity } from '../../store/selectors.ts/app-selector';
 import { getAuthorizationStatus } from '../../store/selectors.ts/user-selector';
 import { changeCity } from '../../store/actions';
 import { toast } from 'react-toastify';
+import { cities, CitiesProps } from '../../types/offer';
 
 export type AuthData = {
   login: string;
@@ -18,7 +18,7 @@ export type LoginProps = RouteProps & {
 };
 
 function Login(props: LoginProps): JSX.Element {
-  const currentCity = useSelector(getCurrentCity);
+  const currentCity : CitiesProps = cities[Math.floor(Math.random() * cities.length)];
   const authorizationStatus = useSelector(getAuthorizationStatus);
   const dispatch = useDispatch();
   const { onSubmitData } = props;
@@ -93,9 +93,9 @@ function Login(props: LoginProps): JSX.Element {
           </section>
           <section className='locations locations--login locations--current'>
             <div className='locations__item'>
-              <a className='locations__item-link' href='/'>
+              <Link onClick={() => dispatch(changeCity(currentCity, SortType.Popular))} className='locations__item-link' to={AppRoute.MAIN}>
                 <span>{currentCity}</span>
-              </a>
+              </Link>
             </div>
           </section>
         </div>

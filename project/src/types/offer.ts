@@ -39,7 +39,7 @@ export type OfferProp = {
 
 export type CitiesProps = |'Amsterdam' |'Dusseldorf' |'Hamburg' |'Brussels' |'Cologne' | 'Paris';
 
-export const cities:string[] = [
+export const cities:CitiesProps[] = [
   City.PARIS,
   City.COLOGNE,
   City.BRUSSELS,

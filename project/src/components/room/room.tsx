@@ -37,7 +37,7 @@ function Room(prop: RoomProp): JSX.Element {
   };
 
   return (
-    <article onMouseOver={offerMouseOverHandle} onMouseLeave={offerMouseLeaveHandle} className={container === Container.FAVORITES ? 'favorites__card place-card' : 'cities__place-card place-card'}>
+    <article data-testid='article' onMouseOver={offerMouseOverHandle} onMouseLeave={offerMouseLeaveHandle} className={container === Container.FAVORITES ? 'favorites__card place-card' : 'cities__place-card place-card'}>
       {room.isPremium ? (
         <div className='place-card__mark'>
           <span>Premium</span>
@@ -55,6 +55,7 @@ function Room(prop: RoomProp): JSX.Element {
             <span className='place-card__price-text'>&#47;&nbsp;night</span>
           </div>
           <button
+            data-testid='add-favorites'
             onClick={addToFavoritesHandle}
             className={currentStatus ? 'place-card__bookmark-button button place-card__bookmark-button--active' : 'place-card__bookmark-button button'}
             type='button'

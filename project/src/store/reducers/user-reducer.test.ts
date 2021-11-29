@@ -25,6 +25,14 @@ export const reviewData : ReviewProp = {
   },
 };
 
+export const mockReviews = [
+  Object.assign({}, reviewData, {id : 1}),
+  Object.assign({}, reviewData, {id : 2}),
+  Object.assign({}, reviewData, {id : 3}),
+  Object.assign({}, reviewData, {id : 4}),
+  Object.assign({}, reviewData, {id : 5}),
+];
+
 describe('Test UserReducer', () => {
   it('Should set field authoriztionStatus to Auth', () => {
     const state = Object.assign({}, initialState);

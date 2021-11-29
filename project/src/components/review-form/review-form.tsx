@@ -1,4 +1,3 @@
-
 import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeRating, setIsFormDisabled } from '../../store/actions';
@@ -26,7 +25,7 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
   const textarea = useRef<HTMLTextAreaElement | null>(null);
   const form = useRef<HTMLFormElement | null>(null);
   const [isTextAreaValided, setisTextAreaValided] = useState(false);
-  let isSubmitActive = isTextAreaValided && currentRating !== null;
+  const isSubmitActive = isTextAreaValided && currentRating !== null;
 
   if (isDataSended && isFormDisabled) {
     form.current?.reset();
@@ -170,7 +169,7 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
         <p className='reviews__help'>
           To submit review please make sure to set <span className='reviews__star'>rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
-        <button onClick={() => isSubmitActive = !isSubmitActive)} data-testid='submit' className='reviews__submit form__submit button' type='submit' disabled={isFormDisabled || !isSubmitActive}>
+        <button data-testid='submit' className='reviews__submit form__submit button' type='submit' disabled={!isSubmitActive || isFormDisabled}>
           Submit
         </button>
       </div>

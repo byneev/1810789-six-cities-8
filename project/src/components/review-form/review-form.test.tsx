@@ -6,9 +6,12 @@ import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 import { ID } from '../../store/api-actions.test';
 import userEvent from '@testing-library/user-event';
+import thunk from 'redux-thunk';
 
-const mockStore = configureMockStore();
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 const history = createMemoryHistory();
+
 
 describe('Test ReviewForm component', () => {
   it('Form should be disabled and cleared', () => {
@@ -33,7 +36,7 @@ describe('Test ReviewForm component', () => {
     inputs.forEach((input) => expect(input).toBeDisabled());
   });
 
-  it('Form should be disabled then enabled', async () => {
+  it('Form should be enabled then disabled after submit', async () => {
     const store = mockStore({
       User: {
         currentRating: 5,
@@ -52,7 +55,9 @@ describe('Test ReviewForm component', () => {
     expect(screen.getByTestId(/textarea/i)).toBeEnabled();
     userEvent.type(screen.getByTestId(/textarea/i), 'This texarea field should enable when we input 30 or more symbols');
     userEvent.click(screen.getByTestId(/submit/i));
-    expect(screen.getByTestId(/submit/i)).toBeDisabled();
-    expect(screen.getByTestId(/textarea/i)).toBeDisabled();
+    expect(screen.getByTestId(/submit/i)).toBeEnabled();
+    expect(screen.getByTestId(/textarea/i)).toBeEnabled();
+    await setTimeout(() => expect(screen.getByTestId(/submit/i)).toBeDisabled(), 50);
+    await setTimeout(() => expect(screen.getByTestId(/textarea/i)).toBeDisabled(), 50);
   });
 });
