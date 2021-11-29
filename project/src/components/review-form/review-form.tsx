@@ -26,7 +26,7 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
   const textarea = useRef<HTMLTextAreaElement | null>(null);
   const form = useRef<HTMLFormElement | null>(null);
   const [isTextAreaValided, setisTextAreaValided] = useState(false);
-  const isSubmitActive = isTextAreaValided && currentRating !== null;
+  let isSubmitActive = isTextAreaValided && currentRating !== null;
 
   if (isDataSended && isFormDisabled) {
     form.current?.reset();
@@ -71,6 +71,7 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
       </label>
       <div className='reviews__rating-form form__rating'>
         <input
+          data-testid='input'
           disabled={isFormDisabled}
           onChange={ratingChangeHandle}
           className='form__rating-input visually-hidden'
@@ -87,6 +88,7 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
         </label>
 
         <input
+          data-testid='input'
           disabled={isFormDisabled}
           onChange={ratingChangeHandle}
           className='form__rating-input visually-hidden'
@@ -103,6 +105,7 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
         </label>
 
         <input
+          data-testid='input'
           disabled={isFormDisabled}
           onChange={ratingChangeHandle}
           className='form__rating-input visually-hidden'
@@ -119,6 +122,7 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
         </label>
 
         <input
+          data-testid='input'
           disabled={isFormDisabled}
           onChange={ratingChangeHandle}
           className='form__rating-input visually-hidden'
@@ -135,6 +139,7 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
         </label>
 
         <input
+          data-testid='input'
           disabled={isFormDisabled}
           onChange={ratingChangeHandle}
           className='form__rating-input visually-hidden'
@@ -152,6 +157,7 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
       </div>
       <textarea
         disabled={isFormDisabled}
+        data-testid='textarea'
         onChange={reviewChangeHandle}
         ref={textarea}
         className='reviews__textarea form__textarea'
@@ -164,7 +170,7 @@ function ReviewForm(props: ReviewFormProps): JSX.Element {
         <p className='reviews__help'>
           To submit review please make sure to set <span className='reviews__star'>rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
-        <button className='reviews__submit form__submit button' type='submit' disabled={!isSubmitActive}>
+        <button onClick={() => isSubmitActive = !isSubmitActive)} data-testid='submit' className='reviews__submit form__submit button' type='submit' disabled={isFormDisabled || !isSubmitActive}>
           Submit
         </button>
       </div>
