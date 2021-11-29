@@ -77,11 +77,11 @@ export const serverReviewData : ServerCommentProp = {
   },
 };
 
-const clientOffers = serverOffers.map((offer: ServerOfferProp) => convertOffersToClient(offer));
-const serverReviews = new Array(3).fill(serverReviewData);
-const clientReviews = serverReviews.map((review: ServerCommentProp) => convertCommentsToClient(review));
-const ID = 1;
-const comment : CommentData = {
+export const clientOffers = serverOffers.map((offer: ServerOfferProp) => convertOffersToClient(offer));
+export const serverReviews = new Array(3).fill(serverReviewData);
+export const clientReviews = serverReviews.map((review: ServerCommentProp) => convertCommentsToClient(review));
+export const ID = 1;
+export const comment : CommentData = {
   comment: 'What a beautiful place',
   rating: 3,
 };

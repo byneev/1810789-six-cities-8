@@ -80,11 +80,11 @@ function Login(props: LoginProps): JSX.Element {
             >
               <div className='login__input-wrapper form__input-wrapper'>
                 <label className='visually-hidden'>E-mail</label>
-                <input ref={email} className='login__input form__input' type='email' name='email' placeholder='Email' required />
+                <input data-testid='e-mail' ref={email} className='login__input form__input' type='email' name='email' placeholder='Email' required />
               </div>
               <div className='login__input-wrapper form__input-wrapper'>
                 <label className='visually-hidden'>Password</label>
-                <input ref={password} className='login__input form__input' type='password' name='password' placeholder='Password' required />
+                <input data-testid='password' ref={password} className='login__input form__input' type='password' name='password' placeholder='Password' required />
               </div>
               <button className='login__submit form__submit button' type='submit'>
                 Sign in

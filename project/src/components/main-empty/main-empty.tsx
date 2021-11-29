@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { changeAuthorization } from '../../store/actions';
 import { logoutFromCite } from '../../store/api-actions';
+import { getCurrentCity } from '../../store/selectors.ts/app-selector';
 import { getAuthorizationStatus, getUserData } from '../../store/selectors.ts/user-selector';
 import { AppRoute, AuthorizationStatus } from '../../utils/constants';
 import CitiesList from '../cities-list/cities-list';
@@ -9,6 +10,7 @@ import CitiesList from '../cities-list/cities-list';
 function MainEmpty(): JSX.Element {
   const authorizationStatus = useSelector(getAuthorizationStatus);
   const userData = useSelector(getUserData);
+  const currentCity = useSelector(getCurrentCity);
   const dispatch = useDispatch();
   const logoutClickHandle = () => {
     dispatch(changeAuthorization(AuthorizationStatus.NoAuth));
@@ -63,7 +65,7 @@ function MainEmpty(): JSX.Element {
             <section className='cities__no-places'>
               <div className='cities__status-wrapper tabs__content'>
                 <b className='cities__status'>No places to stay available</b>
-                <p className='cities__status-description'>We could not find any property available at the moment in Dusseldorf</p>
+                <p className='cities__status-description'>We could not find any property available at the moment in ${currentCity}</p>
               </div>
             </section>
             <div className='cities__right-section'></div>

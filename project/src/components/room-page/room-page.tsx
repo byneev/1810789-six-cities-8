@@ -30,7 +30,8 @@ function RoomPage(): JSX.Element {
 
   const logoClickHandle = () => dispatch(changeCity(City.PARIS, SortType.Popular));
 
-  const logoutClickHandle = () => {
+  const logoutClickHandle = (evt: MouseEvent<HTMLAnchorElement>) => {
+    evt.preventDefault();
     dispatch(changeAuthorization(AuthorizationStatus.NoAuth));
     dispatch(logoutFromCite());
   };
@@ -70,9 +71,9 @@ function RoomPage(): JSX.Element {
                       </Link>
                     </li>
                     <li className='header__nav-item'>
-                      <Link onClick={logoutClickHandle} className='header__nav-link' to={AppRoute.LOGIN}>
+                      <a href='/' onClick={logoutClickHandle} className='header__nav-link'>
                         <span className='header__signout'>Sign out</span>
-                      </Link>
+                      </a>
                     </li>
                   </>
                 ) : (

@@ -25,7 +25,7 @@ function CitiesList(): JSX.Element {
             <a
               onClick={cityListCLickHandle(City.PARIS)}
               className={currentCity === City.PARIS ? 'locations__item-link tabs__item tabs__item--active' : 'locations__item-link tabs__item'}
-              href='/'
+              href='/' data-testid='Paris'
             >
               <span>Paris</span>
             </a>
@@ -34,7 +34,7 @@ function CitiesList(): JSX.Element {
             <a
               onClick={cityListCLickHandle(City.COLOGNE)}
               className={currentCity === City.COLOGNE ? 'locations__item-link tabs__item tabs__item--active' : 'locations__item-link tabs__item'}
-              href='/'
+              href='/' data-testid='Cologne'
             >
               <span>Cologne</span>
             </a>
@@ -43,7 +43,7 @@ function CitiesList(): JSX.Element {
             <a
               onClick={cityListCLickHandle(City.BRUSSELS)}
               className={currentCity === City.BRUSSELS ? 'locations__item-link tabs__item tabs__item--active' : 'locations__item-link tabs__item'}
-              href='/'
+              href='/' data-testid='Brussels'
             >
               <span>Brussels</span>
             </a>

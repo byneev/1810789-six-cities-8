@@ -41,20 +41,20 @@ function Main(): JSX.Element {
                 {authorizationStatus === AuthorizationStatus.Auth ? (
                   <>
                     <li className='header__nav-item user'>
-                      <Link className='header__nav-link header__nav-link--profile' to={AppRoute.FAVORITES}>
+                      <Link data-testid='favorites' className='header__nav-link header__nav-link--profile' to={AppRoute.FAVORITES}>
                         <div className='header__avatar-wrapper user__avatar-wrapper'></div>
                         <span className='header__user-name user__name'>{userData.email}</span>
                       </Link>
                     </li>
                     <li className='header__nav-item'>
-                      <Link onClick={logoutClickHandle} className='header__nav-link' to={AppRoute.LOGIN}>
+                      <Link  data-testid='logout' onClick={logoutClickHandle} className='header__nav-link' to={AppRoute.LOGIN}>
                         <span className='header__signout'>Sign out</span>
                       </Link>
                     </li>
                   </>
                 ) : (
                   <li className='header__nav-item user'>
-                    <Link className='header__nav-link header__nav-link--profile' to={AppRoute.LOGIN}>
+                    <Link data-testid='login' className='header__nav-link header__nav-link--profile' to={AppRoute.LOGIN}>
                       <div className='header__avatar-wrapper user__avatar-wrapper'></div>
                       <span className='header__login'>Sign in</span>
                     </Link>
