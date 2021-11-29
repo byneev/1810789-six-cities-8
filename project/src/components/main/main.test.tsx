@@ -13,7 +13,7 @@ const history = createMemoryHistory();
 const mockStore = configureMockStore();
 
 describe('Test Main component', () => {
-  it('Should redirect to Login', () => {
+  it('Should redirect to Favorites', () => {
     const store = mockStore({
       WebApp: {
         currentSort: SortType.Popular,
@@ -31,20 +31,15 @@ describe('Test Main component', () => {
           <Route path={AppRoute.MAIN} exact>
             <Main />
           </Route>
-          <Route path={AppRoute.LOGIN} render={() => (<h1>Login</h1>)} exact />
           <Route path={AppRoute.FAVORITES} render={() => (<h1>Favorites</h1>)} exact />
         </Router>
       </Provider>,
     );
     expect(screen.getByText(/Sign out/i)).toBeInTheDocument();
-    userEvent.click(screen.getByTestId(/logout/i));
-    expect(screen.getByText(/Login/i)).toBeInTheDocument();
-    history.push(AppRoute.MAIN);
     userEvent.click(screen.getByTestId(/favorites/i));
     expect(screen.getByText(/Favorites/i)).toBeInTheDocument();
   });
-
-  it('Should redirect to Login', () => {
+  it('Should redirect to Login after click Login', () => {
     const store = mockStore({
       WebApp: {
         currentSort: SortType.Popular,
@@ -56,6 +51,7 @@ describe('Test Main component', () => {
         userData: userData,
       },
     });
+    history.push(AppRoute.MAIN);
     render(
       <Provider store={store}>
         <Router history={history}>
@@ -63,7 +59,6 @@ describe('Test Main component', () => {
             <Main />
           </Route>
           <Route path={AppRoute.LOGIN} render={() => (<h1>Login</h1>)} exact />
-          <Route path={AppRoute.FAVORITES} render={() => (<h1>Favorites</h1>)} exact />
         </Router>
       </Provider>,
     );
